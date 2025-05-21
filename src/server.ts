@@ -9,6 +9,7 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import config from "./env-config";
 import { pingDatabase } from "./db/conn";
+import EnvConfig from './env-config';
 
 const app = fastify({
 	ignoreTrailingSlash: true,
@@ -38,8 +39,11 @@ const run = async () => {
 	app.setValidatorCompiler(validatorCompiler);
 	app.setSerializerCompiler(serializerCompiler);
 
-	app.listen({ port: config.PORT }).then(() => {
-		console.log(`Server running => PORT: ${config.PORT}`);
+	const port_from_env = EnvConfig.get('PORT')
+	const current_port = port_from_env ? port_from_env : "5555"
+
+	app.listen({ port: current_port }).then(() => {
+		console.log(`Server running => PORT: ${current_port}`);
 	});
 };
 

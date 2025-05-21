@@ -1,13 +1,13 @@
 import postgres from "postgres";
-import config from "../env-config";
+import EnvConfig from '../env-config';
 
 export const sql = postgres({
-	host: config.DB_HOST,
-	port: Number(config.DB_PORT) || 5432,
-	username: config.DB_USER,
-	password: config.DB_PASSWORD,
-	database: config.DB,
-	ssl: "require",
+	host: EnvConfig.get('DB_HOST'),
+	port: Number(EnvConfig.get('DB_PORT')) || 5432,
+	username: EnvConfig.get('DB_USER'),
+	password: EnvConfig.get('DB_PASSWORD'),
+	database: EnvConfig.get('DB_NAME'),
+	ssl: EnvConfig.get('DB_SSL') ? "require" : undefined,
 });
 
 export async function pingDatabase() {
@@ -16,6 +16,7 @@ export async function pingDatabase() {
 		console.log("Database Connection Status: Sucessfuly");
 	} catch (error) {
 		console.log('PING DATABASE ERROR!')
+		throw error
 		await sql.end();
 		throw error;
 	} finally {
