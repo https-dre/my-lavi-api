@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+	"seed": "tsx --env-file .env.local src/db/seed.ts",
     "dev": "tsx --env-file .env.local --watch src/server.ts",
 	"build": "tsup src --format esm",
 	"start": "node dist/server.mjs"
