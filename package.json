@@ -5,10 +5,10 @@
   "main": "src/server.ts",
   "private": true,
   "scripts": {
-	"seed": "tsx --env-file .env.local src/db/seed.ts",
+    "seed": "tsx --env-file .env.local src/db/seed.ts",
     "dev": "tsx --env-file .env.local --watch src/server.ts",
-	"build": "tsup src --format esm",
-	"start": "node dist/server.mjs"
+    "build": "tsup src --format esm",
+    "start": "node dist/server.mjs"
   },
   "keywords": [],
   "author": "André Dias (https-dre)",
@@ -17,6 +17,7 @@
   "devDependencies": {
     "@faker-js/faker": "^9.7.0",
     "@types/node": "^22.15.17",
+    "drizzle-kit": "^0.31.4",
     "tsup": "^8.4.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
@@ -28,8 +29,11 @@
     "@fastify/swagger": "^9.5.1",
     "@fastify/swagger-ui": "^5.2.2",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.0",
+    "drizzle-orm": "^0.44.3",
     "fastify": "^5.3.3",
     "fastify-type-provider-zod": "^4.0.2",
+    "pg": "^8.16.3",
     "postgres": "^3.4.5",
     "zod": "^3.24.4"
   }
