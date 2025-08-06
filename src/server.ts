@@ -9,6 +9,7 @@ import fastifySwagger from "@fastify/swagger";
 import { verify_env } from "./env-config";
 import { logger } from "./logger";
 import { check_db } from "./drizzle/conn";
+import { router } from "./routes";
 
 const app = fastify({
 	ignoreTrailingSlash: true,
@@ -31,6 +32,8 @@ app.register(fastifySwagger, {
 const run = async () => {
 	verify_env();
 	await check_db();
+
+	app.register(router);
 
 	await app.register(import("@scalar/fastify-api-reference"), {
 		routePrefix: "/docs"
