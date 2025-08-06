@@ -6,10 +6,20 @@ import {
   numeric,
   char,
   boolean,
-  timestamp,
+  timestamp
 } from "drizzle-orm/pg-core";
 
-export const laundryTable = pgTable("laundry", {
+export const owner = pgTable("owner", {
+  id: text().primaryKey(),
+  name: varchar({ length: 255 }),
+  cpf: char({ length: 11 }).unique(),
+  verified: boolean().default(false),
+  email: text().unique(),
+  birth_date: text(),
+  cep: char({ length: 8 }),
+});
+
+export const laundry = pgTable("laundry", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   address: text(),
@@ -21,30 +31,27 @@ export const laundryTable = pgTable("laundry", {
   bank_agency: integer(),
   account_number: text().unique(),
   account_type: text(),
+  type: text(),
   created_at: timestamp().defaultNow(),
-  fk_owner_id: text(),
+  ownerId: text().references(() => owner.id),
 });
 
-export const ownerTable = pgTable("owner", {
+export const laundryBanner = pgTable("laundryBanner", {
   id: text().primaryKey(),
-  name: varchar({ length: 255 }),
-  cpf: char({ length: 11 }).unique(),
-  verified: boolean().default(false),
-  email: text().unique(),
-  birth_date: text(),
-  cep: char({ length: 8 }),
+  resource: text(),
+  laundryId: text().references(() => laundry.id)
 });
 
-export const employeeTable = pgTable("employee", {
+export const employee = pgTable("employee", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }),
   cpf: char({ length: 11 }).unique(),
   email: varchar().unique(),
   password: text(),
-  fk_laundry_id: text(),
+  laundryId: text().references(() => laundry.id),
 });
 
-export const customerTable = pgTable("customer", {
+export const customer = pgTable("customer", {
   id: text().primaryKey(),
   name: text(),
   email: text().unique().notNull(),
@@ -56,25 +63,59 @@ export const customerTable = pgTable("customer", {
   created_at: timestamp().defaultNow(),
 });
 
-export const orderTable = pgTable("order", {
+export const customerAddress = pgTable("customerAddress", {
+  id: text().primaryKey(),
+  name: text(),
+  latitude: numeric(),
+  longitude: numeric(),
+  customerId: text().references(() => customer.id)
+});
+
+export const order = pgTable("order", {
   id: text().primaryKey(),
   created_at: timestamp().defaultNow(),
   description: text(),
   status: text(),
   type: text(),
-  qntd: text(),
+  details: text(),
   latitude: numeric(),
   longitude: numeric(),
-  fk_laundry_id: text().notNull(),
-  fk_user_id: text().notNull(),
+  laundryId: text().references(() => laundry.id),
+  customerId: text().references(() => customer.id),
 });
 
-export const transactionTable = pgTable("transaction", {
+export const orderItem = pgTable("orderItem", {
   id: text().primaryKey(),
-  created_at: timestamp().defaultNow(),
-  method: text().default("pix"),
-  transaction_hash: text(),
-  amount_paid: integer(), // in cents
-  payment_status: text(),
-  fk_order_id: text(),
+  name: text(),
+  services: text(),
+  orderId: text().references(() => order.id)
 });
+
+export const feedbackPost = pgTable("feedbackPost", {
+  id: text().primaryKey(),
+  content: text().notNull(),
+  rate: integer(),
+  created_at: timestamp().defaultNow(),
+  laundryId: text().references(() => laundry.id)
+});
+
+export const feedbackImage = pgTable("feedbackImage", {
+  id: text().primaryKey(),
+  url: text().notNull(),
+  postId: text().references(() => feedbackPost.id)
+})
+
+const tables = {
+  owner,
+  laundry,
+  laundryBanner,
+  employee,
+  customer,
+  customerAddress,
+  order,
+  orderItem,
+  feedbackPost,
+  feedbackImage
+}
+
+export default tables;
