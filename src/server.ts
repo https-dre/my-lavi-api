@@ -36,7 +36,10 @@ const run = async () => {
 	app.register(router);
 
 	await app.register(import("@scalar/fastify-api-reference"), {
-		routePrefix: "/docs"
+		routePrefix: "/docs",
+		configuration: {
+			theme: 'kepler'
+		}
 	});
 
 	app.setValidatorCompiler(validatorCompiler);
