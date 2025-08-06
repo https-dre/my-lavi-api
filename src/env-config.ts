@@ -7,11 +7,7 @@ const EnvConfig = new Map<string, string>(
 );
 
 const vars = [
-	"DB_HOST",
-	"DB_PORT",
-	"DB_USER",
-	"DB_PASSWORD",
-	"DB_NAME"
+	"DATABASE_URL"
 ]
 
 export const verify_env = () => {
