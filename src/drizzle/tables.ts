@@ -53,6 +53,7 @@ export const employee = pgTable("employee", {
 
 export const customer = pgTable("customer", {
   id: text().primaryKey(),
+  profile_url: text(),
   name: text(),
   email: text().unique().notNull(),
   is_pj: boolean().default(false),
