@@ -7,8 +7,8 @@ import {
 import fastifyMultipart from "@fastify/multipart";
 import fastifySwagger from "@fastify/swagger";
 import { verify_env } from "./env-config";
-import { pingDatabase } from "./db/conn";
 import { logger } from "./logger";
+import { check_db } from "./drizzle/conn";
 
 const app = fastify({
 	ignoreTrailingSlash: true,
@@ -30,7 +30,7 @@ app.register(fastifySwagger, {
 
 const run = async () => {
 	verify_env();
-	await pingDatabase();
+	await check_db();
 
 	await app.register(import("@scalar/fastify-api-reference"), {
 		routePrefix: "/docs"
