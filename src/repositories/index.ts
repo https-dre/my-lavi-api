@@ -5,4 +5,5 @@ export interface ICustomerRepository {
   delete(id: string): Promise<void>;
   findByEmail(email: string): Promise<CustomerModel>;
   findById(id: string): Promise<CustomerModel>;
+  update(updates: Partial<Omit<CustomerModel, "id">>, id: string): Promise<void>;
 }

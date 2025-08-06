@@ -33,4 +33,11 @@ export class CustomerRepository implements ICustomerRepository {
   {
     await db.delete(tables.customer).where(eq(tables.customer.id, id));
   }
+
+  public async update(updates: Partial<Omit<CustomerModel, "id">>, id: string): 
+    Promise<void> {
+    await db.update(tables.customer)
+      .set(updates)
+      .where(eq(tables.customer.id, id));
+  }
 }
