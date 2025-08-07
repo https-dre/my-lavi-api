@@ -6,11 +6,16 @@ import { CustomerModel } from "../models";
 import { eq } from "drizzle-orm";
 
 export class CustomerRepository implements ICustomerRepository {
-  public async save(data: Omit<CustomerModel, "id">): Promise<void> {
-    db.insert(tables.customer).values({
-      id: randomUUID(),
-      ...data,
-    });
+  public async save(data: Omit<CustomerModel, "id">): Promise<CustomerModel> {
+    const result = await db
+      .insert(tables.customer)
+      .values({
+        id: randomUUID(),
+        ...data,
+      })
+      .returning();
+
+    return result[0];
   }
 
   public async findByEmail(email: string): Promise<CustomerModel> {

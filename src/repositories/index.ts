@@ -1,7 +1,7 @@
 import { CustomerModel, OwnerModel } from "../models";
 
 export interface ICustomerRepository {
-  save(data: Omit<CustomerModel, "id">): Promise<void>;
+  save(data: Omit<CustomerModel, "id">): Promise<CustomerModel>;
   delete(id: string): Promise<void>;
   findByEmail(email: string): Promise<CustomerModel>;
   findById(id: string): Promise<CustomerModel>;
@@ -19,4 +19,3 @@ export interface IOwnerRepository {
   findByCpf(cpf: string): Promise<OwnerModel>;
   update(updates: Partial<Omit<OwnerModel, "id">>, id: string): Promise<void>;
 }
-
