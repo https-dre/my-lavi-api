@@ -6,17 +6,20 @@ import {
   numeric,
   char,
   boolean,
-  timestamp
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const owner = pgTable("owner", {
   id: text().primaryKey(),
-  name: varchar({ length: 255 }),
-  cpf: char({ length: 11 }).unique(),
+  name: varchar(),
+  cpf: text().notNull(),
+  cpf_sha256: text().notNull().unique(),
   verified: boolean().default(false),
-  email: text().unique(),
+  email: text(),
+  email_sha256: text().unique(),
+  password: text(),
   birth_date: text(),
-  cep: char({ length: 8 }),
+  cep: text(),
 });
 
 export const laundry = pgTable("laundry", {
@@ -39,7 +42,7 @@ export const laundry = pgTable("laundry", {
 export const laundryBanner = pgTable("laundryBanner", {
   id: text().primaryKey(),
   resource: text(),
-  laundryId: text().references(() => laundry.id)
+  laundryId: text().references(() => laundry.id),
 });
 
 export const employee = pgTable("employee", {
@@ -69,7 +72,7 @@ export const customerAddress = pgTable("customerAddress", {
   name: text(),
   latitude: numeric(),
   longitude: numeric(),
-  customerId: text().references(() => customer.id)
+  customerId: text().references(() => customer.id),
 });
 
 export const order = pgTable("order", {
@@ -89,7 +92,7 @@ export const orderItem = pgTable("orderItem", {
   id: text().primaryKey(),
   name: text(),
   services: text(),
-  orderId: text().references(() => order.id)
+  orderId: text().references(() => order.id),
 });
 
 export const feedbackPost = pgTable("feedbackPost", {
@@ -97,14 +100,14 @@ export const feedbackPost = pgTable("feedbackPost", {
   content: text().notNull(),
   rate: integer(),
   created_at: timestamp().defaultNow(),
-  laundryId: text().references(() => laundry.id)
+  laundryId: text().references(() => laundry.id),
 });
 
 export const feedbackImage = pgTable("feedbackImage", {
   id: text().primaryKey(),
   url: text().notNull(),
-  postId: text().references(() => feedbackPost.id)
-})
+  postId: text().references(() => feedbackPost.id),
+});
 
 const tables = {
   owner,
@@ -116,7 +119,7 @@ const tables = {
   order,
   orderItem,
   feedbackPost,
-  feedbackImage
-}
+  feedbackImage,
+};
 
 export default tables;
