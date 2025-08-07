@@ -9,14 +9,15 @@ export class CustomerRepository implements ICustomerRepository {
   public async save(data: Omit<CustomerModel, "id">): Promise<void> {
     db.insert(tables.customer).values({
       id: randomUUID(),
-      ...data
-    })
+      ...data,
+    });
   }
 
   public async findByEmail(email: string): Promise<CustomerModel> {
     const result: CustomerModel[] = await db
       .select()
-      .from(tables.customer).where(eq(tables.customer.id, email));
+      .from(tables.customer)
+      .where(eq(tables.customer.email_sha256, email));
 
     return result[0];
   }
@@ -24,20 +25,24 @@ export class CustomerRepository implements ICustomerRepository {
   public async findById(id: string): Promise<CustomerModel> {
     const result: CustomerModel[] = await db
       .select()
-      .from(tables.customer).where(eq(tables.customer.id, id))
+      .from(tables.customer)
+      .where(eq(tables.customer.id, id));
 
-    return result[0]
+    return result[0];
   }
 
-  public async delete(id: string): Promise<void>
-  {
+  public async delete(id: string): Promise<void> {
     await db.delete(tables.customer).where(eq(tables.customer.id, id));
   }
 
-  public async update(updates: Partial<Omit<CustomerModel, "id">>, id: string): 
-    Promise<void> {
-    await db.update(tables.customer)
+  public async update(
+    updates: Partial<Omit<CustomerModel, "id">>,
+    id: string
+  ): Promise<void> {
+    await db
+      .update(tables.customer)
       .set(updates)
       .where(eq(tables.customer.id, id));
   }
 }
+
