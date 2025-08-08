@@ -10,3 +10,15 @@ export const ZodOwner = z.object({
   birth_date: z.string(),
   cep: z.string().length(8)
 });
+
+export const ZodCustomer = z.object({
+  id: z.string().uuid(),
+  profile_url: z.string().url().optional(),
+  name: z.string(),
+  is_pg: z.boolean(),
+  doc: z.string().max(14).min(11),
+  birth_date: z.string(),
+  gender: z.string(),
+  password: z.string(),
+  created_at: z.string()
+})
