@@ -5,17 +5,14 @@ import jwt from "jsonwebtoken";
 import { logger } from "../logger";
 import { CustomerModel } from "../models";
 import { encrypt, sha256 } from "../crypt-core";
+import { create_customer } from "../routes/schemas/customer-api";
+import z from "zod";
 
 export class CustomerController {
   constructor(readonly repository: ICustomerRepository) {}
 
   public async save(req: FastifyRequest, reply: FastifyReply) {
-    const customer = req.body as Required<
-      Omit<
-        CustomerModel,
-        "id" & "email_sha256" & "doc_sha256" & "created_at" & "profile_url"
-      >
-    >;
+    const { customer } = req.body as z.infer<typeof create_customer.body>;
 
     const { email, doc } = customer;
 
@@ -31,7 +28,11 @@ export class CustomerController {
 
     const doc_hash = sha256(doc);
 
-    // const customer_with_doc = await this.repository.findByDoc(doc_hash);
+    const customer_with_doc = await this.repository.findByDoc(doc_hash);
+
+    if(customer_with_doc) {
+      return reply.code(400).send({ details: "CPF já cadastrado!"})
+    }
 
     const encrypted_customer = {
       ...customer,
@@ -46,7 +47,7 @@ export class CustomerController {
 
     return reply
       .code(201)
-      .send({ details: "Cliente criado!", customer_created });
+      .send({ customer_id: customer_created.id });
   }
 
   public async authByPassword(req: FastifyRequest, reply: FastifyReply) {
@@ -80,4 +81,3 @@ export class CustomerController {
     return reply.code(400).send("ERROR! Contact the system administrator!");
   }
 }
-
