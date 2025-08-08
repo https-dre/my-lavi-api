@@ -7,5 +7,9 @@ export const owner_routes = (app: FastifyInstance) => {
   const ownerRepository = new OwnerRepository();
   const ownerController = new OwnerController(ownerRepository);
 
-  app.post("/owners", { schema: create_owner}, ownerController.save.bind(ownerController));
+  app.post(
+    "/owners",
+    { schema: create_owner },
+    ownerController.save.bind(ownerController)
+  );
 };
