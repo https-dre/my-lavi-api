@@ -30,9 +30,18 @@ export class CustomerController {
 
     const customer_with_doc = await this.repository.findByDoc(doc_hash);
 
-    if(customer_with_doc) {
-      return reply.code(400).send({ details: "CPF já cadastrado!"})
+    if (customer_with_doc) {
+      return reply.code(400).send({ details: "CPF já cadastrado!" });
     }
+
+    if (customer.is_pj && customer.doc.length != 14) {
+      return reply.code(400).send({
+        details: `Em casos de pessoa jurídica, o CNPJ deve conter exatamente 14 caracteres`,
+        field: "CNPJ",
+      });
+    }
+
+    const new_password = bcrypt.hashSync(customer.password, 10);
 
     const encrypted_customer = {
       ...customer,
@@ -41,43 +50,39 @@ export class CustomerController {
       doc_sha256: doc_hash,
       doc: encrypt(doc),
       name: encrypt(customer.name!),
+      password: new_password,
     };
 
     const customer_created = await this.repository.save(encrypted_customer);
 
-    return reply
-      .code(201)
-      .send({ customer_id: customer_created.id });
+    return reply.code(201).send({ customer_id: customer_created.id });
   }
 
   public async authByPassword(req: FastifyRequest, reply: FastifyReply) {
     const { email, password } = req.body as any;
 
-    const customerFounded = await this.repository.findByEmail(email);
+    const customerFounded = await this.repository.findByEmail(sha256(email));
 
     if (!customerFounded) {
       return reply.code(404).send({ details: "customer not found!" });
     }
 
-    bcrypt.compare(password, customerFounded.password!, (err, result) => {
-      if (err || !result) {
-        reply.code(403).send({ details: "password incorrect" });
-      }
+    const result = bcrypt.compareSync(password, customerFounded.password!);
 
-      const payload = {
-        email,
-      };
+    if (!result) {
+      return reply.code(403).send({ details: "Senha ou e-mail incorretos." });
+    }
 
-      const token = jwt.sign(payload, process.env.JWT_KEY!, {
-        expiresIn: "1h",
-      });
+    const payload = {
+      email,
+    };
 
-      return reply
-        .code(200)
-        .send({ status: "authenticated with success!", token });
+    const token = jwt.sign(payload, process.env.JWT_KEY!, {
+      expiresIn: "1h",
     });
 
-    logger.info("Erro na validação da requisição de autenticação!");
-    return reply.code(400).send("ERROR! Contact the system administrator!");
+    return reply
+      .code(200)
+      .send({ details: "Autenticado com sucesso!", token });
   }
 }
