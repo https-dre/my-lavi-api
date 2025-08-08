@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { owner_routes } from "./owner-routes";
+import { customer_routes } from "./customer-routes";
 
 export const router = async (server: FastifyInstance) => {
   const app = server.withTypeProvider<ZodTypeProvider>();
@@ -10,5 +11,6 @@ export const router = async (server: FastifyInstance) => {
   });
 
   owner_routes(app);
+  customer_routes(app);
 };
 
