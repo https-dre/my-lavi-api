@@ -7,7 +7,9 @@ const EnvConfig = new Map<string, string>(
 );
 
 const vars = [
-	"DATABASE_URL"
+	"DATABASE_URL",
+	"JWT_KEY",
+	"ENCRYPT_CORE_KEY"
 ]
 
 export const verify_env = () => {
