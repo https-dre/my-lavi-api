@@ -18,6 +18,14 @@ export class CustomerRepository implements ICustomerRepository {
     return result[0];
   }
 
+  public async findByDoc(doc: string): Promise<CustomerModel> {
+    const result: CustomerModel[] = await db
+      .select()
+      .from(tables.customer)
+      .where(eq(tables.customer.doc_sha256, doc));
+    return result[0];
+  }
+
   public async findByEmail(email: string): Promise<CustomerModel> {
     const result: CustomerModel[] = await db
       .select()

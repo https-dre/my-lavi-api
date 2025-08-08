@@ -9,6 +9,7 @@ export interface ICustomerRepository {
     updates: Partial<Omit<CustomerModel, "id">>,
     id: string
   ): Promise<void>;
+  findByDoc(doc: string): Promise<CustomerModel>;
 }
 
 export interface IOwnerRepository {
