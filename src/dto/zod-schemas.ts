@@ -7,6 +7,6 @@ export const ZodOwner = z.object({
   verified: z.boolean(),
   email: z.string(),
   password: z.string(),
-  birth_date: z.date(),
+  birth_date: z.string(),
   cep: z.string()
 });
