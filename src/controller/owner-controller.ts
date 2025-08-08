@@ -5,6 +5,7 @@ import * as bcrypt from "bcryptjs";
 import { decrypt, encrypt, sha256 } from "../crypt-core";
 import { logger } from "../logger";
 import { OwnerDTO } from "../dto";
+import jwt from 'jsonwebtoken';
 
 export class OwnerController {
   constructor(readonly repository: IOwnerRepository) {}
@@ -57,5 +58,32 @@ export class OwnerController {
     const owner_created = await this.repository.save(crypted_onwer);
 
     return reply.code(201).send({ details: "Owner created!", owner_created });
+  }
+
+  public async auth(req: FastifyRequest, reply: FastifyReply) {
+    const { email, password } = req.body as { email: string, password: string }
+
+    const owner_founded = await this.repository
+      .findByEmail(sha256(email));
+
+    if (!owner_founded) {
+      return reply.code(404).send({ details: "Nenhum dono encontrado!"});
+    }
+
+    const auth_result = bcrypt.compareSync(password, owner_founded.password);
+
+    if(!auth_result) {
+      return reply.code(403).send({ details: "Login ou e-mail incorretos."});
+    }
+
+    const payload = {
+      email
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_KEY!, {
+      expiresIn: "1h"
+    });
+
+    return reply.code(200).send({ details: "authenticated with success", jwt: token });
   }
 }
