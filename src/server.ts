@@ -36,14 +36,14 @@ const run = async () => {
   verify_env();
   await check_db();
 
-  app.register(router);
-
   await app.register(import("@scalar/fastify-api-reference"), {
     routePrefix: "/docs",
     configuration: {
       theme: "kepler",
     },
   });
+
+  app.register(router);
 
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
