@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { logger } from "../logger";
 import { CustomerModel } from "../models";
 import { encrypt, sha256 } from "../crypt-core";
-import { create_customer } from "../routes/schemas/customer-api";
+import { create_customer } from "../schemas/customer-api";
 import z from "zod";
 
 export class CustomerController {
