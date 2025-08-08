@@ -31,6 +31,7 @@ export const laundry = pgTable("laundry", {
   opening: varchar({ length: 30 }).default("."),
   longitude: numeric(),
   latitude: numeric(),
+  cnpj_sha256: text().unique(),
   cnpj: char({ length: 14 }).unique(),
   bank_code: text(),
   bank_agency: integer(),
@@ -50,7 +51,9 @@ export const laundryBanner = pgTable("laundryBanner", {
 export const employee = pgTable("employee", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }),
+  cpf_sha256: text().unique(),
   cpf: char({ length: 11 }).unique(),
+  email_sha256: text().unique(),
   email: varchar().unique(),
   password: text(),
   laundryId: text().references(() => laundry.id),
