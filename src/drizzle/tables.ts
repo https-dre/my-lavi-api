@@ -7,19 +7,21 @@ import {
   char,
   boolean,
   timestamp,
+  date
 } from "drizzle-orm/pg-core";
 
 export const owner = pgTable("owner", {
   id: text().primaryKey(),
-  name: varchar(),
+  profile_url: text(),
+  name: varchar().notNull(),
   cpf: text().notNull(),
   cpf_sha256: text().notNull().unique(),
   verified: boolean().default(false),
-  email: text(),
+  email: text().notNull(),
   email_sha256: text().unique(),
-  password: text(),
-  birth_date: text(),
-  cep: text(),
+  password: text().notNull(),
+  birth_date: date().notNull(),
+  cep: text().notNull(),
 });
 
 export const laundry = pgTable("laundry", {
