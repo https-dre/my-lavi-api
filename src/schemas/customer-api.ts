@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodCustomer } from "../../dto/zod-schemas";
+import { ZodCustomer } from "../dto/zod-schemas";
 
 export const create_customer = {
   summary: "Create a customer",
