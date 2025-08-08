@@ -4,19 +4,21 @@ import { OwnerModel } from "../models";
 import * as bcrypt from "bcryptjs";
 import { decrypt, encrypt, sha256 } from "../crypt-core";
 import { logger } from "../logger";
+import { OwnerDTO } from "../dto";
 
 export class OwnerController {
   constructor(readonly repository: IOwnerRepository) {}
 
   public async save(req: FastifyRequest, reply: FastifyReply) {
-    let new_owner = req.body as {
-      name: string;
-      email: string;
-      password: string;
-      cpf: string;
-      cep: string;
-      birth_date: string;
-    };
+    let new_owner = req.body as Omit<OwnerDTO, "id">;
+
+    if(new_owner.cpf.includes(".")) {
+      return reply.code(400).send({ details: "O CPF deve ser composto somente de números."})
+    }
+    
+    if(new_owner.cpf.length != 11) {
+      return reply.code(400).send({ details: "O CPF deve ter somente 11 caracteres"});
+    }
 
     const cpf_hash = sha256(new_owner.cpf!);
     const owner_with_cpf = await this.repository.findByCpf(cpf_hash);
@@ -43,19 +45,16 @@ export class OwnerController {
     );
 
     const crypted_onwer = {
-      name: new_owner.name,
+      ...new_owner,
       email: encrypt(new_owner.email!),
       email_sha256: email_hash,
       cpf: encrypt(new_owner.cpf!),
       cpf_sha256: cpf_hash,
       cep: encrypt(new_owner.cep!),
-      birth_date: new_owner.birth_date!,
       password: new_password,
     };
 
     const owner_created = await this.repository.save(crypted_onwer);
-
-    logger.info(decrypt(owner_created.email!));
 
     return reply.code(201).send({ details: "Owner created!", owner_created });
   }
