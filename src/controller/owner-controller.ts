@@ -6,19 +6,20 @@ import { decrypt, encrypt, sha256 } from "../crypt-core";
 import { logger } from "../logger";
 import { OwnerDTO } from "../dto";
 import jwt from 'jsonwebtoken';
+import z from "zod";
+import { ZodOwner } from "../dto/zod-schemas";
+import { create_owner } from "../routes/schemas/owner-api";
 
 export class OwnerController {
   constructor(readonly repository: IOwnerRepository) {}
 
   public async save(req: FastifyRequest, reply: FastifyReply) {
-    let new_owner = req.body as Omit<OwnerDTO, "id">;
+    const { owner } = req.body as z.infer<typeof create_owner.body>;
 
-    if(new_owner.cpf.includes(".")) {
-      return reply.code(400).send({ details: "O CPF deve ser composto somente de números."})
-    }
-    
-    if(new_owner.cpf.length != 11) {
-      return reply.code(400).send({ details: "O CPF deve ter somente 11 caracteres"});
+    let new_owner = owner;
+
+    if(new_owner.cpf.includes(".") || new_owner.cep.includes("-")) {
+      return reply.code(400).send({ details: "CEP e CPF devem conter apenas números."})
     }
 
     const cpf_hash = sha256(new_owner.cpf!);
@@ -57,7 +58,7 @@ export class OwnerController {
 
     const owner_created = await this.repository.save(crypted_onwer);
 
-    return reply.code(201).send({ details: "Owner created!", owner_created });
+    return reply.code(201).send({ details: "Owner created!", owner_id: owner_created.id });
   }
 
   public async auth(req: FastifyRequest, reply: FastifyReply) {
