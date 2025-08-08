@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodOwner } from "../../dto/zod-schemas";
+import { ZodOwner } from "../dto/zod-schemas";
 
 export const create_owner = {
   summary: "Create a owner",
