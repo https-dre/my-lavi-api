@@ -74,7 +74,7 @@ export class OwnerController {
     const auth_result = bcrypt.compareSync(password, owner_founded.password);
 
     if(!auth_result) {
-      return reply.code(403).send({ details: "Login ou e-mail incorretos."});
+      return reply.code(401).send({ details: "Login ou e-mail incorretos."});
     }
 
     const payload = {

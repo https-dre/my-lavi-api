@@ -49,7 +49,7 @@ export class CustomerController {
       email: encrypt(email),
       doc_sha256: doc_hash,
       doc: encrypt(doc),
-      name: encrypt(customer.name!),
+      name: encrypt(.ncustomerame!),
       password: new_password,
     };
 
@@ -70,7 +70,7 @@ export class CustomerController {
     const result = bcrypt.compareSync(password, customerFounded.password!);
 
     if (!result) {
-      return reply.code(403).send({ details: "Senha ou e-mail incorretos." });
+      return reply.code(401).send({ details: "Senha ou e-mail incorretos." });
     }
 
     const payload = {
