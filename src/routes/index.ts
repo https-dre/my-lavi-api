@@ -10,6 +10,10 @@ export const router = async (server: FastifyInstance) => {
     reply.redirect("/docs");
   });
 
+  app.get("/ping", {}, (_, reply) => {
+    reply.code(200).send({ pong: true })
+  })
+
   owner_routes(app);
   customer_routes(app);
 };
