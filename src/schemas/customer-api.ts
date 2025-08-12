@@ -28,3 +28,14 @@ export const auth_customer = {
     })
   }
 }
+
+export const update_customer = {
+  summary: "Update fields of customer",
+  tags: ["customer"],
+  body: z.object({
+    fields: ZodCustomer.omit({ id: true, created_at: true, password: true }).partial()
+  }),
+  params: z.object({
+    id: z.string().uuid()
+  })
+}
