@@ -5,8 +5,9 @@ import jwt from "jsonwebtoken";
 import { logger } from "../logger";
 import { CustomerModel } from "../models";
 import { encrypt, sha256 } from "../crypt-core";
-import { create_customer } from "../schemas/customer-api";
+import { create_customer, update_customer } from '../schemas/customer-api';
 import z from "zod";
+import { CustomerDTO } from "../dto";
 
 export class CustomerController {
   constructor(readonly repository: ICustomerRepository) {}
@@ -84,5 +85,32 @@ export class CustomerController {
     return reply
       .code(200)
       .send({ details: "Autenticado com sucesso!", token });
+  }
+
+  public async update(req: FastifyRequest, reply: FastifyReply) {
+    const { fields } = req.body as z.infer<typeof update_customer.body>;
+    const { id } = req.params as z.infer<typeof update_customer.params>;
+
+/*     const customerFounded = await this.repository.findById(id);
+    if(!customerFounded) {
+      return reply.code(404).send({ details: "Cliente não encontrado"});
+    } */
+
+    const protected_fields = ["email", "doc"];
+    let update = {} as any;
+    for(const key of Object.keys(fields)) {
+      if(key in protected_fields) {
+        update[`${key}_sha256`] = sha256((fields as any)[key]);
+        update[key] = encrypt((fields as any)[key]);
+        continue;
+      }
+
+      update[key] = (fields as any)[key];
+    }
+
+    //await this.repository.update(update, id);
+
+    return reply.code(202)
+      .send({ detail: "Dados do cliente atualizados" });
   }
 }
