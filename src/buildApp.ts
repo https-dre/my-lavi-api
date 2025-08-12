@@ -20,6 +20,8 @@ export const buildApp =  (): FastifyInstance => {
     ignoreTrailingSlash: true,
   });
   
+  app.decorate("contextData", null);
+
   app.register(fastifyMultipart);
   app.register(fastifySwagger, {
     swagger: {
