@@ -49,7 +49,7 @@ export class CustomerController {
       email: encrypt(email),
       doc_sha256: doc_hash,
       doc: encrypt(doc),
-      name: encrypt(.ncustomerame!),
+      name: encrypt(customer.name!),
       password: new_password,
     };
 
