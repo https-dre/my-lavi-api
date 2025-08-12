@@ -8,7 +8,7 @@ import { OwnerDTO } from "../dto";
 import jwt from 'jsonwebtoken';
 import z from "zod";
 import { ZodOwner } from "../dto/zod-schemas";
-import { create_owner } from "../routes/schemas/owner-api";
+import { create_owner } from "../schemas/owner-api";
 
 export class OwnerController {
   constructor(readonly repository: IOwnerRepository) {}
