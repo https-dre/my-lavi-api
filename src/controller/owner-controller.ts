@@ -85,6 +85,6 @@ export class OwnerController {
       expiresIn: "1h"
     });
 
-    return reply.code(200).send({ details: "authenticated with success", jwt: token });
+    return reply.code(200).send({ details: "authenticated with success", token });
   }
 }
