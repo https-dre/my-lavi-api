@@ -24,6 +24,15 @@ export class CryptoProvider {
   comparePassword(password: string, hash: string) {
     return bcrypt.compareSync(password, hash);
   }
+  decryptEntity<T extends Record<string, any>>(entity: T, fields: string[]): T {
+    const decrypted = { ...entity } as Record<string, any>;
+    for (const field of fields) {
+      if (decrypted[field]) {
+        decrypted[field] = this.decrypt(decrypted[field]!);
+      }
+    }
+    return decrypted as T;
+  }
 }
 
 export class JwtProvider {
