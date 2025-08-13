@@ -23,7 +23,7 @@ export const customer_routes = (app: FastifyInstance) => {
     customerController.save.bind(customerController)
   );
 
-  app.put(
+  app.post(
     "/customer/sign",
     { schema: auth_customer },
     customerController.auth.bind(customerController)
