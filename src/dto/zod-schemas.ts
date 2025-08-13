@@ -2,6 +2,7 @@ import z from "zod";
 
 export const ZodOwner = z.object({
   id: z.string().uuid(),
+  profile_url: z.string().url().optional(),
   name: z.string(),
   cpf: z.string().length(11),
   verified: z.boolean(),
@@ -9,6 +10,7 @@ export const ZodOwner = z.object({
   password: z.string(),
   birth_date: z.string(),
   cep: z.string().length(8),
+  created_at: z.string()
 });
 
 export const ZodCustomer = z.object({

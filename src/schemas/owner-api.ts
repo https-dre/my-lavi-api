@@ -5,7 +5,7 @@ export const create_owner = {
   summary: "Create a owner",
   tags: ["owner"],
   body: z.object({
-    owner: ZodOwner.omit({ id: true})
+    owner: ZodOwner.omit({ id: true, verified: true, created_at: true })
   }),
   response: {
     201: z.object({

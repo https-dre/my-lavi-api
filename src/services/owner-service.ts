@@ -27,7 +27,7 @@ export class OwnerService {
     }
 
     const password_hash = this.crypto.hashPassword(owner.password);
-    const encrypted_owner: Omit<OwnerModel, "id" | "created_at"> = {
+    const encrypted_owner: Omit<OwnerModel, "id"> = {
       ...owner,
       email_hash,
       email: this.crypto.encrypt(owner.email),
@@ -36,7 +36,7 @@ export class OwnerService {
       cep: this.crypto.encrypt(owner.cep),
       verified: false,
       name: this.crypto.encrypt(owner.name),
-      password: password_hash
+      password: password_hash,
     }
 
     const owner_saved = await this.repository.save(encrypted_owner);

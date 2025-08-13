@@ -26,7 +26,7 @@ export class OwnerRepository implements IOwnerRepository {
     const result = await db
       .select()
       .from(tables.owner)
-      .where(eq(tables.owner.email_sha256, email));
+      .where(eq(tables.owner.email_hash, email));
 
     return result[0];
   }
@@ -51,7 +51,7 @@ export class OwnerRepository implements IOwnerRepository {
     const result: OwnerModel[] = await db
       .select()
       .from(tables.owner)
-      .where(eq(tables.owner.cpf_sha256, cpf));
+      .where(eq(tables.owner.cpf_hash, cpf));
 
     return result[0];
   }

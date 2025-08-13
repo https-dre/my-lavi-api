@@ -22,6 +22,7 @@ export const owner = pgTable("owner", {
   password: text().notNull(),
   birth_date: date().notNull(),
   cep: text().notNull(),
+  created_at: timestamp().defaultNow()
 });
 
 export const laundry = pgTable("laundry", {
