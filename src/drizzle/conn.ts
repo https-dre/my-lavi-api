@@ -5,7 +5,11 @@ export const db = drizzle(process.env.DATABASE_URL!);
 
 export const check_db = async () => {
   logger.info("Checking database connection...");
-  await db.execute("SELECT 1");
+  try {
+    await db.execute("SELECT 1");
+  } catch (err) {
+    logger.fatal("DATABASE CONNECTION ERROR!");
+    throw err;
+  }
   logger.info("Database connection ok!");
-
-}
+};
