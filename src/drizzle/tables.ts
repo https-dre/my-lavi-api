@@ -7,7 +7,7 @@ import {
   char,
   boolean,
   timestamp,
-  date
+  date,
 } from "drizzle-orm/pg-core";
 
 export const owner = pgTable("owner", {
@@ -22,7 +22,7 @@ export const owner = pgTable("owner", {
   password: text().notNull(),
   birth_date: date().notNull(),
   cep: text().notNull(),
-  created_at: timestamp().defaultNow()
+  created_at: timestamp().defaultNow(),
 });
 
 export const laundry = pgTable("laundry", {
@@ -33,9 +33,9 @@ export const laundry = pgTable("laundry", {
   longitude: numeric(),
   latitude: numeric(),
   cnpj_hash: text().unique(),
-  cnpj: char({ length: 14 }).unique(),
+  cnpj: text().unique(),
   bank_code: text(),
-  bank_agency: integer(),
+  bank_agency: text(),
   account_number: text().unique(),
   account_type: text(),
   type: text(),
