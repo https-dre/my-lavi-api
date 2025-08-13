@@ -3,12 +3,14 @@ import { BadRequest } from "../error-handler";
 import { OwnerModel } from "../models";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { IOwnerRepository } from "../repositories";
+import { IdentityService } from "./identity-service";
 
 export class OwnerService {
   constructor(
     private repository: IOwnerRepository,
     private crypto: CryptoProvider,
-    private jwt: JwtProvider
+    private jwt: JwtProvider,
+    private identityService: IdentityService
   ) {}
 
   async saveOwner(owner: Omit<OwnerDTO, "id" | "created_at">): Promise<OwnerModel> {
@@ -17,7 +19,7 @@ export class OwnerService {
     }
 
     const cpf_hash = this.crypto.sha256(owner.cpf);
-    if(await this.repository.findByCpf(cpf_hash)) {
+    if(await this.identityService.isIdentityTaken(cpf_hash)) {
       throw new BadRequest("CPF já exite.")
     }
 

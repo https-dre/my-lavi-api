@@ -2,12 +2,14 @@ import { CustomerDTO } from "../dto";
 import { BadRequest } from "../error-handler";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { ICustomerRepository } from "../repositories";
+import { IdentityService } from "./identity-service";
 
 export class CustomerService {
   constructor(
     readonly repository: ICustomerRepository,
     readonly crypto: CryptoProvider,
-    readonly jwt: JwtProvider
+    readonly jwt: JwtProvider,
+    readonly identityService: IdentityService
   ) {}
 
   public async createCustomer(
@@ -18,15 +20,15 @@ export class CustomerService {
       throw new BadRequest("E-mail já cadastrado!");
     }
 
-    const doc_hash = this.crypto.sha256(customer.doc);
-    if (await this.repository.findByDoc(doc_hash)) {
-      throw new BadRequest("CPF já cadastrado!");
-    }
-
     if (customer.is_pj && customer.doc.length !== 14) {
       throw new BadRequest("CNPJ deve conter exatamente 14 caracteres.");
     }
 
+    const doc_hash = this.crypto.sha256(customer.doc);
+    if(await this.identityService.isIdentityTaken(doc_hash)) {
+      throw new BadRequest("Identidade já existe.")
+    }
+    
     const encrypted_customer = {
       ...customer,
       email_hash,
