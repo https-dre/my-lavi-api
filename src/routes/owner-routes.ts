@@ -4,13 +4,23 @@ import { OwnerController } from "../controller/owner-controller";
 import { auth_owner, create_owner } from "../schemas/owner-api";
 import { OwnerService } from "../services/owner-service";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
+import { IdentityService } from "../services/identity-service";
+import { CustomerRepository } from "../repositories/customer-repository";
 
 export const owner_routes = (app: FastifyInstance) => {
+  const ownerRepository = new OwnerRepository();
+  const customerRepository = new CustomerRepository();
+  const identityService = new IdentityService(
+    customerRepository,
+    ownerRepository
+  );
   const ownerService = new OwnerService(
-    new OwnerRepository(),
+    ownerRepository,
     new CryptoProvider(),
-    new JwtProvider()
-  )
+    new JwtProvider(),
+    identityService
+  );
+
   const ownerController = new OwnerController(ownerService);
 
   app.post(
@@ -23,5 +33,5 @@ export const owner_routes = (app: FastifyInstance) => {
     "/owners/auth",
     { schema: auth_owner },
     ownerController.auth.bind(ownerController)
-  )
+  );
 };

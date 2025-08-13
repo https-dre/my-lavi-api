@@ -8,12 +8,21 @@ import {
 } from "../schemas/customer-api";
 import { CustomerService } from "../services/customer-service";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
+import { OwnerRepository } from "../repositories/owner-repository";
+import { IdentityService } from "../services/identity-service";
 
 export const customer_routes = (app: FastifyInstance) => {
+  const customerRepository = new CustomerRepository();
+  const ownerRepository = new OwnerRepository();
+  const identityService = new IdentityService(
+    customerRepository,
+    ownerRepository
+  );
   const customerService = new CustomerService(
-    new CustomerRepository(),
+    customerRepository,
     new CryptoProvider(),
-    new JwtProvider()
+    new JwtProvider(),
+    identityService
   );
   const customerController = new CustomerController(customerService);
 
