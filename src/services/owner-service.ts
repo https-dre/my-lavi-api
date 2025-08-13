@@ -29,9 +29,9 @@ export class OwnerService {
     const password_hash = this.crypto.hashPassword(owner.password);
     const encrypted_owner: Omit<OwnerModel, "id" | "created_at"> = {
       ...owner,
-      email_sha256: email_hash,
+      email_hash,
       email: this.crypto.encrypt(owner.email),
-      cpf_sha256: cpf_hash,
+      cpf_hash,
       cpf: this.crypto.encrypt(owner.cpf),
       cep: this.crypto.encrypt(owner.cep),
       verified: false,

@@ -29,9 +29,9 @@ export class CustomerService {
 
     const encrypted_customer = {
       ...customer,
-      email_sha256: email_hash,
+      email_hash,
       email: this.crypto.encrypt(customer.email),
-      doc_sha256: doc_hash,
+      doc_hash,
       doc: this.crypto.encrypt(customer.doc),
       name: this.crypto.encrypt(customer.name!),
       password: this.crypto.hashPassword(customer.password!),
