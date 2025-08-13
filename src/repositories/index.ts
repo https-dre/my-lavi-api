@@ -1,4 +1,4 @@
-import { CustomerModel, OwnerModel } from "../models";
+import { CustomerModel, LaundryModel, OwnerModel } from "../models";
 
 export interface ICustomerRepository {
   save(data: Omit<CustomerModel, "id">): Promise<CustomerModel>;
@@ -19,4 +19,13 @@ export interface IOwnerRepository {
   findById(id: string): Promise<OwnerModel>;
   findByCpf(cpf: string): Promise<OwnerModel>;
   update(updates: Partial<Omit<OwnerModel, "id">>, id: string): Promise<void>;
+}
+
+export interface ILaundryRepository {
+  save(data: Omit<LaundryModel, "id">): Promise<LaundryModel>;
+  delete(id: string): Promise<void>;
+  findByCNPJ(cnpj: string): Promise<LaundryModel>;
+  findById(id: string): Promise<LaundryModel>;
+  findByOwnerId(id: string): Promise<LaundryModel[]>;
+  update(id: string, fields: Record<string, any>): Promise<void>;
 }
