@@ -4,8 +4,8 @@ import { logger } from "./logger";
 
 export class BadRequest extends Error {
   constructor(
-    public readonly status: number,
-    public readonly response: string
+    public readonly response: string,
+    public readonly status?: number
   ) {
     super(response);
   }
@@ -35,7 +35,7 @@ export const ServerErrorHandler: FastifyErrorHandler = (error, _, reply) => {
   }
 
   if (error instanceof BadRequest) {
-    return reply.status(error.status).send({
+    return reply.status(error.status || 400).send({
       details: error.message,
     });
   }
