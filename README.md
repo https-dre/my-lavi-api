@@ -1,4 +1,4 @@
-# Laundry API
+# Laví API
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Fastify](https://img.shields.io/badge/fastify-%23000000.svg?style=for-the-badge&logo=fastify&logoColor=white)
@@ -7,7 +7,7 @@
 
 ![Maintainer](https://img.shields.io/badge/maintainer-https--dre-blue)
 
-Uma API criada para gerenciar dados armazenados para o TCC "Colave"!
+Uma API criada para gerenciar os workflows do aplicativo "Laví"!
 
 ## Sobre o Projeto
 
@@ -16,8 +16,8 @@ Eduardo Rossi e Gabriel Durbano.
 
 DESENVOLVEDORES:
 
-- André Dias [https-dre](https://github.com/https-dre)
-- Arthur Rolemberg [Massivo5040](https://github.com/Massivo5040)
+- André Dias [@https-dre](https://github.com/https-dre)
+- Arthur Rolemberg [@Massivo5040](https://github.com/Massivo5040)
 
 ORIENTADORA: Nathane De Castro.
 
