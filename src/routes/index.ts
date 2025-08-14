@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { owner_routes } from "./owner-routes";
 import { customer_routes } from "./customer-routes";
+import { laundry_routes } from "./laundry-routes";
 
 export const router = async (server: FastifyInstance) => {
   const app = server.withTypeProvider<ZodTypeProvider>();
@@ -11,10 +12,10 @@ export const router = async (server: FastifyInstance) => {
   });
 
   app.get("/ping", {}, (_, reply) => {
-    reply.code(200).send({ pong: true })
-  })
+    reply.code(200).send({ pong: true });
+  });
 
   owner_routes(app);
   customer_routes(app);
+  laundry_routes(app);
 };
-
