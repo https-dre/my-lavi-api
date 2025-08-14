@@ -26,14 +26,16 @@ export const ZodCustomer = z.object({
   created_at: z.string(),
 });
 
+const numericSchema = z.string().regex(/^-?\d+(\.\d+)?$/);
+
 export const ZodLaundry = z.object({
   id: z.string().uuid(),
   name: z.string(),
   profile_url: z.string().url().optional(),
   cnpj: z.string(),
   address: z.string(),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: numericSchema,
+  longitude: numericSchema,
   bank_code: z.string(),
   bank_agency: z.string(),
   account_number: z.string(),
@@ -50,4 +52,3 @@ export const PrivateZodLaundry = ZodLaundry.omit({
   account_type: true,
   ownerId: true,
 });
-
