@@ -24,7 +24,7 @@ export type S3Object = {
 export class S3Provider {
   private client: S3Client;
 
-  constructor(private bucket: string) {
+  constructor(public bucket: string) {
     this.client = new S3Client({
       region: process.env.AWS_REGION!,
       credentials: {
@@ -101,7 +101,7 @@ export class S3Provider {
       const response = await this.client.send(command);
       return {
         key: key,
-        url: `https://${this.bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`,
+        url: `https://${this.bucket}.s3.${process.env.AWS_REGION!}.amazonaws.com/${key}`,
         size: response.ContentLength,
         lastModified: response.LastModified,
       };
