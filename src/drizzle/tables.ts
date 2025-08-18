@@ -46,6 +46,7 @@ export const laundry = pgTable("laundry", {
 export const laundryBanner = pgTable("laundryBanner", {
   id: text().primaryKey(),
   resource: text(),
+  resource_key: text(),
   laundryId: text().references(() => laundry.id),
 });
 
