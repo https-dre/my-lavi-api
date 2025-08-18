@@ -12,13 +12,16 @@ const run = async () => {
   const port_from_env = process.env.PORT!;
   const current_port = port_from_env ? port_from_env : "5555";
 
-  app.listen({ port: Number(current_port) }, (err, address) => {
-    if (err) {
-      throw err;
-    }
+  app.listen(
+    { port: Number(current_port), host: "0.0.0.0" },
+    (err, address) => {
+      if (err) {
+        throw err;
+      }
 
-    logger.info("Server running at: " + address);
-  });
+      logger.info("Server running at: " + address);
+    }
+  );
 };
 
 run();
