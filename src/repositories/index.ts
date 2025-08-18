@@ -1,4 +1,9 @@
-import { CustomerModel, LaundryModel, OwnerModel } from "../models";
+import {
+  CustomerModel,
+  LaundryModel,
+  OwnerModel,
+  LaundryBannerModel,
+} from "../models";
 
 export interface ICustomerRepository {
   save(data: Omit<CustomerModel, "id">): Promise<CustomerModel>;
@@ -28,4 +33,11 @@ export interface ILaundryRepository {
   findById(id: string): Promise<LaundryModel>;
   findByOwnerId(id: string): Promise<LaundryModel[]>;
   update(id: string, fields: Record<string, any>): Promise<void>;
+}
+
+export interface ILaundryBannerRepository {
+  save(data: Omit<LaundryBannerModel, "id">): Promise<LaundryBannerModel>;
+  delete(id: string): Promise<void>;
+  findByLaundryId(id: string): Promise<LaundryBannerModel[]>;
+  findById(id: string): Promise<LaundryBannerModel>;
 }
