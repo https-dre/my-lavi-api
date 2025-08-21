@@ -16,7 +16,7 @@ export class CustomerService {
   public async createCustomer(
     customer: Omit<CustomerDTO, "id" | "created_at">
   ) {
-    const email_hash = this.crypto.sha256(customer.email);
+    const email_hash = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_hash)) {
       throw new BadResponse("E-mail já cadastrado!");
     }
@@ -25,16 +25,16 @@ export class CustomerService {
       throw new BadResponse("CNPJ deve conter exatamente 14 caracteres.");
     }
 
-    const doc_hash = this.crypto.sha256(customer.doc);
+    const doc_hash = this.crypto.hmac(customer.doc);
     if (await this.identityService.isIdentityTaken(doc_hash)) {
       throw new BadResponse("Identidade já existe.");
     }
 
     const encrypted_customer = {
       ...customer,
-      email_hash,
+      email_blind_index: email_hash,
       email: this.crypto.encrypt(customer.email),
-      doc_hash,
+      doc_blind_index: doc_hash,
       doc: this.crypto.encrypt(customer.doc),
       name: this.crypto.encrypt(customer.name!),
       password: this.crypto.hashPassword(customer.password!),
@@ -52,7 +52,7 @@ export class CustomerService {
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.sha256(email)
+      this.crypto.hmac(email)
     );
     if (
       !customerFounded ||
@@ -73,7 +73,7 @@ export class CustomerService {
     const update: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
       if (["email", "doc"].includes(key)) {
-        update[`${key}_sha256`] = this.crypto.sha256(fields[key]);
+        update[`${key}_sha256`] = this.crypto.hmac(fields[key]);
         update[key] = this.crypto.encrypt(fields[key]);
         continue;
       }
@@ -93,7 +93,7 @@ export class CustomerService {
   public async checkAuth(token: string) {
     try {
       const payload = this.jwt.verifyToken(token) as { email: string };
-      const email_hash = this.crypto.sha256(payload.email);
+      const email_hash = this.crypto.hmac(payload.email);
       if (!(await this.repository.findByEmail(email_hash)))
         throw new BadResponse("E-mail não encontrado!", 404);
       return payload;
