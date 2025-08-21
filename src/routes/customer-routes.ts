@@ -40,7 +40,10 @@ export const customer_routes = (app: FastifyInstance) => {
 
   app.put(
     "/customer/update",
-    { schema: update_customer },
+    {
+      schema: update_customer,
+      preHandler: customerController.preHandler.bind(customerController),
+    },
     customerController.update.bind(customerController)
   );
 };

@@ -32,4 +32,17 @@ export class CustomerController {
     const customer_id = await this.service.updateCustomer(id, fields);
     return reply.code(202).send({ details: "Atualizado com sucesso!" });
   }
+
+  public async preHandler(req: FastifyRequest, reply: FastifyReply) {
+    const auth_header = req.headers["Authorization"] as string;
+    if (!auth_header?.startsWith("Bearer "))
+      return reply.code(400).send({
+        details: "Não autorizado.",
+        err: "Header 'Authorization' must be defined.",
+      });
+    const token = auth_header.split(" ")[1];
+    req.contextData = { token };
+    const payload = await this.service.checkAuth(token);
+    req.contextData.jwtPayload = { email: payload.email };
+  }
 }

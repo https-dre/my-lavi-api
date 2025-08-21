@@ -32,6 +32,9 @@ export const auth_customer = {
 export const update_customer = {
   summary: "Update fields of customer",
   tags: ["customer"],
+  headers: z.object({
+    Authorization: z.string().startsWith("Bearer ")
+  }),
   body: z.object({
     fields: ZodCustomer.omit({
       id: true,

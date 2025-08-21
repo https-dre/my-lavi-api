@@ -1,3 +1,4 @@
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { CustomerDTO } from "../dto";
 import { BadResponse } from "../error-handler";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
@@ -25,10 +26,10 @@ export class CustomerService {
     }
 
     const doc_hash = this.crypto.sha256(customer.doc);
-    if(await this.identityService.isIdentityTaken(doc_hash)) {
-      throw new BadResponse("Identidade já existe.")
+    if (await this.identityService.isIdentityTaken(doc_hash)) {
+      throw new BadResponse("Identidade já existe.");
     }
-    
+
     const encrypted_customer = {
       ...customer,
       email_hash,
@@ -43,7 +44,13 @@ export class CustomerService {
     return created.id;
   }
 
-  public async authCustomer(email: string, password: string) {
+  /**
+   * 
+   * @param email Normal e-mail
+   * @param password Normal password
+   * @returns Jwt token with normal e-mail
+   */
+  public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
       this.crypto.sha256(email)
     );
@@ -59,13 +66,13 @@ export class CustomerService {
 
   public async updateCustomer(id: string, fields: Record<string, any>) {
     const customerFounded = await this.repository.findById(id);
-    if(!customerFounded) {
-      throw new BadResponse("Cliente não encontrado.", 404)
+    if (!customerFounded) {
+      throw new BadResponse("Cliente não encontrado.", 404);
     }
 
     const update: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
-      if(["email", "doc"].includes(key)) {
+      if (["email", "doc"].includes(key)) {
         update[`${key}_sha256`] = this.crypto.sha256(fields[key]);
         update[key] = this.crypto.encrypt(fields[key]);
         continue;
@@ -76,5 +83,27 @@ export class CustomerService {
 
     await this.repository.update(update, id);
     return id;
+  }
+
+  /**
+   * Check the token JWT
+   * @param token The JWT Token
+   * @returns The JWT payload with normal E-mail
+   */
+  public async checkAuth(token: string) {
+    try {
+      const payload = this.jwt.verifyToken(token) as { email: string };
+      const email_hash = this.crypto.sha256(payload.email);
+      if (!(await this.repository.findByEmail(email_hash)))
+        throw new BadResponse("E-mail não encontrado!", 404);
+      return payload;
+    } catch (err) {
+      if (err instanceof TokenExpiredError)
+        throw new BadResponse("Sessão expirou.");
+      if (err instanceof JsonWebTokenError)
+        throw new BadResponse("Sessão inválida.", 401);
+      
+      throw err;
+    }
   }
 }
