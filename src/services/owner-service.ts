@@ -1,5 +1,7 @@
 import { OwnerDTO } from "../dto";
 import { BadResponse } from "../error-handler";
+import { remove_sensitive_fields } from "../functions/remove-sensitive-fields";
+import { logger } from "../logger";
 import { OwnerModel } from "../models";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { IOwnerRepository } from "../repositories";
@@ -13,19 +15,21 @@ export class OwnerService {
     private identityService: IdentityService
   ) {}
 
-  async saveOwner(owner: Omit< OwnerDTO, "id" | "created_at">): Promise<OwnerModel> {
+  async saveOwner(
+    owner: Omit<OwnerDTO, "id" | "created_at">
+  ): Promise<OwnerModel> {
     if (owner.cpf.includes(".") || owner.cep.includes("-")) {
-      throw new BadResponse("CEP e CPF devem conter somente números.")
+      throw new BadResponse("CEP e CPF devem conter somente números.");
     }
 
-    const cpf_index = this.crypto.sha256(owner.cpf);
-    if(await this.identityService.isIdentityTaken(cpf_index)) {
-      throw new BadResponse("CPF já exite.")
+    const cpf_index = this.crypto.hmac(owner.cpf);
+    if (await this.identityService.isIdentityTaken(cpf_index)) {
+      throw new BadResponse("CPF já exite.");
     }
 
-    const email_index = this.crypto.sha256(owner.cep);
-    if(await this.repository.findByEmail(email_index)) {
-      throw new BadResponse("E-mail já exite.")
+    const email_index = this.crypto.hmac(owner.email);
+    if (await this.repository.findByEmail(email_index)) {
+      throw new BadResponse("E-mail já exite.");
     }
 
     const password_hash = this.crypto.hashPassword(owner.password);
@@ -39,25 +43,43 @@ export class OwnerService {
       verified: false,
       name: this.crypto.encrypt(owner.name),
       password: password_hash,
-    }
-
+    };
     const owner_saved = await this.repository.save(encrypted_owner);
-    return owner_saved
+    return owner_saved;
   }
 
-  async authenticateOwner(email: string, password: string) {
-    const ownerFounded = await this.repository
-      .findByEmail(this.crypto.sha256(email));
-    if(!ownerFounded) {
-      throw new BadResponse("Cadastro não encontrado.", 404);
-    }
+  async ownerLogin(email: string, password: string) {
+    const emailIndex = this.crypto.hmac(email);
+    const ownerWithEmail = await this.repository.findByEmail(emailIndex);
+    if (!ownerWithEmail) throw new BadResponse("Cadastro não encontrado.", 404);
 
-    const passResult = this.crypto.comparePassword(password, ownerFounded.password);
-    if(!passResult) {
+    const passResult = this.crypto.comparePassword(
+      password,
+      ownerWithEmail.password
+    );
+    if (!passResult) {
       throw new BadResponse("Login ou senha incorretos.");
     }
 
     const token = this.jwt.generateToken({ email });
     return token;
+  }
+
+  async checkJwt(token: string) {
+    const payload = this.jwt.verifyToken(token) as { email: string };
+    const owner = await this.repository.findByEmail(payload.email);
+    if (!owner) throw new BadResponse("Cadastro não encontrado.", 404);
+    return payload;
+  }
+
+  async findOwner(id: string) {
+    const owner = await this.repository.findById(id);
+    if (!owner) throw new BadResponse("Cadastro não encontrado.", 404);
+    const decryptedOwner = this.crypto.decryptEntity(owner, [
+      "cep",
+      "email",
+      "cpf",
+    ]);
+    return remove_sensitive_fields(decryptedOwner);
   }
 }
