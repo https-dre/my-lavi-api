@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { OwnerRepository } from "../repositories/owner-repository";
 import { OwnerController } from "../controller/owner-controller";
-import { auth_owner, create_owner } from "../schemas/owner-api";
+import { auth_owner, create_owner, get_owner } from '../schemas/owner-api';
 import { OwnerService } from "../services/owner-service";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { IdentityService } from "../services/identity-service";
@@ -32,6 +32,12 @@ export const owner_routes = (app: FastifyInstance) => {
   app.put(
     "/owners/auth",
     { schema: auth_owner },
-    ownerController.auth.bind(ownerController)
+    ownerController.ownerLogin.bind(ownerController)
   );
+
+  app.get(
+    "/owners/:id",
+    { schema: get_owner },
+    ownerController.getOwner.bind(ownerController)
+  )
 };

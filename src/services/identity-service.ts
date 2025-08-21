@@ -7,9 +7,9 @@ export class IdentityService {
   ) {}
 
   async isIdentityTaken(key: string) {
-    const ownerFounded = await this.ownerRepository.findByCpf(key);
-    const customerFounded = await this.customerRepository.findByDoc(key);
-    if (ownerFounded || customerFounded) {
+    const owner = await this.ownerRepository.findByCpf(key);
+    const customer = await this.customerRepository.findByDoc(key);
+    if (owner || customer) {
       return true
     }
 

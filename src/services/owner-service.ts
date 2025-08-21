@@ -62,7 +62,7 @@ export class OwnerService {
     }
 
     const token = this.jwt.generateToken({ email });
-    return token;
+    return { token, owner_id: ownerWithEmail.id };
   }
 
   async checkJwt(token: string) {

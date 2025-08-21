@@ -15,12 +15,44 @@ export class OwnerController {
     });
   }
 
-  async auth(req: FastifyRequest, reply: FastifyReply) {
+  async ownerLogin(req: FastifyRequest, reply: FastifyReply) {
     const { email, password } = req.body as z.infer<typeof auth_owner.body>;
-    const token = await this.service.authenticateOwner(email, password);
+    const payload = await this.service.ownerLogin(email, password);
     return reply.code(200).send({
       details: "Autenticado com sucesso!",
-      token,
+      token: payload.token,
+      owner_id: payload.owner_id
     });
+  }
+
+  async preHandler(req: FastifyRequest, reply: FastifyReply) {
+    const header = req.headers["Authorization"] as string;
+    if (!header.startsWith("Bearer "))
+      return reply.code(401).send({
+        details: "Sessão inválida.",
+        err: "Header 'Authorization' must start with 'Bearer '",
+      });
+    const token = header.split(" ")[1];
+    const payload = await this.service.checkJwt(token);
+    req.contextData = { token, jwtPayload: payload };
+  }
+
+  async getPublicOwnerData(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    const owner = await this.service.findOwner(id);
+    return reply.code(200).send({
+      details: "Registro encontrado",
+      owner: {
+        id: owner.id,
+        name: owner.name,
+        profile_url: owner.profile_url,
+      },
+    });
+  }
+
+  async getOwner(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    const owner = await this.service.findOwner(id);
+    return reply.code(200).send({ details: "Registro encontrado.", owner });
   }
 }
