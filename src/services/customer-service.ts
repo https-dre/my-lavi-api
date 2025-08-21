@@ -73,7 +73,7 @@ export class CustomerService {
     const update: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
       if (["email", "doc"].includes(key)) {
-        update[`${key}_sha256`] = this.crypto.hmac(fields[key]);
+        update[`${key}_blind_index`] = this.crypto.hmac(fields[key]);
         update[key] = this.crypto.encrypt(fields[key]);
         continue;
       }
