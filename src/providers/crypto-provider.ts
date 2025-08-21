@@ -36,7 +36,12 @@ export class CryptoProvider {
 }
 
 export class JwtProvider {
+  private key = process.env.JWT_KEY! as string;
   generateToken(payload: object, expiresIn?: "1h") {
-    return jwt.sign(payload, process.env.JWT_KEY!, { expiresIn });
+    return jwt.sign(payload, this.key, { expiresIn });
   }
+  verifyToken(token: string) {
+    const payload = jwt.verify(token, this.key)
+    return payload;
+}
 }
