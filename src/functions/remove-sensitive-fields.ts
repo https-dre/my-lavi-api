@@ -2,7 +2,7 @@
  * Remove campos com 'hash' no nome
  */
 export type RemoveHashFields<T> = {
-  [K in keyof T as K extends `${string}hash${string}` ? never : K]: T[K];
+  [K in keyof T as K extends `${string}blind${string}` ? never : K]: T[K];
 };
 
 /**
@@ -16,7 +16,7 @@ export const remove_hash_fields = <T extends Record<string, any>>(model: T):
   const result = {} as RemoveHashFields<T>;
 
   for(const key in model) {
-    if(!key.toLowerCase().includes("sha256")) {
+    if(!key.toLowerCase().includes("blind")) {
       result[key] = model[key];
     }
   }
