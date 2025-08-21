@@ -1,6 +1,7 @@
 import { describe, it, beforeAll, afterAll, expect } from "vitest";
 import request from "supertest";
 import { buildApp } from "../../src/buildApp";
+import { db } from "../../src/drizzle/conn";
 
 let app: ReturnType<typeof buildApp>;
 
@@ -11,6 +12,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await app.close();
+  await db.execute("TRUNCATE laundry, owner RESTART IDENTITY CASCADE")
 })
 
 describe("GET /ping", () => {
