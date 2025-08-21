@@ -13,27 +13,27 @@ export class OwnerService {
     private identityService: IdentityService
   ) {}
 
-  async saveOwner(owner: Omit<OwnerDTO, "id" | "created_at">): Promise<OwnerModel> {
+  async saveOwner(owner: Omit< OwnerDTO, "id" | "created_at">): Promise<OwnerModel> {
     if (owner.cpf.includes(".") || owner.cep.includes("-")) {
       throw new BadResponse("CEP e CPF devem conter somente números.")
     }
 
-    const cpf_hash = this.crypto.sha256(owner.cpf);
-    if(await this.identityService.isIdentityTaken(cpf_hash)) {
+    const cpf_index = this.crypto.sha256(owner.cpf);
+    if(await this.identityService.isIdentityTaken(cpf_index)) {
       throw new BadResponse("CPF já exite.")
     }
 
-    const email_hash = this.crypto.sha256(owner.cep);
-    if(await this.repository.findByEmail(email_hash)) {
+    const email_index = this.crypto.sha256(owner.cep);
+    if(await this.repository.findByEmail(email_index)) {
       throw new BadResponse("E-mail já exite.")
     }
 
     const password_hash = this.crypto.hashPassword(owner.password);
     const encrypted_owner: Omit<OwnerModel, "id"> = {
       ...owner,
-      email_hash,
+      email_blind_index: email_index,
       email: this.crypto.encrypt(owner.email),
-      cpf_hash,
+      cpf_blind_index: cpf_index,
       cpf: this.crypto.encrypt(owner.cpf),
       cep: this.crypto.encrypt(owner.cep),
       verified: false,

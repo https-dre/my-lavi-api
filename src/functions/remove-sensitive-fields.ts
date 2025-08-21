@@ -1,7 +1,7 @@
 /**
  * Remove campos com 'hash' no nome
  */
-export type RemoveHashFields<T> = {
+export type RemoveSensitiveFields<T> = {
   [K in keyof T as K extends `${string}blind${string}` ? never : K]: T[K];
 };
 
@@ -11,9 +11,9 @@ export type RemoveHashFields<T> = {
  * @param model - Objeto original contendo diversos campos
  * @returns Um novo objeto sem os campos que contêm "hash"
  */
-export const remove_hash_fields = <T extends Record<string, any>>(model: T): 
-  RemoveHashFields<T> => {
-  const result = {} as RemoveHashFields<T>;
+export const remove_sensitive_fields = <T extends Record<string, any>>(model: T): 
+  RemoveSensitiveFields<T> => {
+  const result = {} as RemoveSensitiveFields<T>;
 
   for(const key in model) {
     if(!key.toLowerCase().includes("blind")) {

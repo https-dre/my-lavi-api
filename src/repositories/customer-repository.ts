@@ -22,7 +22,7 @@ export class CustomerRepository implements ICustomerRepository {
     const result: CustomerModel[] = await db
       .select()
       .from(tables.customer)
-      .where(eq(tables.customer.doc_hash, doc));
+      .where(eq(tables.customer.doc_blind_index, doc));
     return result[0];
   }
 
@@ -30,7 +30,7 @@ export class CustomerRepository implements ICustomerRepository {
     const result: CustomerModel[] = await db
       .select()
       .from(tables.customer)
-      .where(eq(tables.customer.email_hash, email));
+      .where(eq(tables.customer.email_blind_index, email));
 
     return result[0];
   }

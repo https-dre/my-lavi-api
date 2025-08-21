@@ -1,6 +1,6 @@
 import { LaundryDTO } from "../dto";
 import { BadResponse } from "../error-handler";
-import { remove_hash_fields } from "../functions/remove-sensitive-fields";
+import { remove_sensitive_fields } from "../functions/remove-sensitive-fields";
 import { LaundryModel } from "../models";
 import { CryptoProvider } from "../providers/crypto-provider";
 import { ILaundryRepository, IOwnerRepository } from "../repositories";
@@ -21,8 +21,8 @@ export class LaundryService {
   ) {}
 
   async save(laundry: Omit<LaundryDTO, "id" | "created_at">) {
-    const cnpj_hash = this.crypto.sha256(laundry.cnpj!);
-    const laundryFounded = await this.repository.findByCNPJ(cnpj_hash);
+    const cnpj_index = this.crypto.sha256(laundry.cnpj!);
+    const laundryFounded = await this.repository.findByCNPJ(cnpj_index);
     if (laundryFounded) {
       throw new BadResponse("Este CNPJ já foi registrado.");
     }
@@ -34,7 +34,7 @@ export class LaundryService {
 
     const encrypted_laundry: Omit<LaundryModel, "id"> = {
       ...laundry,
-      cnpj_hash,
+      cnpj_blind_index: cnpj_index,
       cnpj: this.crypto.encrypt(laundry.cnpj!),
       bank_code: this.crypto.encrypt(laundry.bank_code!),
       bank_agency: this.crypto.encrypt(laundry.bank_agency!),
@@ -61,6 +61,6 @@ export class LaundryService {
       laundryFounded,
       sensitive_fields
     );
-    return remove_hash_fields(decrypted_laundry);
+    return remove_sensitive_fields(decrypted_laundry);
   }
 }

@@ -33,7 +33,7 @@ export class LaundryRepository implements ILaundryRepository {
     const result = await db
       .select()
       .from(t.laundry)
-      .where(eq(t.laundry.cnpj_hash, cnpj));
+      .where(eq(t.laundry.cnpj_blind_index, cnpj));
     return result[0];
   }
 

@@ -16,8 +16,8 @@ export class CustomerService {
   public async createCustomer(
     customer: Omit<CustomerDTO, "id" | "created_at">
   ) {
-    const email_hash = this.crypto.hmac(customer.email);
-    if (await this.repository.findByEmail(email_hash)) {
+    const email_index = this.crypto.hmac(customer.email);
+    if (await this.repository.findByEmail(email_index)) {
       throw new BadResponse("E-mail já cadastrado!");
     }
 
@@ -25,16 +25,16 @@ export class CustomerService {
       throw new BadResponse("CNPJ deve conter exatamente 14 caracteres.");
     }
 
-    const doc_hash = this.crypto.hmac(customer.doc);
-    if (await this.identityService.isIdentityTaken(doc_hash)) {
+    const doc_index = this.crypto.hmac(customer.doc);
+    if (await this.identityService.isIdentityTaken(doc_index)) {
       throw new BadResponse("Identidade já existe.");
     }
 
     const encrypted_customer = {
       ...customer,
-      email_blind_index: email_hash,
+      email_blind_index: email_index,
       email: this.crypto.encrypt(customer.email),
-      doc_blind_index: doc_hash,
+      doc_blind_index: doc_index,
       doc: this.crypto.encrypt(customer.doc),
       name: this.crypto.encrypt(customer.name!),
       password: this.crypto.hashPassword(customer.password!),
