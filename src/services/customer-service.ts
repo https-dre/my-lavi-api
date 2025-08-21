@@ -1,5 +1,5 @@
 import { CustomerDTO } from "../dto";
-import { BadRequest } from "../error-handler";
+import { BadResponse } from "../error-handler";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { ICustomerRepository } from "../repositories";
 import { IdentityService } from "./identity-service";
@@ -17,16 +17,16 @@ export class CustomerService {
   ) {
     const email_hash = this.crypto.sha256(customer.email);
     if (await this.repository.findByEmail(email_hash)) {
-      throw new BadRequest("E-mail já cadastrado!");
+      throw new BadResponse("E-mail já cadastrado!");
     }
 
     if (customer.is_pj && customer.doc.length !== 14) {
-      throw new BadRequest("CNPJ deve conter exatamente 14 caracteres.");
+      throw new BadResponse("CNPJ deve conter exatamente 14 caracteres.");
     }
 
     const doc_hash = this.crypto.sha256(customer.doc);
     if(await this.identityService.isIdentityTaken(doc_hash)) {
-      throw new BadRequest("Identidade já existe.")
+      throw new BadResponse("Identidade já existe.")
     }
     
     const encrypted_customer = {
@@ -51,7 +51,7 @@ export class CustomerService {
       !customerFounded ||
       !this.crypto.comparePassword(password, customerFounded.password!)
     ) {
-      throw new BadRequest("Senha ou e-mail incorretos!", 401);
+      throw new BadResponse("Senha ou e-mail incorretos!", 401);
     }
 
     return this.jwt.generateToken({ email });
@@ -60,7 +60,7 @@ export class CustomerService {
   public async updateCustomer(id: string, fields: Record<string, any>) {
     const customerFounded = await this.repository.findById(id);
     if(!customerFounded) {
-      throw new BadRequest("Cliente não encontrado.", 404)
+      throw new BadResponse("Cliente não encontrado.", 404)
     }
 
     const update: Record<string, any> = {};

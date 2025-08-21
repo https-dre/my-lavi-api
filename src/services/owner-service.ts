@@ -1,5 +1,5 @@
 import { OwnerDTO } from "../dto";
-import { BadRequest } from "../error-handler";
+import { BadResponse } from "../error-handler";
 import { OwnerModel } from "../models";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { IOwnerRepository } from "../repositories";
@@ -15,17 +15,17 @@ export class OwnerService {
 
   async saveOwner(owner: Omit<OwnerDTO, "id" | "created_at">): Promise<OwnerModel> {
     if (owner.cpf.includes(".") || owner.cep.includes("-")) {
-      throw new BadRequest("CEP e CPF devem conter somente números.")
+      throw new BadResponse("CEP e CPF devem conter somente números.")
     }
 
     const cpf_hash = this.crypto.sha256(owner.cpf);
     if(await this.identityService.isIdentityTaken(cpf_hash)) {
-      throw new BadRequest("CPF já exite.")
+      throw new BadResponse("CPF já exite.")
     }
 
     const email_hash = this.crypto.sha256(owner.cep);
     if(await this.repository.findByEmail(email_hash)) {
-      throw new BadRequest("E-mail já exite.")
+      throw new BadResponse("E-mail já exite.")
     }
 
     const password_hash = this.crypto.hashPassword(owner.password);
@@ -49,12 +49,12 @@ export class OwnerService {
     const ownerFounded = await this.repository
       .findByEmail(this.crypto.sha256(email));
     if(!ownerFounded) {
-      throw new BadRequest("Cadastro não encontrado.", 404);
+      throw new BadResponse("Cadastro não encontrado.", 404);
     }
 
     const passResult = this.crypto.comparePassword(password, ownerFounded.password);
     if(!passResult) {
-      throw new BadRequest("Login ou senha incorretos.");
+      throw new BadResponse("Login ou senha incorretos.");
     }
 
     const token = this.jwt.generateToken({ email });

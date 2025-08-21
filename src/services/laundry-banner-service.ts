@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { BadRequest } from "../error-handler";
+import { BadResponse } from "../error-handler";
 import { S3ObjectProps, S3Provider } from "../providers/S3Provider";
 import { ILaundryBannerRepository, ILaundryRepository } from "../repositories";
 import { LaundryBannerModel } from "../models";
@@ -18,7 +18,7 @@ export class LaundryBannerService {
     // verifica se a lavanderia existe
 
     if (!(await this.laundryRepository.findById(laundry_id))) {
-      throw new BadRequest("Lavanderia não encontrata.", 404);
+      throw new BadResponse("Lavanderia não encontrata.", 404);
     }
 
     // Salva no S3
@@ -31,7 +31,7 @@ export class LaundryBannerService {
     const savedObject = await this.s3Provider.getObject(newObject.key);
 
     if (!savedObject) {
-      throw new BadRequest("Houve um erro ao salvar a imagem.", 500);
+      throw new BadResponse("Houve um erro ao salvar a imagem.", 500);
     }
 
     // salva no postgresql
@@ -49,7 +49,7 @@ export class LaundryBannerService {
     laundryId: string
   ): Promise<LaundryBannerModel[]> {
     if (!(await this.laundryRepository.findById(laundryId))) {
-      throw new BadRequest("Lavanderia não encontrata.", 404);
+      throw new BadResponse("Lavanderia não encontrata.", 404);
     }
 
     const banners = await this.bannerRepository.findByLaundryId(laundryId);
@@ -58,7 +58,7 @@ export class LaundryBannerService {
 
   async deleteById(bannerId: string) {
     if (!(await this.bannerRepository.findById(bannerId))) {
-      throw new BadRequest("Imagem não encontrata.", 404);
+      throw new BadResponse("Imagem não encontrata.", 404);
     }
 
     await this.bannerRepository.delete(bannerId);

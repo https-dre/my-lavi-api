@@ -1,5 +1,5 @@
 import { LaundryDTO } from "../dto";
-import { BadRequest } from "../error-handler";
+import { BadResponse } from "../error-handler";
 import { remove_hash_fields } from "../functions/remove-sensitive-fields";
 import { LaundryModel } from "../models";
 import { CryptoProvider } from "../providers/crypto-provider";
@@ -24,12 +24,12 @@ export class LaundryService {
     const cnpj_hash = this.crypto.sha256(laundry.cnpj!);
     const laundryFounded = await this.repository.findByCNPJ(cnpj_hash);
     if (laundryFounded) {
-      throw new BadRequest("Este CNPJ já foi registrado.");
+      throw new BadResponse("Este CNPJ já foi registrado.");
     }
 
     const owner = this.ownerRepository.findById(laundry.ownerId!);
     if (!owner) {
-      throw new BadRequest("Cadastro de dono não encontrado!");
+      throw new BadResponse("Cadastro de dono não encontrado!");
     }
 
     const encrypted_laundry: Omit<LaundryModel, "id"> = {
@@ -55,7 +55,7 @@ export class LaundryService {
       );
 
     if (!laundryFounded)
-      throw new BadRequest("Lavanderia não encontrada.", 404);
+      throw new BadResponse("Lavanderia não encontrada.", 404);
 
     const decrypted_laundry = this.crypto.decryptEntity(
       laundryFounded,

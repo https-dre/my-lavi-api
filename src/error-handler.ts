@@ -2,12 +2,18 @@ import { FastifyInstance } from "fastify";
 import { ZodError } from "zod";
 import { logger } from "./logger";
 
-export class BadRequest extends Error {
-  constructor(
-    public readonly response: string,
-    public readonly status?: number
-  ) {
-    super(response);
+export class BadResponse extends Error {
+  public response: string | object;
+  public status: number;
+
+  constructor(response: string | object, status: number = 400) {
+    const message = typeof response === "string" ? response : "Error";
+
+    super(message);
+
+    this.name = "BadResponse";
+    this.response = response;
+    this.status = status;
   }
 }
 
@@ -34,10 +40,13 @@ export const ServerErrorHandler: FastifyErrorHandler = (error, _, reply) => {
     });
   }
 
-  if (error instanceof BadRequest) {
-    return reply.status(error.status || 400).send({
-      details: error.message,
-    });
+  if (error instanceof BadResponse) {
+    if (typeof error.response == "string") {
+      return reply.code(error.status).send({
+        details: error.response,
+      });
+    }
+    return reply.code(error.status).send(error.response);
   }
 
   logger.fatal(error);
