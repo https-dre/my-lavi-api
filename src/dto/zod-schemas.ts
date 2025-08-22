@@ -1,8 +1,10 @@
 import z from "zod";
 
+const zCreatedAt = z.preprocess((val) => new Date(val as string), z.date());
+
 export const ZodOwner = z.object({
   id: z.string().uuid(),
-  profile_url: z.string().url().optional(),
+  profile_url: z.string().url().nullable().optional(),
   name: z.string(),
   cpf: z.string().length(11),
   verified: z.boolean(),
@@ -10,12 +12,12 @@ export const ZodOwner = z.object({
   password: z.string(),
   birth_date: z.string(),
   cep: z.string().length(8),
-  created_at: z.string(),
+  created_at: zCreatedAt
 });
 
 export const ZodCustomer = z.object({
   id: z.string().uuid(),
-  profile_url: z.string().url().optional(),
+  profile_url: z.string().url().nullable().optional(),
   name: z.string(),
   email: z.string().email(),
   is_pj: z.boolean(),
@@ -23,7 +25,7 @@ export const ZodCustomer = z.object({
   birth_date: z.string(),
   gender: z.string(),
   password: z.string(),
-  created_at: z.string(),
+  created_at: zCreatedAt
 });
 
 const numericSchema = z.string().regex(/^-?\d+(\.\d+)?$/);
@@ -31,7 +33,7 @@ const numericSchema = z.string().regex(/^-?\d+(\.\d+)?$/);
 export const ZodLaundry = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  profile_url: z.string().url().optional(),
+  profile_url: z.string().url().nullable().optional(),
   cnpj: z.string(),
   address: z.string(),
   latitude: numericSchema,
@@ -41,7 +43,7 @@ export const ZodLaundry = z.object({
   account_number: z.string(),
   account_type: z.string(),
   type: z.string(),
-  created_at: z.preprocess((val) => new Date(val as string), z.date()),
+  created_at: zCreatedAt,
   ownerId: z.string().uuid(),
 });
 

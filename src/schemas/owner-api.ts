@@ -38,6 +38,9 @@ export const get_owner = {
     id: z.string().uuid(),
   }),
   response: {
-    200: ZodOwner,
+    200: z.object({
+      details: z.string(),
+      owner: ZodOwner
+    }),
   },
 };
