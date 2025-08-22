@@ -73,10 +73,6 @@ export class LaundryService {
       email: string;
       role: string;
     };
-    if (
-      !(await this.ownerRepository.findByEmail(this.crypto.hmac(payload.email)))
-    )
-      throw new BadResponse("E-mail não cadastrado.");
     return payload;
   }
 
