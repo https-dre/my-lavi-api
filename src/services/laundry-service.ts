@@ -2,7 +2,7 @@ import { LaundryDTO } from "../dto";
 import { BadResponse } from "../error-handler";
 import { remove_sensitive_fields } from "../functions/remove-sensitive-fields";
 import { LaundryModel } from "../models";
-import { CryptoProvider } from "../providers/crypto-provider";
+import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { ILaundryRepository, IOwnerRepository } from "../repositories";
 
 const sensitive_fields = [
@@ -14,11 +14,15 @@ const sensitive_fields = [
 ];
 
 export class LaundryService {
+  private jwt: JwtProvider;
   constructor(
     private repository: ILaundryRepository,
     private ownerRepository: IOwnerRepository,
     private crypto: CryptoProvider
-  ) {}
+  ) {
+    this.jwt = new JwtProvider();
+    this.crypto = new CryptoProvider();
+  }
 
   async save(laundry: Omit<LaundryDTO, "id" | "created_at">) {
     const cnpj_index = this.crypto.sha256(laundry.cnpj!);
@@ -27,7 +31,7 @@ export class LaundryService {
       throw new BadResponse("Este CNPJ já foi registrado.");
     }
 
-    const owner = this.ownerRepository.findById(laundry.ownerId!);
+    const owner = await this.ownerRepository.findById(laundry.ownerId!);
     if (!owner) {
       throw new BadResponse("Cadastro de dono não encontrado!");
     }
@@ -62,5 +66,63 @@ export class LaundryService {
       sensitive_fields
     );
     return remove_sensitive_fields(decrypted_laundry);
+  }
+
+  private async checkJwt(token: string) {
+    const payload = this.jwt.verifyToken(token) as {
+      email: string;
+      role: string;
+    };
+    if (
+      !(await this.ownerRepository.findByEmail(this.crypto.hmac(payload.email)))
+    )
+      throw new BadResponse("E-mail não cadastrado.");
+    return payload;
+  }
+
+  async verifyTokenAndValidateOwner(header: string) {
+    if (!header.startsWith("Bearer "))
+      throw new BadResponse({
+        details: "Sessão inválida",
+        err: "Invalid 'Authorization' header",
+      });
+    const token = header.split(" ")[1];
+    const jwtPayload = await this.checkJwt(token);
+    return {
+      token,
+      jwtPayload,
+    };
+  }
+
+  async updateLaundryFields(
+    laundryId: string,
+    updatedFields: Record<string, any>
+  ) {
+    const laundryWithId = await this.repository.findById(laundryId);
+    if (!laundryId) throw new BadResponse("Lavanderia não encontrado", 404);
+    const decryptedLaundry = this.crypto.decryptEntity(
+      laundryWithId,
+      sensitive_fields
+    );
+    const updated_laundry = { ...decryptedLaundry, ...updatedFields } as Record<
+      string,
+      any
+    >;
+    const encrypted_fields = {} as Record<string, any>;
+    for (const field of sensitive_fields) {
+      if (updated_laundry[field]) {
+        encrypted_fields[field] = this.crypto.encrypt(updated_laundry[field]);
+      }
+    }
+    let cnpj_blind_index = updated_laundry.cnpj_blind_index;
+    if (updatedFields.cnpj) {
+      cnpj_blind_index = this.crypto.hmac(updatedFields.cnpj);
+    }
+    const updatedRecord = {
+      ...updated_laundry,
+      ...encrypted_fields,
+      cnpj_blind_index,
+    };
+    await this.repository.update(laundryId, updatedRecord);
   }
 }
