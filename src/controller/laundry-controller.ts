@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LaundryService } from "../services/laundry-service";
 import z from "zod";
 import { create_laundry, get_laundry } from "../schemas/laundry-api";
+import { defaultPreHandler } from "../middlewares/default-pre-handler";
 
 export class LaundryController {
   constructor(private service: LaundryService) {}
@@ -18,5 +19,12 @@ export class LaundryController {
     const { key } = req.params as z.infer<typeof get_laundry.params>;
     const laundry = await this.service.find(key);
     return reply.code(200).send(laundry);
+  }
+
+  async preHandler(req: FastifyRequest, reply: FastifyReply) {
+    const allPayload = await this.service.verifyTokenAndValidateOwner(
+      req.headers["Authorization"] as string
+    );
+    req.contextData = allPayload;
   }
 }
