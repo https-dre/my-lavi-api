@@ -82,4 +82,10 @@ export class OwnerService {
     ]);
     return remove_sensitive_fields(decryptedOwner);
   }
+
+  async deleteById(id: string) {
+    const onwerWithId = await this.repository.findById(id);
+    if (!onwerWithId) throw new BadResponse("Nenhum cadastro encontrado", 404);
+    await this.repository.delete(id);
+  }
 }
