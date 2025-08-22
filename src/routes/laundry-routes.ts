@@ -1,5 +1,9 @@
 import { FastifyInstance } from "fastify";
-import { create_laundry, get_laundry } from "../schemas/laundry-api";
+import {
+  create_laundry,
+  get_laundry,
+  get_laundry_for_owner,
+} from "../schemas/laundry-api";
 import { LaundryService } from "../services/laundry-service";
 import { LaundryRepository } from "../repositories/laundry-repository";
 import { OwnerRepository } from "../repositories/owner-repository";
@@ -9,22 +13,27 @@ import { LaundryController } from "../controller/laundry-controller";
 export const laundry_routes = (app: FastifyInstance) => {
   const laundryRepository = new LaundryRepository();
   const ownerRepository = new OwnerRepository();
-  const laundryService = new LaundryService(
-    laundryRepository,
-    ownerRepository,
-    new CryptoProvider()
-  );
-  const laundryController = new LaundryController(laundryService);
+  const laundryService = new LaundryService(laundryRepository, ownerRepository);
+  const controller = new LaundryController(laundryService);
 
   app.post(
     "/laundry",
     { schema: create_laundry },
-    laundryController.save.bind(laundryController)
+    controller.save.bind(controller)
   );
 
   app.get(
     "/laundry/:key",
     { schema: get_laundry },
-    laundryController.getByIdOrCNPJ.bind(laundryController)
+    controller.getByIdOrCNPJ.bind(controller)
+  );
+
+  app.get(
+    "/laundry/profile/:id",
+    {
+      schema: get_laundry_for_owner,
+      preHandler: controller.preHandler.bind(controller),
+    },
+    controller.getLaundryForOwner.bind(controller)
   );
 };

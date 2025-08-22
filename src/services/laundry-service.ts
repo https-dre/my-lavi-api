@@ -15,10 +15,10 @@ const sensitive_fields = [
 
 export class LaundryService {
   private jwt: JwtProvider;
+  private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
     private ownerRepository: IOwnerRepository,
-    private crypto: CryptoProvider
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();

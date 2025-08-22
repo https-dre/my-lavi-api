@@ -52,5 +52,5 @@ export const PrivateZodLaundry = ZodLaundry.omit({
   bank_agency: true,
   account_number: true,
   account_type: true,
-  ownerId: true,
+  /* ownerId: true, */
 });

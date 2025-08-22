@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LaundryService } from "../services/laundry-service";
 import z from "zod";
 import { create_laundry, get_laundry } from "../schemas/laundry-api";
-import { defaultPreHandler } from "../middlewares/default-pre-handler";
 
 export class LaundryController {
   constructor(private service: LaundryService) {}
@@ -26,5 +25,28 @@ export class LaundryController {
       req.headers["Authorization"] as string
     );
     req.contextData = allPayload;
+  }
+
+  async getPublicLaundryData(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    const laundry = await this.service.find(id);
+    const {
+      bank_code,
+      bank_agency,
+      account_number,
+      account_type,
+      ...filteredLaundry
+    } = laundry;
+    return reply.code(200).send({
+      laundry: filteredLaundry,
+    });
+  }
+
+  async getLaundryForOwner(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    const laundry = await this.service.find(id);
+    return reply.code(200).send({
+      laundry,
+    });
   }
 }

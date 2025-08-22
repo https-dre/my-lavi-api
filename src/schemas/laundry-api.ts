@@ -26,3 +26,16 @@ export const get_laundry = {
     200: PrivateZodLaundry,
   },
 };
+
+export const get_laundry_for_owner = {
+  summary: "Get laundry for Owner",
+  tags: ["laundry"],
+  params: z.object({
+    id: z.string().uuid(),
+  }),
+  response: {
+    200: z.object({
+      laundry: ZodLaundry,
+    }),
+  },
+};
