@@ -5,7 +5,8 @@ declare module 'fastify' {
     contextData?: {
       token?: string;
       jwtPayload?: {
-        email: string
+        email: string,
+        role?: string
       }
     }
   }
