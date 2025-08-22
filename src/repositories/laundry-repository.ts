@@ -3,7 +3,7 @@ import { db } from "../drizzle/conn";
 import { LaundryModel } from "../models";
 import t from "../drizzle/tables.ts";
 import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm";
+import { eq, ilike } from "drizzle-orm";
 
 export class LaundryRepository implements ILaundryRepository {
   async save(data: Omit<LaundryModel, "id">): Promise<LaundryModel> {
@@ -47,5 +47,18 @@ export class LaundryRepository implements ILaundryRepository {
 
   async update(id: string, fields: Record<string, any>): Promise<void> {
     await db.update(t.laundry).set(fields).where(eq(t.laundry.id, id));
+  }
+
+  async searchByName(name: string): Promise<LaundryModel[]> {
+    const result: LaundryModel[] = await db
+      .select()
+      .from(t.laundry)
+      .where(ilike(t.laundry.name, `%${name}%`));
+    return result;
+  }
+
+  async listAll(): Promise<LaundryModel[]> {
+    const result: LaundryModel[] = await db.select().from(t.laundry);
+    return result;
   }
 }

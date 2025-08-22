@@ -18,7 +18,7 @@ export class LaundryService {
   private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
-    private ownerRepository: IOwnerRepository,
+    private ownerRepository: IOwnerRepository
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();
@@ -120,5 +120,15 @@ export class LaundryService {
       cnpj_blind_index,
     };
     await this.repository.update(laundryId, updatedRecord);
+  }
+
+  async searchByName(name?: string) {
+    let searchResult: LaundryModel[] = [];
+    if (name && name.trim() != "") {
+      searchResult = await this.repository.searchByName(name);
+      return searchResult;
+    }
+    searchResult = await this.repository.listAll();
+    return searchResult;
   }
 }

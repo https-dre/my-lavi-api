@@ -33,6 +33,8 @@ export interface ILaundryRepository {
   findById(id: string): Promise<LaundryModel>;
   findByOwnerId(id: string): Promise<LaundryModel[]>;
   update(id: string, fields: Record<string, any>): Promise<void>;
+  searchByName(name: string): Promise<LaundryModel[]>;
+  listAll(): Promise<LaundryModel[]>;
 }
 
 export interface ILaundryBannerRepository {
