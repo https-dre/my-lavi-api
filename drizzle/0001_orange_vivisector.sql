@@ -1,1 +1,0 @@
-ALTER TABLE "owner" ADD COLUMN "password" text;

@@ -1,5 +1,5 @@
 {
-  "id": "4ce37885-b32c-4af9-98f9-3b1c650b0999",
+  "id": "d90135d3-3c81-4e33-a028-bf1a61864f2c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -26,6 +26,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "email_blind_index": {
+          "name": "email_blind_index",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "email": {
           "name": "email",
           "type": "text",
@@ -39,11 +45,17 @@
           "notNull": false,
           "default": false
         },
-        "document": {
-          "name": "document",
-          "type": "varchar(14)",
+        "doc_blind_index": {
+          "name": "doc_blind_index",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "doc": {
+          "name": "doc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "birth_date": {
           "name": "birth_date",
@@ -75,11 +87,18 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "customer_email_unique": {
-          "name": "customer_email_unique",
+        "customer_email_blind_index_unique": {
+          "name": "customer_email_blind_index_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "email_blind_index"
+          ]
+        },
+        "customer_doc_blind_index_unique": {
+          "name": "customer_doc_blind_index_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "doc_blind_index"
           ]
         }
       },
@@ -160,9 +179,21 @@
           "primaryKey": false,
           "notNull": false
         },
+        "cpf_blind_index": {
+          "name": "cpf_blind_index",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "cpf": {
           "name": "cpf",
           "type": "char(11)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email_blind_index": {
+          "name": "email_blind_index",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -203,11 +234,25 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "employee_cpf_blind_index_unique": {
+          "name": "employee_cpf_blind_index_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "cpf_blind_index"
+          ]
+        },
         "employee_cpf_unique": {
           "name": "employee_cpf_unique",
           "nullsNotDistinct": false,
           "columns": [
             "cpf"
+          ]
+        },
+        "employee_email_blind_index_unique": {
+          "name": "employee_email_blind_index_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email_blind_index"
           ]
         },
         "employee_email_unique": {
@@ -366,9 +411,15 @@
           "primaryKey": false,
           "notNull": false
         },
+        "cnpj_blind_index": {
+          "name": "cnpj_blind_index",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "cnpj": {
           "name": "cnpj",
-          "type": "char(14)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -380,7 +431,7 @@
         },
         "bank_agency": {
           "name": "bank_agency",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -434,6 +485,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "laundry_cnpj_blind_index_unique": {
+          "name": "laundry_cnpj_blind_index_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "cnpj_blind_index"
+          ]
+        },
         "laundry_cnpj_unique": {
           "name": "laundry_cnpj_unique",
           "nullsNotDistinct": false,
@@ -465,6 +523,12 @@
         },
         "resource": {
           "name": "resource",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resource_key": {
+          "name": "resource_key",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -515,9 +579,9 @@
           "notNull": false,
           "default": "now()"
         },
-        "description": {
-          "name": "description",
-          "type": "text",
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         },
@@ -527,8 +591,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "type": {
-          "name": "type",
+        "delivery_type": {
+          "name": "delivery_type",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -609,14 +673,26 @@
           "primaryKey": true,
           "notNull": true
         },
+        "qntd": {
+          "name": "qntd",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unitPrice_inCents": {
+          "name": "unitPrice_inCents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "services": {
-          "name": "services",
+        "service": {
+          "name": "service",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -660,17 +736,29 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
+        "profile_url": {
+          "name": "profile_url",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
         "cpf": {
           "name": "cpf",
-          "type": "char(11)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "cpf_blind_index": {
+          "name": "cpf_blind_index",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "verified": {
           "name": "verified",
@@ -683,37 +771,56 @@
           "name": "email",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "birth_date": {
-          "name": "birth_date",
+        "email_blind_index": {
+          "name": "email_blind_index",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "birth_date": {
+          "name": "birth_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
         "cep": {
           "name": "cep",
-          "type": "char(8)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "owner_cpf_unique": {
-          "name": "owner_cpf_unique",
+        "owner_cpf_blind_index_unique": {
+          "name": "owner_cpf_blind_index_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "cpf"
+            "cpf_blind_index"
           ]
         },
-        "owner_email_unique": {
-          "name": "owner_email_unique",
+        "owner_email_blind_index_unique": {
+          "name": "owner_email_blind_index_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "email_blind_index"
           ]
         }
       },
