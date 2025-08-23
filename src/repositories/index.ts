@@ -3,6 +3,8 @@ import {
   LaundryModel,
   OwnerModel,
   LaundryBannerModel,
+  OrderModel,
+  OrderItemModel,
 } from "../models";
 
 export interface ICustomerRepository {
@@ -42,4 +44,18 @@ export interface ILaundryBannerRepository {
   delete(id: string): Promise<void>;
   findByLaundryId(id: string): Promise<LaundryBannerModel[]>;
   findById(id: string): Promise<LaundryBannerModel>;
+}
+
+export interface IOrderRepository {
+  create(data: Omit<OrderModel, "id">): Promise<OrderModel>;
+  delete(orderId: string): Promise<void>;
+  findByCustomerId(id: string): Promise<OrderModel[]>;
+  findById(id: string): Promise<OrderModel>;
+  findByCustomerIdAndStatus(
+    customerId: string,
+    status: string
+  ): Promise<OrderModel[]>;
+  pushOrderItem(item: Omit<OrderItemModel, "id">): Promise<OrderItemModel>;
+  deleteOrderItem(itemId: string): Promise<void>;
+  deleteItemByOrderId(id: string): Promise<void>;
 }
