@@ -99,8 +99,10 @@ export const order = pgTable("order", {
 
 export const orderItem = pgTable("orderItem", {
   id: text().primaryKey(),
+  qntd: integer(),
+  unitPrice_inCents: integer(),
   name: text(),
-  services: text(),
+  service: text(),
   orderId: text().references(() => order.id),
 });
 
