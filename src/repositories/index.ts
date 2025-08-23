@@ -56,6 +56,9 @@ export interface IOrderRepository {
     status: string
   ): Promise<OrderModel[]>;
   pushOrderItem(item: Omit<OrderItemModel, "id">): Promise<OrderItemModel>;
+  pushManyOrderItems(
+    items: Omit<OrderItemModel, "id">[]
+  ): Promise<OrderItemModel[]>;
   deleteOrderItem(itemId: string): Promise<void>;
-  deleteItemByOrderId(id: string): Promise<void>;
+  deleteAllItemsFromOrder(id: string): Promise<void>;
 }

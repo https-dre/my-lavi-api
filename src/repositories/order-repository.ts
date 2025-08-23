@@ -57,11 +57,19 @@ export class OrderRepository implements IOrderRepository {
     return result[0];
   }
 
+  async pushManyOrderItems(
+    items: Omit<OrderItemModel, "id">[]
+  ): Promise<OrderItemModel[]> {
+    const data = items.map((item) => ({ id: randomUUID(), ...item }));
+    const result = await db.insert(t.orderItem).values(data).returning();
+    return result;
+  }
+
   async deleteOrderItem(itemId: string): Promise<void> {
     await db.delete(t.orderItem).where(eq(t.orderItem.id, itemId));
   }
 
-  async deleteItemByOrderId(id: string): Promise<void> {
+  async deleteAllItemsFromOrder(id: string): Promise<void> {
     await db.delete(t.orderItem).where(and(eq(t.orderItem.orderId, id)));
   }
 }
