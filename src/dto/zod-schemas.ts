@@ -12,7 +12,7 @@ export const ZodOwner = z.object({
   password: z.string(),
   birth_date: z.string(),
   cep: z.string().length(8),
-  created_at: zCreatedAt
+  created_at: zCreatedAt,
 });
 
 export const ZodCustomer = z.object({
@@ -25,7 +25,7 @@ export const ZodCustomer = z.object({
   birth_date: z.string(),
   gender: z.string(),
   password: z.string(),
-  created_at: zCreatedAt
+  created_at: zCreatedAt,
 });
 
 const numericSchema = z.string().regex(/^-?\d+(\.\d+)?$/);
@@ -53,4 +53,26 @@ export const PrivateZodLaundry = ZodLaundry.omit({
   account_number: true,
   account_type: true,
   /* ownerId: true, */
+});
+
+export const ZodOrderItem = z.object({
+  id: z.string().uuid(),
+  qntd: z.coerce.number(),
+  unitPrice_inCents: z.coerce.number(),
+  name: z.string(),
+  service: z.string(),
+  orderId: z.string(),
+});
+
+export const ZodOrder = z.object({
+  id: z.string().uuid(),
+  created_at: zCreatedAt,
+  details: z.string().nullable().optional(),
+  status: z.string(),
+  type: z.string(),
+  latitude: numericSchema,
+  longitude: numericSchema,
+  laundryId: z.string().uuid(),
+  customerId: z.string().uuid(),
+  orderItems: z.array(ZodOrderItem).nullable().optional(),
 });
