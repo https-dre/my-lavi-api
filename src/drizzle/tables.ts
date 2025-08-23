@@ -87,9 +87,9 @@ export const customerAddress = pgTable("customerAddress", {
 export const order = pgTable("order", {
   id: text().primaryKey(),
   created_at: timestamp().defaultNow(),
-  description: text(),
+  updated_at: timestamp(),
   status: text(),
-  type: text(),
+  delivery_type: text(),
   details: text(),
   latitude: numeric(),
   longitude: numeric(),
