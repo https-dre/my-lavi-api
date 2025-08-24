@@ -67,9 +67,10 @@ export const ZodOrderItem = z.object({
 export const ZodOrder = z.object({
   id: z.string().uuid(),
   created_at: zCreatedAt,
-  details: z.string().nullable().optional(),
+  updated_at: zCreatedAt.optional().nullable(),
+  details: z.string(),
   status: z.string(),
-  type: z.string(),
+  delivery_type: z.string(),
   latitude: numericSchema,
   longitude: numericSchema,
   laundryId: z.string().uuid(),
