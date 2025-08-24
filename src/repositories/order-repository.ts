@@ -72,4 +72,17 @@ export class OrderRepository implements IOrderRepository {
   async deleteAllItemsFromOrder(id: string): Promise<void> {
     await db.delete(t.orderItem).where(and(eq(t.orderItem.orderId, id)));
   }
+
+  async updateFields(
+    orderId: string,
+    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>
+  ): Promise<void> {
+    await db
+      .update(t.order)
+      .set({
+        updated_at: new Date(),
+        ...fields,
+      })
+      .where(eq(t.order.id, orderId));
+  }
 }

@@ -61,4 +61,8 @@ export interface IOrderRepository {
   ): Promise<OrderItemModel[]>;
   deleteOrderItem(itemId: string): Promise<void>;
   deleteAllItemsFromOrder(id: string): Promise<void>;
+  updateFields(
+    orderId: string,
+    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>
+  ): Promise<void>;
 }
