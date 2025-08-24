@@ -14,7 +14,7 @@ export class OrderService {
   ) {}
 
   async createOrder(
-    orderData: Required<Omit<OrderModel, "id" | "created_at">>
+    orderData: Required<Omit<OrderModel, "id" | "created_at" | "updated_at">>
   ) {
     if (!(await this.customerRepository.findById(orderData.customerId!)))
       throw new BadResponse("Cliente não encontrado.", 404);
@@ -33,5 +33,11 @@ export class OrderService {
   async pushOrderItems(items: Omit<OrderItemModel, "id">[]) {
     const itemsCreated = await this.repository.pushManyOrderItems(items);
     return itemsCreated;
+  }
+
+  async updateStatus(orderId: string, status: string) {
+    if (!(await this.repository.findById(orderId)))
+      throw new BadResponse("Pedido não encontrado.", 404);
+    await this.repository.updateFields(orderId, { status });
   }
 }
