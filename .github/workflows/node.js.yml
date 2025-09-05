@@ -13,6 +13,7 @@ jobs:
       - name: Generating artifact
         run: |
           cd ..
+          ls
           tar czvf lavi-api/lavi-api.tar.gz \
             --exclude='./lavi-api/node_modules' \
             --exclude='./lavi-api/.git' \ 
