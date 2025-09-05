@@ -13,10 +13,9 @@ jobs:
       - name: Generating artifact
         run: |
           echo "Current dir $(ls)"
-          tar czvf lavi-api.tar.gz \
-            --exclude='./lavi-api.tar.gz' \
+          tar --exclude='./lavi-api.tar.gz' \
             --exclude='./.git' \
-            .
+            -czvf lavi-api.tar.gz .
 
       - name: Uploading artifact
         uses: actions/upload-artifact@v4
