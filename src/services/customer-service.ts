@@ -1,4 +1,4 @@
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import JWT from "jsonwebtoken";
 import { CustomerDTO } from "../dto";
 import { BadResponse } from "../error-handler";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
@@ -10,11 +10,11 @@ export class CustomerService {
     readonly repository: ICustomerRepository,
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
-    readonly identityService: IdentityService
+    readonly identityService: IdentityService,
   ) {}
 
   public async createCustomer(
-    customer: Omit<CustomerDTO, "id" | "created_at">
+    customer: Omit<CustomerDTO, "id" | "created_at">,
   ) {
     const email_index = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_index)) {
@@ -45,14 +45,14 @@ export class CustomerService {
   }
 
   /**
-   * 
+   *
    * @param email Normal e-mail
    * @param password Normal password
    * @returns Jwt token with normal e-mail
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.hmac(email)
+      this.crypto.hmac(email),
     );
     if (
       !customerFounded ||
@@ -98,11 +98,11 @@ export class CustomerService {
         throw new BadResponse("E-mail não encontrado!", 404);
       return payload;
     } catch (err) {
-      if (err instanceof TokenExpiredError)
+      if (err instanceof JWT.TokenExpiredError)
         throw new BadResponse("Sessão expirou.");
-      if (err instanceof JsonWebTokenError)
+      if (err instanceof JWT.JsonWebTokenError)
         throw new BadResponse("Sessão inválida.", 401);
-      
+
       throw err;
     }
   }
