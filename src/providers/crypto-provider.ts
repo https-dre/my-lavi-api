@@ -10,12 +10,15 @@ export class CryptoProvider {
     return crypto.createHash("sha256").update(payload).digest("hex");
   }
   /**
-   * 
+   *
    * @param payload O valor a ser encriptado
    * @returns Valor criptografado para blind
    */
   hmac(payload: string) {
-    return crypto.createHmac("sha256", this.blind).update(payload).digest("hex");
+    return crypto
+      .createHmac("sha256", this.blind)
+      .update(payload)
+      .digest("hex");
   }
   encrypt(value: string) {
     const encrypted = CryptoJS.AES.encrypt(value, this.key).toString();
@@ -49,7 +52,7 @@ export class JwtProvider {
     return jwt.sign(payload, this.key, { expiresIn: "1y" });
   }
   verifyToken(token: string) {
-    const payload = jwt.verify(token, this.key)
+    const payload = jwt.verify(token, this.key);
     return payload;
-}
+  }
 }
