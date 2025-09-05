@@ -1,39 +1,39 @@
 import { FastifyInstance } from "fastify";
-import { OrderRepository } from "../repositories/order-repository";
-import { OrderService } from "../services/order-service";
-import { OrderController } from "../controller/order-controller";
+import { OrderRepository } from "./order-repository";
+import { OrderService } from "./order-service";
+import { OrderController } from "./order-controller";
 import {
   createOrder,
   deleteOrder,
   updateOrderStatus,
-} from "../schemas/order-api";
-import { LaundryRepository } from "../repositories/laundry-repository";
-import { CustomerRepository } from "../repositories/customer-repository";
+} from "../shared/schemas/order-api";
+import { LaundryRepository } from "../laundry/laundry-repository";
+import { CustomerRepository } from "../customer/customer-repository";
 
 export const order_router = (app: FastifyInstance) => {
   const orderRepository = new OrderRepository();
   const service = new OrderService(
     orderRepository,
     new CustomerRepository(),
-    new LaundryRepository()
+    new LaundryRepository(),
   );
   const controller = new OrderController(service);
 
   app.post(
     "/orders",
     { schema: createOrder },
-    controller.createOrder.bind(controller)
+    controller.createOrder.bind(controller),
   );
 
   app.delete(
     "/orders/:id",
     { schema: deleteOrder },
-    controller.deleteOrder.bind(controller)
+    controller.deleteOrder.bind(controller),
   );
 
   app.put(
     "/order/status/:id",
     { schema: updateOrderStatus },
-    controller.updateOrderStatus.bind(controller)
+    controller.updateOrderStatus.bind(controller),
   );
 };

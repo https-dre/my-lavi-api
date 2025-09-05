@@ -1,20 +1,20 @@
-import { BadResponse } from "../error-handler";
-import { OrderItemModel, OrderModel } from "../models";
+import { BadResponse } from "../infra/error-handler";
+import { OrderItemModel, OrderModel } from "../shared/models";
 import {
   ICustomerRepository,
   ILaundryRepository,
   IOrderRepository,
-} from "../repositories";
+} from "../shared/repositories";
 
 export class OrderService {
   constructor(
     private repository: IOrderRepository,
     private customerRepository: ICustomerRepository,
-    private laundryRepository: ILaundryRepository
+    private laundryRepository: ILaundryRepository,
   ) {}
 
   async createOrder(
-    orderData: Required<Omit<OrderModel, "id" | "created_at" | "updated_at">>
+    orderData: Required<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
   ) {
     if (!(await this.customerRepository.findById(orderData.customerId!)))
       throw new BadResponse("Cliente não encontrado.", 404);

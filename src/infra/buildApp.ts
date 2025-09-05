@@ -6,20 +6,20 @@ import {
 } from "fastify-type-provider-zod";
 import fastifyMultipart from "@fastify/multipart";
 import fastifySwagger from "@fastify/swagger";
-import { router } from "./routes";
+import { router } from "../shared/routes";
 import { ServerErrorHandler } from "./error-handler";
 
 /**
  * Build and config all application preferences
- * 
+ *
  * Must be called after environment checking
  * @returns the main app instance
  */
-export const buildApp =  (): FastifyInstance => {
+export const buildApp = (): FastifyInstance => {
   const app = fastify({
     ignoreTrailingSlash: true,
   });
-  
+
   app.decorate("contextData", null);
 
   app.register(fastifyMultipart);
@@ -35,7 +35,7 @@ export const buildApp =  (): FastifyInstance => {
     },
     transform: jsonSchemaTransform,
   });
-  
+
   app.setErrorHandler(ServerErrorHandler);
 
   app.register(import("@scalar/fastify-api-reference"), {
@@ -50,5 +50,5 @@ export const buildApp =  (): FastifyInstance => {
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
-  return app
-}
+  return app;
+};

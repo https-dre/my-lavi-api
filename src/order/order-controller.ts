@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { OrderService } from "../services/order-service";
+import { OrderService } from "./order-service";
 import {
   createOrder,
   deleteOrder,
   updateOrderStatus,
-} from "../schemas/order-api";
+} from "../shared/schemas/order-api";
 import z from "zod";
 
 export class OrderController {

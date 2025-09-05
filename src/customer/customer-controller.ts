@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CustomerService } from "../services/customer-service";
+import { CustomerService } from "./customer-service";
 import z from "zod";
 import {
   auth_customer,
   create_customer,
   update_customer,
-} from "../schemas/customer-api";
+} from "../shared/schemas/customer-api";
 
 export class CustomerController {
   constructor(readonly service: CustomerService) {}

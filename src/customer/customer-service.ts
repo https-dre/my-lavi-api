@@ -1,9 +1,12 @@
 import JWT from "jsonwebtoken";
-import { CustomerDTO } from "../dto";
-import { BadResponse } from "../error-handler";
-import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
-import { ICustomerRepository } from "../repositories";
-import { IdentityService } from "./identity-service";
+import { CustomerDTO } from "../shared/dto";
+import { BadResponse } from "../infra/error-handler";
+import {
+  CryptoProvider,
+  JwtProvider,
+} from "../shared/providers/crypto-provider";
+import { ICustomerRepository } from "../shared/repositories";
+import { IdentityService } from "../shared/services/identity-service";
 
 export class CustomerService {
   constructor(

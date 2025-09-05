@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { logger } from "../logger";
+import { logger } from "../../infra/logger";
 
 export const db = drizzle(process.env.DATABASE_URL!);
 

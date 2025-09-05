@@ -1,9 +1,12 @@
-import { LaundryDTO } from "../dto";
-import { BadResponse } from "../error-handler";
-import { remove_sensitive_fields } from "../functions/remove-sensitive-fields";
-import { LaundryModel } from "../models";
-import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
-import { ILaundryRepository, IOwnerRepository } from "../repositories";
+import { LaundryDTO } from "../shared/dto";
+import { BadResponse } from "../infra/error-handler";
+import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
+import { LaundryModel } from "../shared/models";
+import {
+  CryptoProvider,
+  JwtProvider,
+} from "../shared/providers/crypto-provider";
+import { ILaundryRepository, IOwnerRepository } from "../shared/repositories";
 
 const sensitive_fields = [
   "account_number",
@@ -18,7 +21,7 @@ export class LaundryService {
   private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
-    private ownerRepository: IOwnerRepository
+    private ownerRepository: IOwnerRepository,
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();
@@ -55,7 +58,7 @@ export class LaundryService {
 
     if (!laundryFounded)
       laundryFounded = await this.repository.findByCNPJ(
-        this.crypto.sha256(key)
+        this.crypto.sha256(key),
       );
 
     if (!laundryFounded)
@@ -63,7 +66,7 @@ export class LaundryService {
 
     const decrypted_laundry = this.crypto.decryptEntity(
       laundryFounded,
-      sensitive_fields
+      sensitive_fields,
     );
     return remove_sensitive_fields(decrypted_laundry);
   }
@@ -92,13 +95,13 @@ export class LaundryService {
 
   async updateLaundryFields(
     laundryId: string,
-    updatedFields: Record<string, any>
+    updatedFields: Record<string, any>,
   ) {
     const laundryWithId = await this.repository.findById(laundryId);
     if (!laundryId) throw new BadResponse("Lavanderia não encontrado", 404);
     const decryptedLaundry = this.crypto.decryptEntity(
       laundryWithId,
-      sensitive_fields
+      sensitive_fields,
     );
     const updated_laundry = { ...decryptedLaundry, ...updatedFields } as Record<
       string,

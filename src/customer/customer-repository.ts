@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import { ICustomerRepository } from ".";
-import { db } from "../drizzle/conn";
-import tables from "../drizzle/tables";
-import { CustomerModel } from "../models";
+import { ICustomerRepository } from "../shared/repositories";
+import { db } from "../shared/drizzle/conn";
+import tables from "../shared/drizzle/tables";
+import { CustomerModel } from "../shared/models";
 import { eq } from "drizzle-orm";
 
 export class CustomerRepository implements ICustomerRepository {
@@ -50,7 +50,7 @@ export class CustomerRepository implements ICustomerRepository {
 
   public async update(
     updates: Partial<Omit<CustomerModel, "id">>,
-    id: string
+    id: string,
   ): Promise<void> {
     await db
       .update(tables.customer)
@@ -58,4 +58,3 @@ export class CustomerRepository implements ICustomerRepository {
       .where(eq(tables.customer.id, id));
   }
 }
-

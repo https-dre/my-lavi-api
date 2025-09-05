@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import { IOwnerRepository } from ".";
-import { db } from "../drizzle/conn";
-import tables from "../drizzle/tables";
-import { OwnerModel } from "../models";
+import { IOwnerRepository } from "../shared/repositories";
+import { db } from "../shared/drizzle/conn";
+import tables from "../shared/drizzle/tables";
+import { OwnerModel } from "../shared/models";
 import { eq } from "drizzle-orm";
 
 export class OwnerRepository implements IOwnerRepository {
@@ -42,7 +42,7 @@ export class OwnerRepository implements IOwnerRepository {
 
   public async update(
     updates: Partial<Omit<OwnerModel, "id">>,
-    id: string
+    id: string,
   ): Promise<void> {
     await db.update(tables.owner).set(updates).where(eq(tables.owner.id, id));
   }

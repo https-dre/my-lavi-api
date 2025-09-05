@@ -1,22 +1,25 @@
-import { OwnerDTO } from "../dto";
-import { BadResponse } from "../error-handler";
-import { remove_sensitive_fields } from "../functions/remove-sensitive-fields";
-import { logger } from "../logger";
-import { OwnerModel } from "../models";
-import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
-import { IOwnerRepository } from "../repositories";
-import { IdentityService } from "./identity-service";
+import { OwnerDTO } from "../shared/dto";
+import { BadResponse } from "../infra/error-handler";
+import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
+import { logger } from "../infra/logger";
+import { OwnerModel } from "../shared/models";
+import {
+  CryptoProvider,
+  JwtProvider,
+} from "../shared/providers/crypto-provider";
+import { IOwnerRepository } from "../shared/repositories";
+import { IdentityService } from "../shared/services/identity-service";
 
 export class OwnerService {
   constructor(
     private repository: IOwnerRepository,
     private crypto: CryptoProvider,
     private jwt: JwtProvider,
-    private identityService: IdentityService
+    private identityService: IdentityService,
   ) {}
 
   async saveOwner(
-    owner: Omit<OwnerDTO, "id" | "created_at">
+    owner: Omit<OwnerDTO, "id" | "created_at">,
   ): Promise<OwnerModel> {
     if (owner.cpf.includes(".") || owner.cep.includes("-")) {
       throw new BadResponse("CEP e CPF devem conter somente números.");
@@ -55,7 +58,7 @@ export class OwnerService {
 
     const passResult = this.crypto.comparePassword(
       password,
-      ownerWithEmail.password
+      ownerWithEmail.password,
     );
     if (!passResult) {
       throw new BadResponse("Login ou senha incorretos.");

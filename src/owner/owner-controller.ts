@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { OwnerService } from "../services/owner-service";
+import { OwnerService } from "./owner-service";
 import z from "zod";
-import { auth_owner, create_owner } from "../schemas/owner-api";
+import { auth_owner, create_owner } from "../shared/schemas/owner-api";
 
 export class OwnerController {
   constructor(readonly service: OwnerService) {}
@@ -21,7 +21,7 @@ export class OwnerController {
     return reply.code(200).send({
       details: "Autenticado com sucesso!",
       token: payload.token,
-      owner_id: payload.owner_id
+      owner_id: payload.owner_id,
     });
   }
 

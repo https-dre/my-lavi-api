@@ -1,7 +1,7 @@
-import { IOrderRepository } from ".";
-import { db } from "../drizzle/conn";
-import { OrderItemModel, OrderModel } from "../models";
-import * as t from "../drizzle/tables.ts";
+import { IOrderRepository } from "../shared/repositories";
+import { db } from "../shared/drizzle/conn";
+import { OrderItemModel, OrderModel } from "../shared/models";
+import * as t from "../shared/drizzle/tables.ts";
 import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 
@@ -28,13 +28,13 @@ export class OrderRepository implements IOrderRepository {
 
   async findByCustomerIdAndStatus(
     customerId: string,
-    status: string
+    status: string,
   ): Promise<OrderModel[]> {
     const result = await db
       .select()
       .from(t.order)
       .where(
-        and(eq(t.order.customerId, customerId), eq(t.order.status, status))
+        and(eq(t.order.customerId, customerId), eq(t.order.status, status)),
       );
 
     return result;
@@ -45,7 +45,7 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async pushOrderItem(
-    item: Omit<OrderItemModel, "id">
+    item: Omit<OrderItemModel, "id">,
   ): Promise<OrderItemModel> {
     const result = await db
       .insert(t.orderItem)
@@ -58,7 +58,7 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async pushManyOrderItems(
-    items: Omit<OrderItemModel, "id">[]
+    items: Omit<OrderItemModel, "id">[],
   ): Promise<OrderItemModel[]> {
     const data = items.map((item) => ({ id: randomUUID(), ...item }));
     const result = await db.insert(t.orderItem).values(data).returning();
@@ -75,7 +75,7 @@ export class OrderRepository implements IOrderRepository {
 
   async updateFields(
     orderId: string,
-    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>
+    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
   ): Promise<void> {
     await db
       .update(t.order)

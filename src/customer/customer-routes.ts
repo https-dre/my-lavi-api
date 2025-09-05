@@ -1,41 +1,44 @@
 import { FastifyInstance } from "fastify";
-import { CustomerRepository } from "../repositories/customer-repository";
-import { CustomerController } from "../controller/customer-controller";
+import { CustomerRepository } from "./customer-repository";
+import { CustomerController } from "./customer-controller";
 import {
   auth_customer,
   create_customer,
   update_customer,
-} from "../schemas/customer-api";
-import { CustomerService } from "../services/customer-service";
-import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
-import { OwnerRepository } from "../repositories/owner-repository";
-import { IdentityService } from "../services/identity-service";
+} from "../shared/schemas/customer-api";
+import { CustomerService } from "./customer-service";
+import {
+  CryptoProvider,
+  JwtProvider,
+} from "../shared/providers/crypto-provider";
+import { OwnerRepository } from "../owner/owner-repository";
+import { IdentityService } from "../shared/services/identity-service";
 
 export const customer_routes = (app: FastifyInstance) => {
   const customerRepository = new CustomerRepository();
   const ownerRepository = new OwnerRepository();
   const identityService = new IdentityService(
     customerRepository,
-    ownerRepository
+    ownerRepository,
   );
   const customerService = new CustomerService(
     customerRepository,
     new CryptoProvider(),
     new JwtProvider(),
-    identityService
+    identityService,
   );
   const customerController = new CustomerController(customerService);
 
   app.post(
     "/customer",
     { schema: create_customer },
-    customerController.save.bind(customerController)
+    customerController.save.bind(customerController),
   );
 
   app.post(
     "/customer/sign",
     { schema: auth_customer },
-    customerController.auth.bind(customerController)
+    customerController.auth.bind(customerController),
   );
 
   app.put(
@@ -44,6 +47,6 @@ export const customer_routes = (app: FastifyInstance) => {
       schema: update_customer,
       preHandler: customerController.preHandler.bind(customerController),
     },
-    customerController.update.bind(customerController)
+    customerController.update.bind(customerController),
   );
 };

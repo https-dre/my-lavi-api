@@ -1,13 +1,13 @@
-import { ILaundryBannerRepository } from ".";
-import { db } from "../drizzle/conn";
-import { LaundryBannerModel } from "../models";
-import * as t from "../drizzle/tables.ts";
+import { ILaundryBannerRepository } from "../shared/repositories";
+import { db } from "../shared/drizzle/conn";
+import { LaundryBannerModel } from "../shared/models";
+import * as t from "../shared/drizzle/tables.ts";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
 
 export class LaundryBannerRepository implements ILaundryBannerRepository {
   async save(
-    data: Omit<LaundryBannerModel, "id">
+    data: Omit<LaundryBannerModel, "id">,
   ): Promise<LaundryBannerModel> {
     const result = await db
       .insert(t.laundryBanner)
