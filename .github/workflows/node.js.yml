@@ -15,7 +15,7 @@ jobs:
           tar czvf lavi-api.tar.gz \
             --exclude='./node_modules' \
             --exclude='./.git' \
-            --exclude-'./lavi-api.tar.gz' \
+            --exclude='./lavi-api.tar.gz' \
             .
 
       - name: Uploading artifact
