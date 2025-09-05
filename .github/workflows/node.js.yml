@@ -52,6 +52,7 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
             tar xzvf /home/${{ secrets.EC2_USERNAME }}/lavi-api.tar.gz
             cd lavi-api
+            echo ${{ secrets.ENV_PROD }} >> .env.prod
             docker-compose down
             docker-compose up -d --build
             docker image prune -f
