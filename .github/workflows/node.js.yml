@@ -12,11 +12,11 @@ jobs:
 
       - name: Generating artifact
         run: |
-          tar czvf lavi-api.tar.gz \
-            --exclude='./node_modules' \
-            --exclude='./.git' \
-            --exclude='./lavi-api.tar.gz' \
-            .
+          cd ..
+          tar czvf lavi-api/lavi-api.tar.gz \
+            --exclude='./lavi-api/node_modules' \
+            --exclude='./lavi-api/.git' \ 
+            lavi-api
 
       - name: Uploading artifact
         uses: actions/upload-artifact@v4
