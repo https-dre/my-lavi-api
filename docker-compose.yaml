@@ -1,6 +1,7 @@
 services:
   database:
     image: bitnami/postgresql:latest
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
@@ -12,6 +13,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    volumes:
+      - lavi_data:/var/lib/postgresql/data
   api:
     build:
       context: .
@@ -24,3 +27,5 @@ services:
     depends_on:
       database:
         condition: service_healthy
+volumes:
+  lavi_data:
