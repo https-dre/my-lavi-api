@@ -43,4 +43,17 @@ export const owner_routes = (app: FastifyInstance) => {
     { schema: get_owner },
     ownerController.getOwner.bind(ownerController),
   );
+
+  if (process.env.NODE_ENV !== "production") {
+    app.get(
+      "/onwers",
+      {
+        schema: {
+          tags: ["owner"],
+          summary: "List all owners",
+        },
+      },
+      ownerController.listAllIds.bind(ownerController),
+    );
+  }
 };

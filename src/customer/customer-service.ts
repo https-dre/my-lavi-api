@@ -109,4 +109,9 @@ export class CustomerService {
       throw err;
     }
   }
+
+  public async listAllIds(): Promise<{ id: string }[]> {
+    const result = await this.repository.listAllIds();
+    return result;
+  }
 }

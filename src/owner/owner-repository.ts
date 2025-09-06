@@ -55,4 +55,9 @@ export class OwnerRepository implements IOwnerRepository {
 
     return result[0];
   }
+
+  public async listAllIds(): Promise<{ id: string }[]> {
+    const result = await db.select({ id: tables.owner.id }).from(tables.owner);
+    return result;
+  }
 }

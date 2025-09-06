@@ -35,7 +35,7 @@ export const customer_routes = (app: FastifyInstance) => {
     customerController.save.bind(customerController),
   );
 
-  app.post(
+  app.put(
     "/customer/sign",
     { schema: auth_customer },
     customerController.auth.bind(customerController),
@@ -49,4 +49,17 @@ export const customer_routes = (app: FastifyInstance) => {
     },
     customerController.update.bind(customerController),
   );
+
+  if (process.env.NODE_ENV !== "production") {
+    app.get(
+      "/customers",
+      {
+        schema: {
+          tags: ["customer"],
+          summary: "List all customers",
+        },
+      },
+      customerController.listAllIds.bind(customerController),
+    );
+  }
 };

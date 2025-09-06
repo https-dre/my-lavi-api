@@ -5,7 +5,7 @@ import {
   auth_customer,
   create_customer,
   update_customer,
-} from "../shared/schemas/customer-api";
+} from "./customer-api";
 
 export class CustomerController {
   constructor(readonly service: CustomerService) {}
@@ -44,5 +44,10 @@ export class CustomerController {
     req.contextData = { token };
     const payload = await this.service.checkAuth(token);
     req.contextData.jwtPayload = { email: payload.email };
+  }
+
+  public async listAllIds(): Promise<{ id: string }[]> {
+    const result = await this.service.listAllIds();
+    return result;
   }
 }

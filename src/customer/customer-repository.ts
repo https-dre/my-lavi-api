@@ -57,4 +57,11 @@ export class CustomerRepository implements ICustomerRepository {
       .set(updates)
       .where(eq(tables.customer.id, id));
   }
+
+  public async listAllIds(): Promise<{ id: string }[]> {
+    const result = await db
+      .select({ id: tables.customer.id })
+      .from(tables.customer);
+    return result;
+  }
 }

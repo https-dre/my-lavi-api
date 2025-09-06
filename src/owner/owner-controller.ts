@@ -55,4 +55,9 @@ export class OwnerController {
     const owner = await this.service.findOwner(id);
     return reply.code(200).send({ details: "Registro encontrado.", owner });
   }
+
+  async listAllIds(): Promise<{ id: string }[]> {
+    const result = await this.service.listAllIds();
+    return result;
+  }
 }

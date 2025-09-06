@@ -91,4 +91,9 @@ export class OwnerService {
     if (!onwerWithId) throw new BadResponse("Nenhum cadastro encontrado", 404);
     await this.repository.delete(id);
   }
+
+  async listAllIds(): Promise<{ id: string }[]> {
+    const result = await this.repository.listAllIds();
+    return result;
+  }
 }
