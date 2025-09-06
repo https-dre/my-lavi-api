@@ -44,7 +44,7 @@ export const owner_routes = (app: FastifyInstance) => {
     ownerController.getOwner.bind(ownerController),
   );
 
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.ROUTE_MODE !== "production") {
     app.get(
       "/onwers",
       {

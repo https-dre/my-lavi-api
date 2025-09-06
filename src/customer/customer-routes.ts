@@ -50,7 +50,7 @@ export const customer_routes = (app: FastifyInstance) => {
     customerController.update.bind(customerController),
   );
 
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.ROUTE_MODE !== "production") {
     app.get(
       "/customers",
       {
