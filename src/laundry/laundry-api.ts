@@ -2,7 +2,7 @@ import z from "zod";
 import { PrivateZodLaundry, ZodLaundry } from "../shared/dto/zod-schemas";
 
 export const create_laundry = {
-  summary: "Create a laundry",
+  summary: "Create laundry",
   tags: ["laundry"],
   body: z.object({
     laundry: ZodLaundry.omit({ id: true, created_at: true }),
@@ -16,7 +16,7 @@ export const create_laundry = {
 };
 
 export const get_laundry = {
-  summary: "Get a laundry",
+  summary: "Get laundry",
   tags: ["laundry"],
   description: "Use Id or CNPJ",
   params: z.object({

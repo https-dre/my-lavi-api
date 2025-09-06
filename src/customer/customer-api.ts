@@ -2,7 +2,7 @@ import z from "zod";
 import { ZodCustomer } from "../shared/dto/zod-schemas";
 
 export const create_customer = {
-  summary: "Create a customer",
+  summary: "Create customer",
   tags: ["customer"],
   body: z.object({
     customer: ZodCustomer.omit({ id: true, created_at: true }),
@@ -15,7 +15,7 @@ export const create_customer = {
 };
 
 export const auth_customer = {
-  summary: "Authenticate a customer by password",
+  summary: "Authenticate customer by password",
   tags: ["customer"],
   body: z.object({
     email: z.string().email(),
@@ -30,7 +30,7 @@ export const auth_customer = {
 };
 
 export const update_customer = {
-  summary: "Update fields of customer",
+  summary: "Update customer fields",
   tags: ["customer"],
   headers: z.object({
     Authorization: z.string().startsWith("Bearer "),

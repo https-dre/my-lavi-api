@@ -2,7 +2,7 @@ import z from "zod";
 import { ZodOwner } from "../shared/dto/zod-schemas";
 
 export const create_owner = {
-  summary: "Create a owner",
+  summary: "Create owner",
   tags: ["owner"],
   body: z.object({
     owner: ZodOwner.omit({ id: true, verified: true, created_at: true }),
