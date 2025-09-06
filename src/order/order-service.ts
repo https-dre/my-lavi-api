@@ -40,4 +40,34 @@ export class OrderService {
       throw new BadResponse("Pedido não encontrado.", 404);
     await this.repository.updateFields(orderId, { status });
   }
+
+  async getOrdersByCustomerId(customerId: string) {
+    if (!(await this.customerRepository.findById(customerId)))
+      throw new BadResponse("Conta de cliente não encontrada.");
+
+    const orders = await this.repository.findByCustomerId(customerId);
+    return orders;
+  }
+
+  async getOrderItems(orderId: string) {
+    if (!(await this.repository.findById(orderId)))
+      throw new BadResponse("Pedido não encontrado.");
+
+    return await this.repository.findOrderItemsByOrderId(orderId);
+  }
+
+  async getOrdersWithInterval(
+    customerId: string,
+    startDate: Date,
+    endDate: Date,
+  ) {
+    if (!(await this.customerRepository.findById(customerId)))
+      throw new BadResponse("Cliente não encontrado.", 404);
+
+    return await this.repository.findByCustomerIdWithDateInterval(
+      customerId,
+      startDate,
+      endDate,
+    );
+  }
 }

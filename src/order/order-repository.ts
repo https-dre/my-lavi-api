@@ -3,7 +3,7 @@ import { db } from "../shared/drizzle/conn";
 import { OrderItemModel, OrderModel } from "../shared/models";
 import * as t from "../shared/drizzle/tables.ts";
 import { randomUUID } from "crypto";
-import { and, eq } from "drizzle-orm";
+import { and, eq, gt, gte, lt, lte } from "drizzle-orm";
 
 export class OrderRepository implements IOrderRepository {
   async create(data: Omit<OrderModel, "id">): Promise<OrderModel> {
@@ -84,5 +84,47 @@ export class OrderRepository implements IOrderRepository {
         ...fields,
       })
       .where(eq(t.order.id, orderId));
+  }
+
+  async findOrderItemById(id: string): Promise<OrderItemModel> {
+    const result = await db
+      .select()
+      .from(t.orderItem)
+      .where(eq(t.orderItem.id, id));
+    return result[0];
+  }
+
+  async findOrderItemsByOrderId(orderId: string): Promise<OrderItemModel[]> {
+    return await db
+      .select()
+      .from(t.orderItem)
+      .where(eq(t.orderItem.orderId, orderId));
+  }
+
+  async findByCustomerIdWithCursorIndex(
+    id: string,
+    cursor: Date,
+  ): Promise<OrderModel[]> {
+    return await db
+      .select()
+      .from(t.order)
+      .where(and(eq(t.order.customerId, id), gt(t.order.created_at, cursor)));
+  }
+
+  async findByCustomerIdWithDateInterval(
+    id: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<OrderModel[]> {
+    return await db
+      .select()
+      .from(t.order)
+      .where(
+        and(
+          eq(t.order.customerId, id),
+          gte(t.order.created_at, startDate),
+          lte(t.order.created_at, endDate),
+        ),
+      );
   }
 }
