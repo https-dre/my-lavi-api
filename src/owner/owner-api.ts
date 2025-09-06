@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodOwner } from "../dto/zod-schemas";
+import { ZodOwner } from "../shared/dto/zod-schemas";
 
 export const create_owner = {
   summary: "Create a owner",
@@ -40,7 +40,7 @@ export const get_owner = {
   response: {
     200: z.object({
       details: z.string(),
-      owner: ZodOwner
+      owner: ZodOwner,
     }),
   },
 };

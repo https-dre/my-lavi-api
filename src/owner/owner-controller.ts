@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { OwnerService } from "./owner-service";
 import z from "zod";
-import { auth_owner, create_owner } from "../shared/schemas/owner-api";
+import { auth_owner, create_owner } from "./owner-api";
 
 export class OwnerController {
   constructor(readonly service: OwnerService) {}

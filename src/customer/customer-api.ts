@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodCustomer } from "../dto/zod-schemas";
+import { ZodCustomer } from "../shared/dto/zod-schemas";
 
 export const create_customer = {
   summary: "Create a customer",
@@ -33,7 +33,7 @@ export const update_customer = {
   summary: "Update fields of customer",
   tags: ["customer"],
   headers: z.object({
-    Authorization: z.string().startsWith("Bearer ")
+    Authorization: z.string().startsWith("Bearer "),
   }),
   body: z.object({
     fields: ZodCustomer.omit({

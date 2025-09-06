@@ -1,11 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { OwnerRepository } from "./owner-repository";
 import { OwnerController } from "./owner-controller";
-import {
-  auth_owner,
-  create_owner,
-  get_owner,
-} from "../shared/schemas/owner-api";
+import { auth_owner, create_owner, get_owner } from "./owner-api";
 import { OwnerService } from "./owner-service";
 import {
   CryptoProvider,

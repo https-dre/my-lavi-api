@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodOrder } from "../dto/zod-schemas";
+import { ZodOrder } from "../shared/dto/zod-schemas";
 
 const authHeaders = z.object({ Authorization: z.string().jwt() });
 

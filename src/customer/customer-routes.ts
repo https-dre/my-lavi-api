@@ -5,7 +5,7 @@ import {
   auth_customer,
   create_customer,
   update_customer,
-} from "../shared/schemas/customer-api";
+} from "./customer-api";
 import { CustomerService } from "./customer-service";
 import {
   CryptoProvider,

@@ -2,11 +2,7 @@ import { FastifyInstance } from "fastify";
 import { OrderRepository } from "./order-repository";
 import { OrderService } from "./order-service";
 import { OrderController } from "./order-controller";
-import {
-  createOrder,
-  deleteOrder,
-  updateOrderStatus,
-} from "../shared/schemas/order-api";
+import { createOrder, deleteOrder, updateOrderStatus } from "./order-api";
 import { LaundryRepository } from "../laundry/laundry-repository";
 import { CustomerRepository } from "../customer/customer-repository";
 

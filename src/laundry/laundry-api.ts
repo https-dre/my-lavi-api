@@ -1,5 +1,5 @@
 import z from "zod";
-import { PrivateZodLaundry, ZodLaundry } from "../dto/zod-schemas";
+import { PrivateZodLaundry, ZodLaundry } from "../shared/dto/zod-schemas";
 
 export const create_laundry = {
   summary: "Create a laundry",

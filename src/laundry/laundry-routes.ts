@@ -3,7 +3,7 @@ import {
   create_laundry,
   get_laundry,
   get_laundry_for_owner,
-} from "../shared/schemas/laundry-api";
+} from "./laundry-api";
 import { LaundryService } from "./laundry-service";
 import { LaundryRepository } from "./laundry-repository";
 import { OwnerRepository } from "../owner/owner-repository";
