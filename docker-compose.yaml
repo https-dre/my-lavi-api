@@ -1,6 +1,6 @@
 services:
   database:
-    image: bitnami/postgresql:latest
+    image: postgresql:16
     restart: unless-stopped
     ports:
       - "5432:5432"
