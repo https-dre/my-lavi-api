@@ -1,7 +1,7 @@
 name: EC2 Delivery
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -50,9 +50,10 @@ jobs:
           script: |
             mkdir -p ${{ secrets.PROJECT_PATH }}
             cd ${{ secrets.PROJECT_PATH }}
+            rm -rf lavi-api
             tar xzvf /home/${{ secrets.EC2_USERNAME }}/lavi-api.tar.gz
+            cp .env.prod.bak lavi-api/.env.prod
             cd lavi-api
-            echo ${{ secrets.ENV_PROD }} >> .env.prod
             docker-compose down
             docker-compose up -d --build
             docker image prune -f
