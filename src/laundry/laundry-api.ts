@@ -29,6 +29,9 @@ export const get_laundry = {
 
 export const get_laundry_for_owner = {
   summary: "Get laundry for Owner",
+  headers: z.object({
+    Authorization: z.string().startsWith("Bearer ").jwt(),
+  }),
   tags: ["laundry"],
   params: z.object({
     id: z.string().uuid(),

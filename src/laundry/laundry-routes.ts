@@ -20,13 +20,13 @@ export const laundry_routes = (app: FastifyInstance) => {
   app.post(
     "/laundry",
     { schema: create_laundry },
-    controller.save.bind(controller),
+    controller.save.bind(controller)
   );
 
   app.get(
-    "/laundry/:key",
+    "/public/laundry/:key",
     { schema: get_laundry },
-    controller.getByIdOrCNPJ.bind(controller),
+    controller.getByIdOrCNPJ.bind(controller)
   );
 
   app.get(
@@ -35,12 +35,12 @@ export const laundry_routes = (app: FastifyInstance) => {
       schema: get_laundry_for_owner,
       preHandler: controller.preHandler.bind(controller),
     },
-    controller.getLaundryForOwner.bind(controller),
+    controller.getLaundryForOwner.bind(controller)
   );
 
   app.get(
     "/search/laundry/:name",
     { schema: search_laundries_by_name },
-    controller.searchLaundriesByName.bind(controller),
+    controller.searchLaundriesByName.bind(controller)
   );
 };
