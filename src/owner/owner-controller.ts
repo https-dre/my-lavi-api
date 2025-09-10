@@ -60,4 +60,10 @@ export class OwnerController {
     const result = await this.service.listAllIds();
     return result;
   }
+
+  async deleteWithId(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    await this.service.deleteById(id);
+    return reply.code(204).send();
+  }
 }

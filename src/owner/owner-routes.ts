@@ -15,45 +15,56 @@ export const owner_routes = (app: FastifyInstance) => {
   const customerRepository = new CustomerRepository();
   const identityService = new IdentityService(
     customerRepository,
-    ownerRepository,
+    ownerRepository
   );
   const ownerService = new OwnerService(
     ownerRepository,
     new CryptoProvider(),
     new JwtProvider(),
-    identityService,
+    identityService
   );
 
-  const ownerController = new OwnerController(ownerService);
+  const controller = new OwnerController(ownerService);
 
   app.post(
     "/owners",
     { schema: create_owner },
-    ownerController.save.bind(ownerController),
+    controller.save.bind(controller)
   );
 
   app.put(
     "/owners/auth",
     { schema: auth_owner },
-    ownerController.ownerLogin.bind(ownerController),
+    controller.ownerLogin.bind(controller)
   );
 
   app.get(
     "/owners/:id",
     { schema: get_owner },
-    ownerController.getOwner.bind(ownerController),
+    controller.getOwner.bind(controller)
+  );
+
+  app.delete(
+    "/owners/:id",
+    {
+      schema: {
+        summary: "Delete owner",
+        tags: ["owner"],
+      },
+    },
+    controller.deleteWithId.bind(controller)
   );
 
   if (process.env.ROUTE_MODE !== "production") {
     app.get(
-      "/onwers",
+      "/public/onwers",
       {
         schema: {
           tags: ["owner"],
           summary: "List all owners",
         },
       },
-      ownerController.listAllIds.bind(ownerController),
+      controller.listAllIds.bind(controller)
     );
   }
 };
