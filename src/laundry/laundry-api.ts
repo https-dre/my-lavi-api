@@ -39,3 +39,16 @@ export const get_laundry_for_owner = {
     }),
   },
 };
+
+export const search_laundries_by_name = {
+  summary: "Search laundries by name",
+  tags: ["laundry"],
+  params: z.object({
+    name: z.string().optional().nullable(),
+  }),
+  response: {
+    200: z.object({
+      laundries: z.array(ZodLaundry),
+    }),
+  },
+};

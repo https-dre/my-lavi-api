@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { LaundryService } from "./laundry-service";
 import z from "zod";
-import { create_laundry, get_laundry } from "../shared/schemas/laundry-api";
+import { create_laundry, get_laundry } from "./laundry-api";
 
 export class LaundryController {
   constructor(private service: LaundryService) {}
@@ -48,5 +48,13 @@ export class LaundryController {
     return reply.code(200).send({
       laundry,
     });
+  }
+
+  async searchLaundriesByName(req: FastifyRequest, reply: FastifyReply) {
+    const { name } = req.params as { name?: string };
+    const result = await this.service.searchByName(name);
+    if (result.length > 0) return reply.code(200).send({ laundries: result });
+
+    return reply.code(404).send({ details: "Nenhuma lavanderia encontrada." });
   }
 }

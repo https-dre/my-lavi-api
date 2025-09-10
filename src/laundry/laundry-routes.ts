@@ -3,6 +3,7 @@ import {
   create_laundry,
   get_laundry,
   get_laundry_for_owner,
+  search_laundries_by_name,
 } from "./laundry-api";
 import { LaundryService } from "./laundry-service";
 import { LaundryRepository } from "./laundry-repository";
@@ -35,5 +36,11 @@ export const laundry_routes = (app: FastifyInstance) => {
       preHandler: controller.preHandler.bind(controller),
     },
     controller.getLaundryForOwner.bind(controller),
+  );
+
+  app.get(
+    "/search/laundry/:name",
+    { schema: search_laundries_by_name },
+    controller.searchLaundriesByName.bind(controller),
   );
 };

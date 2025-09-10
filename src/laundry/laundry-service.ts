@@ -1,6 +1,9 @@
 import { LaundryDTO } from "../shared/dto";
 import { BadResponse } from "../infra/error-handler";
-import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
+import {
+  remove_sensitive_fields,
+  RemoveSensitiveFields,
+} from "../shared/functions/remove-sensitive-fields";
 import { LaundryModel } from "../shared/models";
 import {
   CryptoProvider,
@@ -12,6 +15,7 @@ const sensitive_fields = [
   "account_number",
   "cnpj",
   "account_type",
+  "bank_code",
   "bank_number",
   "bank_agency",
 ];
@@ -54,20 +58,18 @@ export class LaundryService {
   }
 
   async find(key: string) {
-    let laundryFounded = await this.repository.findById(key);
+    let laundryFound = await this.repository.findById(key);
 
-    if (!laundryFounded)
-      laundryFounded = await this.repository.findByCNPJ(
-        this.crypto.sha256(key),
-      );
+    if (!laundryFound)
+      laundryFound = await this.repository.findByCNPJ(this.crypto.sha256(key));
 
-    if (!laundryFounded)
-      throw new BadResponse("Lavanderia não encontrada.", 404);
+    if (!laundryFound) throw new BadResponse("Lavanderia não encontrada.", 404);
 
-    const decrypted_laundry = this.crypto.decryptEntity(
-      laundryFounded,
-      sensitive_fields,
-    );
+    return remove_sensitive_fields(this.decryptLaundry(laundryFound));
+  }
+
+  decryptLaundry(l: LaundryModel): LaundryDTO {
+    const decrypted_laundry = this.crypto.decryptEntity(l, sensitive_fields);
     return remove_sensitive_fields(decrypted_laundry);
   }
 
@@ -127,11 +129,11 @@ export class LaundryService {
 
   async searchByName(name?: string) {
     let searchResult: LaundryModel[] = [];
-    if (name && name.trim() != "") {
+    if (name && name.trim() != "" && name != "{name}") {
       searchResult = await this.repository.searchByName(name);
-      return searchResult;
+      return searchResult.map((e) => this.decryptLaundry(e));
     }
     searchResult = await this.repository.listAll();
-    return searchResult;
+    return searchResult.map((e) => this.decryptLaundry(e));
   }
 }
