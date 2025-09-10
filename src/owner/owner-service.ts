@@ -1,7 +1,6 @@
 import { OwnerDTO } from "../shared/dto";
 import { BadResponse } from "../infra/error-handler";
 import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
-import { logger } from "../infra/logger";
 import { OwnerModel } from "../shared/models";
 import {
   CryptoProvider,
@@ -15,11 +14,11 @@ export class OwnerService {
     private repository: IOwnerRepository,
     private crypto: CryptoProvider,
     private jwt: JwtProvider,
-    private identityService: IdentityService,
+    private identityService: IdentityService
   ) {}
 
   async saveOwner(
-    owner: Omit<OwnerDTO, "id" | "created_at">,
+    owner: Omit<OwnerDTO, "id" | "created_at">
   ): Promise<OwnerModel> {
     if (owner.cpf.includes(".") || owner.cep.includes("-")) {
       throw new BadResponse("CEP e CPF devem conter somente números.");
@@ -58,7 +57,7 @@ export class OwnerService {
 
     const passResult = this.crypto.comparePassword(
       password,
-      ownerWithEmail.password,
+      ownerWithEmail.password
     );
     if (!passResult) {
       throw new BadResponse("Login ou senha incorretos.");
@@ -78,12 +77,9 @@ export class OwnerService {
   async findOwner(id: string) {
     const owner = await this.repository.findById(id);
     if (!owner) throw new BadResponse("Cadastro não encontrado.", 404);
-    const decryptedOwner = this.crypto.decryptEntity(owner, [
-      "cep",
-      "email",
-      "cpf",
-    ]);
-    return remove_sensitive_fields(decryptedOwner);
+    const decryptedOwner = this.decryptOwner(owner);
+    const { password, ...rest } = decryptedOwner;
+    return rest;
   }
 
   async deleteById(id: string) {
@@ -95,5 +91,11 @@ export class OwnerService {
   async listAllIds(): Promise<{ id: string }[]> {
     const result = await this.repository.listAllIds();
     return result;
+  }
+
+  public decryptOwner(owner: OwnerModel): OwnerDTO {
+    return remove_sensitive_fields(
+      this.crypto.decryptEntity(owner, ["name", "cep", "email", "cpf"])
+    );
   }
 }

@@ -40,7 +40,7 @@ export const get_owner = {
   response: {
     200: z.object({
       details: z.string(),
-      owner: ZodOwner,
+      owner: ZodOwner.omit({ password: true }),
     }),
   },
 };
