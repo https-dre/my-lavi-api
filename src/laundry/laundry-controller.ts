@@ -22,7 +22,7 @@ export class LaundryController {
 
   async preHandler(req: FastifyRequest, reply: FastifyReply) {
     const allPayload = await this.service.verifyTokenAndValidateOwner(
-      req.headers["Authorization"] as string,
+      req.headers["Authorization"] as string
     );
     req.contextData = allPayload;
   }
@@ -56,5 +56,11 @@ export class LaundryController {
     if (result.length > 0) return reply.code(200).send({ laundries: result });
 
     return reply.code(404).send({ details: "Nenhuma lavanderia encontrada." });
+  }
+
+  async deleteLaundry(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    await this.service.deleteWithId(id);
+    return reply.code(204).send();
   }
 }

@@ -25,7 +25,7 @@ export class LaundryService {
   private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
-    private ownerRepository: IOwnerRepository,
+    private ownerRepository: IOwnerRepository
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();
@@ -55,6 +55,13 @@ export class LaundryService {
 
     const saved_laundry = await this.repository.save(encrypted_laundry);
     return saved_laundry.id;
+  }
+
+  async deleteWithId(id: string) {
+    if (!(await this.repository.findById(id)))
+      throw new BadResponse("Lavanderia não encontrada.", 404);
+
+    await this.repository.delete(id);
   }
 
   async find(key: string) {
@@ -97,13 +104,13 @@ export class LaundryService {
 
   async updateLaundryFields(
     laundryId: string,
-    updatedFields: Record<string, any>,
+    updatedFields: Record<string, any>
   ) {
     const laundryWithId = await this.repository.findById(laundryId);
     if (!laundryId) throw new BadResponse("Lavanderia não encontrado", 404);
     const decryptedLaundry = this.crypto.decryptEntity(
       laundryWithId,
-      sensitive_fields,
+      sensitive_fields
     );
     const updated_laundry = { ...decryptedLaundry, ...updatedFields } as Record<
       string,

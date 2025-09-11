@@ -43,4 +43,10 @@ export const laundry_routes = (app: FastifyInstance) => {
     { schema: search_laundries_by_name },
     controller.searchLaundriesByName.bind(controller)
   );
+
+  app.delete(
+    "/laundry/:id",
+    { schema: { summary: "Delete laundry", tags: ["laundry"] } },
+    controller.deleteLaundry.bind(controller)
+  );
 };
