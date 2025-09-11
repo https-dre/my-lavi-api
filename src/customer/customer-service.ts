@@ -15,11 +15,16 @@ export class CustomerService {
     readonly repository: ICustomerRepository,
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
-    readonly identityService: IdentityService
+    readonly identityService: IdentityService,
   ) {}
 
+  public validateFields(customer: Omit<CustomerDTO, "id" | "created_at">) {
+    if (customer.is_pj && customer.doc.length != 14)
+      throw new BadResponse("CNPJ deve conter exatamente 14 caracteres.");
+  }
+
   public async createCustomer(
-    customer: Omit<CustomerDTO, "id" | "created_at">
+    customer: Omit<CustomerDTO, "id" | "created_at">,
   ) {
     const email_index = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_index)) {
@@ -73,7 +78,7 @@ export class CustomerService {
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.hmac(email)
+      this.crypto.hmac(email),
     );
     if (
       !customerFounded ||
@@ -134,7 +139,11 @@ export class CustomerService {
   }
 
   public decryptCustomer(c: CustomerModel): CustomerDTO {
-    const decrypted_customer = this.crypto.decryptEntity(c, ["email", "doc"]);
+    const decrypted_customer = this.crypto.decryptEntity(c, [
+      "email",
+      "doc",
+      "name",
+    ]);
     return remove_sensitive_fields(decrypted_customer);
   }
 }

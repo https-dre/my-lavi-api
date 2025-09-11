@@ -56,4 +56,10 @@ export class CustomerController {
     const result = await this.service.listAllIds();
     return result;
   }
+
+  public async getCustomerWithId(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    const result = await this.service.getCustomerWithId(id);
+    return reply.code(200).send({ customer: result });
+  }
 }

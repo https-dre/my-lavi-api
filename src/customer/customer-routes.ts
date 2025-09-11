@@ -20,26 +20,26 @@ export const customer_routes = (app: FastifyInstance) => {
   const ownerRepository = new OwnerRepository();
   const identityService = new IdentityService(
     customerRepository,
-    ownerRepository
+    ownerRepository,
   );
   const customerService = new CustomerService(
     customerRepository,
     new CryptoProvider(),
     new JwtProvider(),
-    identityService
+    identityService,
   );
   const controller = new CustomerController(customerService);
 
   app.post(
     "/customer",
     { schema: create_customer },
-    controller.save.bind(controller)
+    controller.save.bind(controller),
   );
 
   app.put(
     "/customer/sign",
     { schema: auth_customer },
-    controller.auth.bind(controller)
+    controller.auth.bind(controller),
   );
 
   app.put(
@@ -48,7 +48,7 @@ export const customer_routes = (app: FastifyInstance) => {
       schema: update_customer,
       preHandler: controller.preHandler.bind(controller),
     },
-    controller.update.bind(controller)
+    controller.update.bind(controller),
   );
 
   app.delete(
@@ -62,7 +62,13 @@ export const customer_routes = (app: FastifyInstance) => {
         },
       },
     },
-    controller.deleteWithId.bind(controller)
+    controller.deleteWithId.bind(controller),
+  );
+
+  app.get(
+    "/customer/:id",
+    { schema: { summary: "Find customer", tags: ["customer"] } },
+    controller.getCustomerWithId.bind(controller),
   );
 
   if (process.env.ROUTE_MODE !== "production") {
@@ -74,7 +80,7 @@ export const customer_routes = (app: FastifyInstance) => {
           summary: "List all customers",
         },
       },
-      controller.listAllIds.bind(controller)
+      controller.listAllIds.bind(controller),
     );
   }
 };
