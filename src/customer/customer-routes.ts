@@ -13,41 +13,56 @@ import {
 } from "../shared/providers/crypto-provider";
 import { OwnerRepository } from "../owner/owner-repository";
 import { IdentityService } from "../shared/services/identity-service";
+import z from "zod";
 
 export const customer_routes = (app: FastifyInstance) => {
   const customerRepository = new CustomerRepository();
   const ownerRepository = new OwnerRepository();
   const identityService = new IdentityService(
     customerRepository,
-    ownerRepository,
+    ownerRepository
   );
   const customerService = new CustomerService(
     customerRepository,
     new CryptoProvider(),
     new JwtProvider(),
-    identityService,
+    identityService
   );
-  const customerController = new CustomerController(customerService);
+  const controller = new CustomerController(customerService);
 
   app.post(
     "/customer",
     { schema: create_customer },
-    customerController.save.bind(customerController),
+    controller.save.bind(controller)
   );
 
   app.put(
     "/customer/sign",
     { schema: auth_customer },
-    customerController.auth.bind(customerController),
+    controller.auth.bind(controller)
   );
 
   app.put(
     "/customer/update",
     {
       schema: update_customer,
-      preHandler: customerController.preHandler.bind(customerController),
+      preHandler: controller.preHandler.bind(controller),
     },
-    customerController.update.bind(customerController),
+    controller.update.bind(controller)
+  );
+
+  app.delete(
+    "/customer/:id",
+    {
+      schema: {
+        summary: "Delete customer",
+        tags: ["customer"],
+        response: {
+          204: z.null(),
+        },
+      },
+    },
+    controller.deleteWithId.bind(controller)
   );
 
   if (process.env.ROUTE_MODE !== "production") {
@@ -59,7 +74,7 @@ export const customer_routes = (app: FastifyInstance) => {
           summary: "List all customers",
         },
       },
-      customerController.listAllIds.bind(customerController),
+      controller.listAllIds.bind(controller)
     );
   }
 };

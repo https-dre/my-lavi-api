@@ -18,6 +18,12 @@ export class CustomerController {
       .send({ details: "Cadastrado com sucesso!", customer_id: id });
   }
 
+  public async deleteWithId(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.params as { id: string };
+    await this.service.deleteWithId(id);
+    return reply.code(204).send();
+  }
+
   public async auth(req: FastifyRequest, reply: FastifyReply) {
     const { email, password } = req.body as z.infer<typeof auth_customer.body>;
     const jwt = await this.service.authCustomer(email, password);

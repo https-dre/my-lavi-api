@@ -7,17 +7,19 @@ import {
 } from "../shared/providers/crypto-provider";
 import { ICustomerRepository } from "../shared/repositories";
 import { IdentityService } from "../shared/services/identity-service";
+import { CustomerModel } from "../shared/models";
+import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
 
 export class CustomerService {
   constructor(
     readonly repository: ICustomerRepository,
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
-    readonly identityService: IdentityService,
+    readonly identityService: IdentityService
   ) {}
 
   public async createCustomer(
-    customer: Omit<CustomerDTO, "id" | "created_at">,
+    customer: Omit<CustomerDTO, "id" | "created_at">
   ) {
     const email_index = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_index)) {
@@ -47,6 +49,22 @@ export class CustomerService {
     return created.id;
   }
 
+  async deleteWithId(id: string) {
+    if (!(await this.repository.findById(id)))
+      throw new BadResponse("Cliente não encontrado.", 404);
+
+    await this.repository.delete(id);
+  }
+
+  async getCustomerWithId(id: string): Promise<Omit<CustomerDTO, "password">> {
+    const customer = await this.repository.findById(id);
+    if (!customer) throw new BadResponse("Cliente não encontrado!", 404);
+
+    const decrypted_customer = this.decryptCustomer(customer);
+    const { password, ...rest } = decrypted_customer;
+    return rest;
+  }
+
   /**
    *
    * @param email Normal e-mail
@@ -55,7 +73,7 @@ export class CustomerService {
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.hmac(email),
+      this.crypto.hmac(email)
     );
     if (
       !customerFounded ||
@@ -113,5 +131,10 @@ export class CustomerService {
   public async listAllIds(): Promise<{ id: string }[]> {
     const result = await this.repository.listAllIds();
     return result;
+  }
+
+  public decryptCustomer(c: CustomerModel): CustomerDTO {
+    const decrypted_customer = this.crypto.decryptEntity(c, ["email", "doc"]);
+    return remove_sensitive_fields(decrypted_customer);
   }
 }
