@@ -40,14 +40,14 @@ export const laundry = pgTable("laundry", {
   account_type: text(),
   type: text(),
   created_at: timestamp().defaultNow(),
-  ownerId: text().references(() => owner.id),
+  ownerId: text().references(() => owner.id, { onDelete: "cascade" }),
 });
 
 export const laundryBanner = pgTable("laundryBanner", {
   id: text().primaryKey(),
   resource: text(),
   resource_key: text(),
-  laundryId: text().references(() => laundry.id),
+  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
 });
 
 export const employee = pgTable("employee", {
@@ -81,7 +81,7 @@ export const customerAddress = pgTable("customerAddress", {
   name: text(),
   latitude: numeric(),
   longitude: numeric(),
-  customerId: text().references(() => customer.id),
+  customerId: text().references(() => customer.id, { onDelete: "cascade" }),
 });
 
 export const order = pgTable("order", {
@@ -93,8 +93,8 @@ export const order = pgTable("order", {
   details: text(),
   latitude: numeric(),
   longitude: numeric(),
-  laundryId: text().references(() => laundry.id),
-  customerId: text().references(() => customer.id),
+  laundryId: text().references(() => laundry.id, { onDelete: "set null" }),
+  customerId: text().references(() => customer.id, { onDelete: "set null" }),
 });
 
 export const orderItem = pgTable("orderItem", {
@@ -103,7 +103,7 @@ export const orderItem = pgTable("orderItem", {
   unitPrice_inCents: integer(),
   name: text(),
   service: text(),
-  orderId: text().references(() => order.id),
+  orderId: text().references(() => order.id, { onDelete: "cascade" }),
 });
 
 export const feedbackPost = pgTable("feedbackPost", {
@@ -111,13 +111,14 @@ export const feedbackPost = pgTable("feedbackPost", {
   content: text().notNull(),
   rate: integer(),
   created_at: timestamp().defaultNow(),
-  laundryId: text().references(() => laundry.id),
+  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
+  customerId: text().references(() => customer.id, { onDelete: "cascade" }),
 });
 
 export const feedbackImage = pgTable("feedbackImage", {
   id: text().primaryKey(),
   url: text().notNull(),
-  postId: text().references(() => feedbackPost.id),
+  postId: text().references(() => feedbackPost.id, { onDelete: "cascade" }),
 });
 
 const tables = {
