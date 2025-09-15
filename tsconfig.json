@@ -3,16 +3,16 @@
   "_version": "23.0.0",
 
   "compilerOptions": {
-    "lib": ["es2024"],
-	"outDir": "dist/",
-    "module": "NodeNext",
-    "target": "es2024",
+    "lib": ["ESNext"],
+	  "outDir": "dist/",
+    "module": "Preserve",
+    "target": "ESNext",
     "noEmit": true,
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
 
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16"
+    "moduleResolution": "bundler"
   }
 }
