@@ -16,9 +16,7 @@ import { ServerErrorHandler } from "./error-handler";
  * @returns the main app instance
  */
 export const buildApp = (): FastifyInstance => {
-  const app = fastify({
-    ignoreTrailingSlash: true,
-  });
+  const app = fastify();
 
   app.decorate("contextData", null);
 
