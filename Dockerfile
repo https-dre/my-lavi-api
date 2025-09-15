@@ -1,19 +1,13 @@
-FROM node:22 AS builder
+FROM oven/bun:1-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY package.json bun.lock ./
+
+RUN bun install --production
+
 COPY . .
-RUN npm run build
 
-FROM node:22-alpine AS production
-
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY drizzle ./drizzle
-COPY drizzle.config.ts ./
-COPY package*.json .
-RUN npm install --omit=dev
 ENV NODE_ENV=production
-CMD ["npm", "start"]
+
+CMD ["bun", "src/server.ts"]
