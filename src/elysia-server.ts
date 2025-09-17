@@ -1,21 +1,39 @@
-import { Elysia } from 'elysia';
+import { Elysia } from "elysia";
 import { openapi } from "@elysiajs/openapi";
-import { ownerRouter } from './owner/routes';
+import { ownerController } from "./owner/routes";
+import { logger } from "./infra/logger";
+/**
+ * @returns New Elysia App
+ */
+export const buildElysiaApp = (): Elysia => {
+  const app = new Elysia()
+    .onError(({ error, code }) => {
+      console.log(`ERROR: code = ${code}`);
+      console.log(error);
+    })
+    .use(
+      openapi({
+        path: "/docs",
+        documentation: {
+          info: {
+            title: "Laví API",
+            version: "2.0.0",
+          },
+        },
+        // @ts-ignore
+        scalar: {
+          url: "/docs/json",
+        },
+      })
+    );
 
-const buildElysiaApp = (): Elysia => {
-    const app = new Elysia();
-    app.use(openapi({
-        path: "/docs"
-    }));
-
-    app.get("/", () => "Welcome to Laví API");
-
-    // Configura as rotas
-    app.use(ownerRouter);
-    return app;
-}
+  // Configura as rotas
+  app.get("/", ({ redirect }) => redirect("/docs"));
+  app.use(ownerController);
+  return app;
+};
 
 const PORT = process.env.PORT ? process.env.PORT : "5000";
 const app = buildElysiaApp();
-console.log("Server running...");
+logger.info("Server Ready on http://localhost:" + PORT);
 app.listen(PORT);
