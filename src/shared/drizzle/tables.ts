@@ -7,7 +7,6 @@ import {
   char,
   boolean,
   timestamp,
-  date,
 } from "drizzle-orm/pg-core";
 
 export const owner = pgTable("owner", {
@@ -16,11 +15,11 @@ export const owner = pgTable("owner", {
   name: varchar().notNull(),
   cpf: text().notNull(),
   cpf_blind_index: text().notNull().unique(),
-  verified: boolean().default(false),
+  verified: boolean().default(false).notNull(),
   email: text().notNull(),
   email_blind_index: text().unique(),
   password: text().notNull(),
-  birth_date: date().notNull(),
+  birth_date: timestamp().notNull(),
   cep: text().notNull(),
   created_at: timestamp().defaultNow(),
 });
