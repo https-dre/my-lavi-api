@@ -1,5 +1,5 @@
 import { LaundryDTO } from "../shared/dto";
-import { BadResponse } from "../infra/error-handler";
+import { BadResponse } from "../../http/error-handler";
 import {
   remove_sensitive_fields,
   RemoveSensitiveFields,

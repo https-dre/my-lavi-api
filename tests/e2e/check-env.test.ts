@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { config } from "dotenv";
 import path from "path";
-import { logger } from "../../src/infra/logger";
+import { logger } from "../../src/logger";
 
 const envPath = path.resolve(process.cwd(), ".env");
 config({ path: envPath });

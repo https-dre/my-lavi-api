@@ -1,7 +1,7 @@
 import { ILaundryRepository } from "../shared/repositories";
-import { db } from "../shared/drizzle/conn";
+import { db } from "../shared/database/conn";
 import { LaundryModel } from "../shared/models";
-import t from "../shared/drizzle/tables.ts";
+import t from "../shared/database/tables";
 import { randomUUID } from "crypto";
 import { eq, ilike } from "drizzle-orm";
 

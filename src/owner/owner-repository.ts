@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { IOwnerRepository } from "../shared/repositories";
-import { db } from "../shared/drizzle/conn";
-import tables from "../shared/drizzle/tables";
+import { db } from "../../database/conn";
+import tables from "../../database/tables";
 import { OwnerModel } from "../shared/models";
 import { eq } from "drizzle-orm";
 

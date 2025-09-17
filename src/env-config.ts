@@ -1,9 +1,9 @@
-import { logger } from "./infra/logger";
+import { logger } from "./logger";
 
 const EnvConfig = new Map<string, string>(
   Object.entries(process.env).filter(
-    (entry): entry is [string, string] => entry[1] !== undefined,
-  ),
+    (entry): entry is [string, string] => entry[1] !== undefined
+  )
 );
 
 const vars = ["DATABASE_URL", "JWT_KEY", "ENCRYPT_CORE_KEY"];

@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { BadResponse } from "../infra/error-handler";
+import { BadResponse } from "../../http/error-handler";
 import { S3ObjectProps, S3Provider } from "../shared/providers/S3Provider";
 import {
   ILaundryBannerRepository,
@@ -11,12 +11,12 @@ export class LaundryBannerService {
   constructor(
     private bannerRepository: ILaundryBannerRepository,
     private laundryRepository: ILaundryRepository,
-    private s3Provider: S3Provider,
+    private s3Provider: S3Provider
   ) {}
 
   public async saveBanner(
     laundry_id: string,
-    file: Omit<S3ObjectProps, "key" & "bucket">,
+    file: Omit<S3ObjectProps, "key" & "bucket">
   ) {
     // verifica se a lavanderia existe
 
@@ -49,7 +49,7 @@ export class LaundryBannerService {
   }
 
   async listBannersFromLaundry(
-    laundryId: string,
+    laundryId: string
   ): Promise<LaundryBannerModel[]> {
     if (!(await this.laundryRepository.findById(laundryId))) {
       throw new BadResponse("Lavanderia não encontrata.", 404);

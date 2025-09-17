@@ -1,6 +1,6 @@
 import JWT from "jsonwebtoken";
 import { CustomerDTO } from "../shared/dto";
-import { BadResponse } from "../infra/error-handler";
+import { BadResponse } from "../../http/error-handler";
 import {
   CryptoProvider,
   JwtProvider,
@@ -15,7 +15,7 @@ export class CustomerService {
     readonly repository: ICustomerRepository,
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
-    readonly identityService: IdentityService,
+    readonly identityService: IdentityService
   ) {}
 
   public validateFields(customer: Omit<CustomerDTO, "id" | "created_at">) {
@@ -24,7 +24,7 @@ export class CustomerService {
   }
 
   public async createCustomer(
-    customer: Omit<CustomerDTO, "id" | "created_at">,
+    customer: Omit<CustomerDTO, "id" | "created_at">
   ) {
     const email_index = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_index)) {
@@ -78,7 +78,7 @@ export class CustomerService {
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.hmac(email),
+      this.crypto.hmac(email)
     );
     if (
       !customerFounded ||

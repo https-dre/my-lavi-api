@@ -5,7 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { BadResponse } from "../../infra/error-handler";
+import { BadResponse } from "../../../http/error-handler";
 
 export type S3ObjectProps = {
   key: string;
@@ -48,7 +48,7 @@ export class S3Provider {
     if (cmd_status !== 201 && cmd_status !== 200) {
       throw new BadResponse(
         `Failed to upload file to S3, command status: ${cmd_status}`,
-        500,
+        500
       );
     }
   }
@@ -101,7 +101,8 @@ export class S3Provider {
       const response = await this.client.send(command);
       return {
         key: key,
-        url: `https://${this.bucket}.s3.${process.env.AWS_REGION!}.amazonaws.com/${key}`,
+        url: `https://${this.bucket}.s3.${process.env
+          .AWS_REGION!}.amazonaws.com/${key}`,
         size: response.ContentLength,
         lastModified: response.LastModified,
       };

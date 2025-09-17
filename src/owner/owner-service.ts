@@ -1,5 +1,5 @@
 import { OwnerDTO } from "../shared/dto";
-import { BadResponse } from "../infra/error-handler";
+import { BadResponse } from "../../http/error-handler";
 import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
 import { OwnerModel } from "../shared/models";
 import {

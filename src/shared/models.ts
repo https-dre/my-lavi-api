@@ -1,4 +1,4 @@
-import tables from "./drizzle/tables";
+import tables from "../../database/tables";
 
 export type CustomerModel = typeof tables.customer.$inferInsert;
 
@@ -19,4 +19,3 @@ export type OrderItemModel = typeof tables.orderItem.$inferInsert;
 export type FeedbackModel = typeof tables.feedbackPost.$inferInsert;
 
 export type FeedbackImageModel = typeof tables.feedbackImage.$inferInsert;
-

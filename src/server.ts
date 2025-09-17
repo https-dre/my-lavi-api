@@ -1,7 +1,7 @@
 import { verify_env } from "./env-config";
-import { logger } from "./infra/logger";
-import { check_db } from "./shared/drizzle/conn";
-import { buildApp } from "./infra/buildApp";
+import { logger } from "./logger";
+import { check_db } from "../database/conn";
+import { buildApp } from "../http/buildApp";
 
 const run = async () => {
   verify_env();
@@ -20,7 +20,7 @@ const run = async () => {
       }
 
       logger.info("Server running at: " + address);
-    },
+    }
   );
 };
 

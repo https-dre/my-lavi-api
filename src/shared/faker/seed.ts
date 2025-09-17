@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import { faker } from "@faker-js/faker/locale/pt_BR";
 
 // Importe seu schema do Drizzle
-import * as schema from "../drizzle/tables";
+import * as schema from "../database/tables";
 
 dotenv.config();
 

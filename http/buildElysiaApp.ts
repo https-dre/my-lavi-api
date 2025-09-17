@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 import { openapi } from "@elysiajs/openapi";
-import { ownerController } from "./owner/routes";
-import { logger } from "./infra/logger";
+import { ownerController } from "../src/owner/routes";
+import { logger } from "../src/logger";
 /**
  * @returns New Elysia App
  */

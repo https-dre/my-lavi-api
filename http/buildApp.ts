@@ -6,7 +6,7 @@ import {
 } from "fastify-type-provider-zod";
 import fastifyMultipart from "@fastify/multipart";
 import fastifySwagger from "@fastify/swagger";
-import { router } from "../shared/routes";
+import { router } from "../src/shared/routes";
 import { ServerErrorHandler } from "./error-handler";
 
 /**

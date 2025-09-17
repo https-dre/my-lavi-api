@@ -1,4 +1,4 @@
-import { BadResponse } from "../infra/error-handler";
+import { BadResponse } from "../../http/error-handler";
 import { OrderItemModel, OrderModel } from "../shared/models";
 import {
   ICustomerRepository,
@@ -10,11 +10,11 @@ export class OrderService {
   constructor(
     private repository: IOrderRepository,
     private customerRepository: ICustomerRepository,
-    private laundryRepository: ILaundryRepository,
+    private laundryRepository: ILaundryRepository
   ) {}
 
   async createOrder(
-    orderData: Required<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
+    orderData: Required<Omit<OrderModel, "id" | "created_at" | "updated_at">>
   ) {
     if (!(await this.customerRepository.findById(orderData.customerId!)))
       throw new BadResponse("Cliente não encontrado.", 404);
@@ -59,7 +59,7 @@ export class OrderService {
   async getOrdersWithInterval(
     customerId: string,
     startDate: Date,
-    endDate: Date,
+    endDate: Date
   ) {
     if (!(await this.customerRepository.findById(customerId)))
       throw new BadResponse("Cliente não encontrado.", 404);
@@ -67,7 +67,7 @@ export class OrderService {
     return await this.repository.findByCustomerIdWithDateInterval(
       customerId,
       startDate,
-      endDate,
+      endDate
     );
   }
 }

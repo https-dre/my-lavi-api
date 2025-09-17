@@ -1,7 +1,7 @@
 import { describe, it, beforeAll, afterAll, afterEach, expect } from "vitest";
 import request from "supertest";
-import { buildApp } from "../../src/infra/buildApp";
-import { db } from "../../src/shared/drizzle/conn";
+import { buildApp } from "../../http/buildApp";
+import { db } from "../../src/shared/database/conn";
 
 let app: ReturnType<typeof buildApp>;
 
