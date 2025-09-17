@@ -35,7 +35,7 @@ export class OwnerService {
     }
 
     const password_hash = this.crypto.hashPassword(owner.password);
-    const encrypted_owner: Omit<OwnerModel, "id"> = {
+    const encrypted_owner: Omit<OwnerModel, "id" | "created_at"> = {
       ...owner,
       email_blind_index: email_index,
       email: this.crypto.encrypt(owner.email),
@@ -74,7 +74,7 @@ export class OwnerService {
     return payload;
   }
 
-  async findOwner(id: string) {
+  async findOwner(id: string): Promise<Omit<OwnerDTO, "password">> {
     const owner = await this.repository.findById(id);
     if (!owner) throw new BadResponse("Cadastro não encontrado.", 404);
     const decryptedOwner = this.decryptOwner(owner);
