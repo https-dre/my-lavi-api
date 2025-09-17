@@ -19,6 +19,7 @@
   "packageManager": "pnpm@10.9.0",
   "devDependencies": {
     "@faker-js/faker": "^9.7.0",
+    "@types/bun": "^1.2.22",
     "@types/crypto-js": "^4.2.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.17",
@@ -34,6 +35,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",
+    "@elysiajs/openapi": "^1.4.2",
     "@fastify/cors": "^11.0.1",
     "@fastify/formbody": "^8.0.2",
     "@fastify/multipart": "^9.0.3",
@@ -43,6 +45,7 @@
     "bcryptjs": "^3.0.2",
     "crypto-js": "^4.2.0",
     "drizzle-orm": "^0.44.3",
+    "elysia": "^1.4.5",
     "fastify": "^5.3.3",
     "fastify-type-provider-zod": "^4.0.2",
     "jsonwebtoken": "^9.0.2",
