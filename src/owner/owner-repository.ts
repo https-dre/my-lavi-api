@@ -6,7 +6,9 @@ import { OwnerModel } from "../shared/models";
 import { eq } from "drizzle-orm";
 
 export class OwnerRepository implements IOwnerRepository {
-  public async save(data: Omit<OwnerModel, "id">): Promise<OwnerModel> {
+  public async save(
+    data: Omit<OwnerModel, "id" | "created_at">
+  ): Promise<OwnerModel> {
     const new_owner = await db
       .insert(tables.owner)
       .values({
@@ -42,7 +44,7 @@ export class OwnerRepository implements IOwnerRepository {
 
   public async update(
     updates: Partial<Omit<OwnerModel, "id">>,
-    id: string,
+    id: string
   ): Promise<void> {
     await db.update(tables.owner).set(updates).where(eq(tables.owner.id, id));
   }
