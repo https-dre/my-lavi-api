@@ -6,9 +6,12 @@
   "private": true,
   "scripts": {
     "e2e": "vitest run",
-    "dev": "tsx --env-file .env --watch src/server.ts",
-    "build": "tsup src --format esm",
-    "start": "bun dist/server.mjs"
+    "dev": "bun run --env-file .env --watch src/server.ts",
+    "build": "bun build src/server.ts --compile --outfile server",
+    "start": "bun run src/server.ts",
+    "dev:tsx": "tsx --env-file .env --watch src/server.ts",
+    "build:tsx": "tsup src --format esm",
+    "start:node": "node dist/server.mjs"
   },
   "keywords": [],
   "author": "André Dias (https-dre)",
