@@ -32,8 +32,3 @@ export const buildElysiaApp = (): Elysia => {
   app.use(ownerController);
   return app;
 };
-
-const PORT = process.env.PORT ? process.env.PORT : "5000";
-const app = buildElysiaApp();
-logger.info("Server Ready on http://localhost:" + PORT);
-app.listen(PORT);
