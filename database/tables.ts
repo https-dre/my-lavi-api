@@ -20,7 +20,7 @@ export const owner = pgTable("owner", {
   email: text().notNull(),
   email_blind_index: text().unique(),
   password: text().notNull(),
-  birth_date: timestamp().notNull(),
+  birth_date: date().notNull(),
   cep: text().notNull(),
   created_at: timestamp().defaultNow(),
 });
@@ -70,7 +70,7 @@ export const customer = pgTable("customer", {
   is_pj: boolean().default(false).notNull(),
   doc_blind_index: text().notNull().unique(),
   doc: text().notNull(),
-  birth_date: timestamp().notNull(),
+  birth_date: date().notNull(),
   gender: text().notNull(),
   password: text().notNull(),
   created_at: timestamp().defaultNow(),
