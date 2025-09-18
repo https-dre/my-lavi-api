@@ -1,15 +1,15 @@
 CREATE TABLE "customer" (
 	"id" text PRIMARY KEY NOT NULL,
 	"profile_url" text,
-	"name" text,
+	"name" text NOT NULL,
 	"email_blind_index" text NOT NULL,
 	"email" text NOT NULL,
-	"is_pj" boolean DEFAULT false,
+	"is_pj" boolean DEFAULT false NOT NULL,
 	"doc_blind_index" text NOT NULL,
 	"doc" text NOT NULL,
-	"birth_date" text,
-	"gender" text,
-	"password" text,
+	"birth_date" date NOT NULL,
+	"gender" text NOT NULL,
+	"password" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	CONSTRAINT "customer_email_blind_index_unique" UNIQUE("email_blind_index"),
 	CONSTRAINT "customer_doc_blind_index_unique" UNIQUE("doc_blind_index")
@@ -49,25 +49,27 @@ CREATE TABLE "feedbackPost" (
 	"content" text NOT NULL,
 	"rate" integer,
 	"created_at" timestamp DEFAULT now(),
-	"laundryId" text
+	"laundryId" text,
+	"customerId" text
 );
 --> statement-breakpoint
 CREATE TABLE "laundry" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" varchar(255) NOT NULL,
-	"address" text,
-	"opening" varchar(30) DEFAULT '.',
-	"longitude" numeric,
-	"latitude" numeric,
+	"profile_url" text,
+	"address" text NOT NULL,
+	"opening" text NOT NULL,
+	"longitude" numeric NOT NULL,
+	"latitude" numeric NOT NULL,
 	"cnpj_blind_index" text,
-	"cnpj" text,
-	"bank_code" text,
-	"bank_agency" text,
-	"account_number" text,
-	"account_type" text,
-	"type" text,
+	"cnpj" text NOT NULL,
+	"bank_code" text NOT NULL,
+	"bank_agency" text NOT NULL,
+	"account_number" text NOT NULL,
+	"account_type" text NOT NULL,
+	"type" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
-	"ownerId" text,
+	"ownerId" text NOT NULL,
 	CONSTRAINT "laundry_cnpj_blind_index_unique" UNIQUE("cnpj_blind_index"),
 	CONSTRAINT "laundry_cnpj_unique" UNIQUE("cnpj"),
 	CONSTRAINT "laundry_account_number_unique" UNIQUE("account_number")
@@ -108,7 +110,7 @@ CREATE TABLE "owner" (
 	"name" varchar NOT NULL,
 	"cpf" text NOT NULL,
 	"cpf_blind_index" text NOT NULL,
-	"verified" boolean DEFAULT false,
+	"verified" boolean DEFAULT false NOT NULL,
 	"email" text NOT NULL,
 	"email_blind_index" text,
 	"password" text NOT NULL,
@@ -119,12 +121,13 @@ CREATE TABLE "owner" (
 	CONSTRAINT "owner_email_blind_index_unique" UNIQUE("email_blind_index")
 );
 --> statement-breakpoint
-ALTER TABLE "customerAddress" ADD CONSTRAINT "customerAddress_customerId_customer_id_fk" FOREIGN KEY ("customerId") REFERENCES "public"."customer"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "customerAddress" ADD CONSTRAINT "customerAddress_customerId_customer_id_fk" FOREIGN KEY ("customerId") REFERENCES "public"."customer"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "employee" ADD CONSTRAINT "employee_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "feedbackImage" ADD CONSTRAINT "feedbackImage_postId_feedbackPost_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."feedbackPost"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "feedbackPost" ADD CONSTRAINT "feedbackPost_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "laundry" ADD CONSTRAINT "laundry_ownerId_owner_id_fk" FOREIGN KEY ("ownerId") REFERENCES "public"."owner"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "laundryBanner" ADD CONSTRAINT "laundryBanner_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "order" ADD CONSTRAINT "order_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "order" ADD CONSTRAINT "order_customerId_customer_id_fk" FOREIGN KEY ("customerId") REFERENCES "public"."customer"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "orderItem" ADD CONSTRAINT "orderItem_orderId_order_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."order"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "feedbackImage" ADD CONSTRAINT "feedbackImage_postId_feedbackPost_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."feedbackPost"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "feedbackPost" ADD CONSTRAINT "feedbackPost_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "feedbackPost" ADD CONSTRAINT "feedbackPost_customerId_customer_id_fk" FOREIGN KEY ("customerId") REFERENCES "public"."customer"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "laundry" ADD CONSTRAINT "laundry_ownerId_owner_id_fk" FOREIGN KEY ("ownerId") REFERENCES "public"."owner"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "laundryBanner" ADD CONSTRAINT "laundryBanner_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "order" ADD CONSTRAINT "order_laundryId_laundry_id_fk" FOREIGN KEY ("laundryId") REFERENCES "public"."laundry"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "order" ADD CONSTRAINT "order_customerId_customer_id_fk" FOREIGN KEY ("customerId") REFERENCES "public"."customer"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orderItem" ADD CONSTRAINT "orderItem_orderId_order_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."order"("id") ON DELETE cascade ON UPDATE no action;

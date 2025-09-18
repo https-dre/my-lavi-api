@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1755989510054,
-      "tag": "0000_worthless_lake",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1757552700953,
-      "tag": "0001_default",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1758158200277,
-      "tag": "0002_common_pete_wisdom",
+      "when": 1758232694498,
+      "tag": "0000_uneven_zeigeist",
       "breakpoints": true
     }
   ]
