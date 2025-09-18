@@ -10,7 +10,7 @@
 
 ## Sobre o Projeto
 
-A **Laví API** é o backend responsável por gerenciar os workflows e as regras de negócio do aplicativo "Laví". Construída com foco em performance e escalabilidade, utilizando um stack moderno com Fastify e TypeScript.
+A **Laví API** é o backend responsável por gerenciar os workflows e as regras de negócio do aplicativo "Laví". Construída com foco em performance e escalabilidade, utilizando um stack moderno com Elysia, Bun e TypeScript.
 
 ### Pré-requisitos
 
