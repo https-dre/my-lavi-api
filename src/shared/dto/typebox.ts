@@ -11,7 +11,6 @@ const DateISO = Type.Transform(
   .Encode((value) => new Date(value));
 
 const DateString = Type.String({
-  format: "date",
   description: "Date with format YYYY-MM-DD",
   default: "2000-01-01",
   examples: ["2007-05-02"],
