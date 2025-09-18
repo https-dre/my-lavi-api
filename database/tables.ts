@@ -28,19 +28,22 @@ export const owner = pgTable("owner", {
 export const laundry = pgTable("laundry", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
-  address: text(),
-  opening: varchar({ length: 30 }).default("."),
-  longitude: numeric(),
-  latitude: numeric(),
+  profile_url: text(),
+  address: text().notNull(),
+  opening: text().notNull(),
+  longitude: numeric().notNull(),
+  latitude: numeric().notNull(),
   cnpj_blind_index: text().unique(),
-  cnpj: text().unique(),
-  bank_code: text(),
-  bank_agency: text(),
-  account_number: text().unique(),
-  account_type: text(),
-  type: text(),
+  cnpj: text().unique().notNull(),
+  bank_code: text().notNull(),
+  bank_agency: text().notNull(),
+  account_number: text().unique().notNull(),
+  account_type: text().notNull(),
+  type: text().notNull(),
   created_at: timestamp().defaultNow(),
-  ownerId: text().references(() => owner.id, { onDelete: "cascade" }),
+  ownerId: text()
+    .references(() => owner.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 export const laundryBanner = pgTable("laundryBanner", {
