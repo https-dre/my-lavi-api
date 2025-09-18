@@ -1,6 +1,6 @@
 import tables from "../../database/tables";
 
-export type CustomerModel = typeof tables.customer.$inferInsert;
+export type CustomerModel = Required<typeof tables.customer.$inferInsert>;
 
 export type CustomerAddressModel = typeof tables.customerAddress.$inferInsert;
 
