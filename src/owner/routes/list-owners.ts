@@ -1,21 +1,23 @@
 import Elysia from "elysia";
-import { ownerService } from ".";
 import { Type } from "@sinclair/typebox";
+import { OwnerService } from "../owner-service";
 
-export const listOwners = new Elysia().get(
-  "/public/owners",
-  async ({ status }) => {
-    const owners = await ownerService.listAllIds();
-    const ids = owners.map((e) => e.id);
-    return status(200, { ids });
-  },
-  {
-    detail: {
-      summary: "List owners id",
-      tags: ["owner"],
+export const listOwners = async (service: OwnerService): Promise<Elysia> => {
+  return new Elysia().get(
+    "/public/owners",
+    async ({ status }) => {
+      const owners = await service.listAllIds();
+      const ids = owners.map((e) => e.id);
+      return status(200, { ids });
     },
-    response: {
-      200: Type.Object({ ids: Type.Array(Type.String({ format: "uuid" })) }),
-    },
-  }
-);
+    {
+      detail: {
+        summary: "List owners id",
+        tags: ["owner"],
+      },
+      response: {
+        200: Type.Object({ ids: Type.Array(Type.String({ format: "uuid" })) }),
+      },
+    }
+  );
+};

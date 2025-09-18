@@ -8,15 +8,17 @@ import { IdentityService } from "../../shared/services/identity-service";
 import { OwnerRepository } from "../owner-repository";
 import { OwnerService } from "../owner-service";
 
-import { createOwner } from "./post-owner";
-import { findOwner } from "./get-owner";
+import { postOwner } from "./post-owner";
+import { getOwner } from "./get-owner";
 import { deleteOwner } from "./delete-owner";
 import { listOwners } from "./list-owners";
+import { authenticateOwner } from "./authenticate-owner";
 
 const ownerRepository = new OwnerRepository();
 const jwtProvider = new JwtProvider();
 const cryptoProvider = new CryptoProvider();
 const customerRepository = new CustomerRepository();
+
 const ownerService = new OwnerService(
   ownerRepository,
   cryptoProvider,
@@ -25,10 +27,11 @@ const ownerService = new OwnerService(
 );
 
 // CONFIGURA AS ROTAS PARA 'OWNER'
-const ownerController = new Elysia();
-ownerController.use(createOwner);
-ownerController.use(findOwner);
-ownerController.use(deleteOwner);
-ownerController.use(listOwners);
+const ownerController = new Elysia()
+  .use(postOwner(ownerService))
+  .use(getOwner(ownerService))
+  .use(deleteOwner(ownerService))
+  .use(listOwners(ownerService))
+  .use(authenticateOwner(ownerService));
 
-export { ownerController, ownerService };
+export { ownerController };
