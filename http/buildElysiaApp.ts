@@ -1,18 +1,14 @@
 import { Elysia } from "elysia";
 import { openapi } from "@elysiajs/openapi";
 import { ownerController } from "../src/owner/routes";
-import { logger } from "../src/logger";
 import { customerController } from "../src/customer/routes";
 import { laundryController } from "../src/laundry/routes";
+import { BadResponse } from "./error-handler";
 /**
  * @returns New Elysia App
  */
 export const buildElysiaApp = (): Elysia => {
   const app = new Elysia()
-    .onError(({ error, code }) => {
-      console.log(`ERROR: code = ${code}`);
-      console.log(error);
-    })
     .use(
       openapi({
         path: "/docs",
@@ -27,12 +23,28 @@ export const buildElysiaApp = (): Elysia => {
           url: "/docs/json",
         },
       }),
-    );
+    )
+    .error({
+      BadResponse,
+    })
+    .onError(({ code, error, status }) => {
+      switch (code) {
+        case "BadResponse":
+          return status(error.status, error.response);
+        default:
+          return status(500, {
+            details: "Internal server error",
+            alert: "CONTACT ADM!",
+            error,
+          });
+      }
+    });
 
   // Configura as rotas
   app.get("/", ({ redirect }) => redirect("/docs"));
   app.use(ownerController);
   app.use(customerController);
   app.use(laundryController);
+  // @ts-ignore
   return app;
 };
