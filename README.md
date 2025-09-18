@@ -1,9 +1,8 @@
 # Laví API
 
+![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![Fastify](https://img.shields.io/badge/fastify-%23000000.svg?style=for-the-badge&logo=fastify&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
@@ -17,9 +16,8 @@ A **Laví API** é o backend responsável por gerenciar os workflows e as regras
 
 Antes de começar, você vai precisar ter as seguintes ferramentas instaladas:
 
-  * [Node.js](https://nodejs.org/en/) (v20.x ou superior)
+  * [Bun](https://bun.sh/) (v1.2 ou superior)
   * [Docker](https://www.docker.com/get-started) e [Docker Compose](https://docs.docker.com/compose/install/)
-  * Um gerenciador de pacotes como [NPM](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/)
 
 ## Instalação
 
@@ -42,13 +40,13 @@ Antes de começar, você vai precisar ter as seguintes ferramentas instaladas:
 2.  **Execute as migrações do banco de dados**
 
     ```sh
-    npx drizzle-kit migrate
+    bunx drizzle-kit migrate
     ```
 
-3.  **Inicie a API em modo de desenvolvimento:**
+3.  **Inicie a API usando docker:**
 
     ```sh
-    npm run dev
+    docker-compose up api -d
     ```
 
 A API estará disponível em `http://localhost:{PORT}`, onde `{PORT}` é a porta que você definiu no seu arquivo `.env`.
