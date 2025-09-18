@@ -28,7 +28,7 @@ export const CustomerType = Type.Object({
   birth_date: DateISO,
   gender: Type.String(),
   password: Type.String(),
-  created_at: DateISO,
+  created_at: Type.Union([DateISO, Type.Null()]),
 });
 
 export const LaundryType = Type.Object({
