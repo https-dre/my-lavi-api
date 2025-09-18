@@ -1,14 +1,14 @@
 import { Type } from "@sinclair/typebox";
 
 const DateISO = Type.Transform(
-  Type.String({
+  Type.Date({
     format: "date-time",
     description: "Date with format ISO 8601",
     default: "2025-09-18T19:35:25.102Z",
   }),
 )
-  .Decode((value) => new Date(value))
-  .Encode((value) => value.toISOString());
+  .Decode((value) => value.toISOString())
+  .Encode((value) => new Date(value));
 
 const DateString = Type.String({
   format: "date",
