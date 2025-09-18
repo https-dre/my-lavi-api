@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { openapi } from "@elysiajs/openapi";
 import { ownerController } from "../src/owner/routes";
 import { logger } from "../src/logger";
+import { customerController } from "../src/customer/routes";
 /**
  * @returns New Elysia App
  */
@@ -24,11 +25,12 @@ export const buildElysiaApp = (): Elysia => {
         scalar: {
           url: "/docs/json",
         },
-      })
+      }),
     );
 
   // Configura as rotas
   app.get("/", ({ redirect }) => redirect("/docs"));
   app.use(ownerController);
+  app.use(customerController);
   return app;
 };
