@@ -8,17 +8,19 @@ import {
 } from "../shared/providers/crypto-provider";
 import { IOwnerRepository } from "../shared/repositories";
 import { IdentityService } from "../shared/services/identity-service";
+import { OwnerType } from "../shared/dto/typebox";
+import _ from "lodash";
 
 export class OwnerService {
   constructor(
     private repository: IOwnerRepository,
     private crypto: CryptoProvider,
     private jwt: JwtProvider,
-    private identityService: IdentityService
+    private identityService: IdentityService,
   ) {}
 
   async saveOwner(
-    owner: Omit<OwnerDTO, "id" | "created_at">
+    owner: Omit<OwnerDTO, "id" | "created_at">,
   ): Promise<OwnerModel> {
     if (owner.cpf.includes(".") || owner.cep.includes("-")) {
       throw new BadResponse("CEP e CPF devem conter somente números.");
@@ -57,7 +59,7 @@ export class OwnerService {
 
     const passResult = this.crypto.comparePassword(
       password,
-      ownerWithEmail.password
+      ownerWithEmail.password,
     );
     if (!passResult) {
       throw new BadResponse("Login ou senha incorretos.");
@@ -94,8 +96,14 @@ export class OwnerService {
   }
 
   public decryptOwner(owner: OwnerModel): OwnerDTO {
-    return remove_sensitive_fields(
-      this.crypto.decryptEntity(owner, ["name", "cep", "email", "cpf"])
+    return this.adaptModel(
+      this.crypto.decryptEntity(owner, ["name", "cep", "email", "cpf"]),
     );
+  }
+
+  adaptModel(model: OwnerModel): OwnerDTO {
+    const dtoKeys = Object.keys(OwnerType.properties) as (keyof OwnerDTO)[];
+    const dto = _.pick(model, dtoKeys);
+    return dto;
   }
 }

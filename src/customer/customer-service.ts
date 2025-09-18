@@ -9,13 +9,16 @@ import { ICustomerRepository } from "../shared/repositories";
 import { IdentityService } from "../shared/services/identity-service";
 import { CustomerModel } from "../shared/models";
 import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
+import { CustomerType } from "../shared/dto/typebox";
+import _ from "lodash";
+import { TObject } from "@sinclair/typebox";
 
 export class CustomerService {
   constructor(
     readonly repository: ICustomerRepository,
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
-    readonly identityService: IdentityService
+    readonly identityService: IdentityService,
   ) {}
 
   public validateFields(customer: Omit<CustomerDTO, "id" | "created_at">) {
@@ -24,7 +27,7 @@ export class CustomerService {
   }
 
   public async createCustomer(
-    customer: Omit<CustomerDTO, "id" | "created_at">
+    customer: Omit<CustomerDTO, "id" | "created_at">,
   ) {
     const email_index = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_index)) {
@@ -48,6 +51,7 @@ export class CustomerService {
       doc: this.crypto.encrypt(customer.doc),
       name: this.crypto.encrypt(customer.name!),
       password: this.crypto.hashPassword(customer.password!),
+      created_at: new Date(),
     };
 
     const created = await this.repository.save(encrypted_customer);
@@ -78,7 +82,7 @@ export class CustomerService {
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.hmac(email)
+      this.crypto.hmac(email),
     );
     if (
       !customerFounded ||
@@ -144,6 +148,14 @@ export class CustomerService {
       "doc",
       "name",
     ]);
-    return remove_sensitive_fields(decrypted_customer);
+    return this.adaptModel(decrypted_customer);
+  }
+
+  adaptModel(c: CustomerModel): CustomerDTO {
+    const dtoKeys = Object.keys(
+      CustomerType.properties,
+    ) as (keyof CustomerDTO)[];
+    const dto = _.pick(c, dtoKeys);
+    return dto;
   }
 }
