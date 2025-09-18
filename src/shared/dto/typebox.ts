@@ -45,7 +45,7 @@ export const CustomerType = Type.Object({
 export const LaundryType = Type.Object({
   id: Type.String(),
   name: Type.String(),
-  profile: Type.Union([Type.String(), Type.Null()]),
+  profile_url: Type.Union([Type.String(), Type.Null()]),
   cnpj: Type.String(),
   address: Type.String(),
   latitude: Type.String(),
@@ -55,8 +55,9 @@ export const LaundryType = Type.Object({
   account_number: Type.String(),
   account_type: Type.String(),
   type: Type.String(),
-  created_at: DateISO,
-  onwerId: Type.String(),
+  opening: Type.String(),
+  created_at: Type.Union([DateISO, Type.Null()]),
+  ownerId: Type.String(),
 });
 
 export const OrderItemType = Type.Object({

@@ -1,15 +1,14 @@
 import { LaundryDTO } from "../shared/dto";
 import { BadResponse } from "../../http/error-handler";
-import {
-  remove_sensitive_fields,
-  RemoveSensitiveFields,
-} from "../shared/functions/remove-sensitive-fields";
+import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
 import { LaundryModel } from "../shared/models";
 import {
   CryptoProvider,
   JwtProvider,
 } from "../shared/providers/crypto-provider";
 import { ILaundryRepository, IOwnerRepository } from "../shared/repositories";
+import { LaundryType } from "../shared/dto/typebox";
+import _ from "lodash";
 
 const sensitive_fields = [
   "account_number",
@@ -25,7 +24,7 @@ export class LaundryService {
   private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
-    private ownerRepository: IOwnerRepository
+    private ownerRepository: IOwnerRepository,
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();
@@ -38,7 +37,7 @@ export class LaundryService {
       throw new BadResponse("Este CNPJ já foi registrado.");
     }
 
-    const owner = await this.ownerRepository.findById(laundry.ownerId!);
+    const owner = await this.ownerRepository.findById(laundry.ownerId);
     if (!owner) {
       throw new BadResponse("Cadastro de dono não encontrado!");
     }
@@ -51,6 +50,7 @@ export class LaundryService {
       bank_agency: this.crypto.encrypt(laundry.bank_agency!),
       account_number: this.crypto.encrypt(laundry.account_number!),
       account_type: this.crypto.encrypt(laundry.account_type!),
+      created_at: new Date(),
     };
 
     const saved_laundry = await this.repository.save(encrypted_laundry);
@@ -77,7 +77,7 @@ export class LaundryService {
 
   decryptLaundry(l: LaundryModel): LaundryDTO {
     const decrypted_laundry = this.crypto.decryptEntity(l, sensitive_fields);
-    return remove_sensitive_fields(decrypted_laundry);
+    return this.adaptModel(decrypted_laundry);
   }
 
   private async checkJwt(token: string) {
@@ -104,13 +104,13 @@ export class LaundryService {
 
   async updateLaundryFields(
     laundryId: string,
-    updatedFields: Record<string, any>
+    updatedFields: Record<string, any>,
   ) {
     const laundryWithId = await this.repository.findById(laundryId);
     if (!laundryId) throw new BadResponse("Lavanderia não encontrado", 404);
     const decryptedLaundry = this.crypto.decryptEntity(
       laundryWithId,
-      sensitive_fields
+      sensitive_fields,
     );
     const updated_laundry = { ...decryptedLaundry, ...updatedFields } as Record<
       string,
@@ -142,5 +142,11 @@ export class LaundryService {
     }
     searchResult = await this.repository.listAll();
     return searchResult.map((e) => this.decryptLaundry(e));
+  }
+
+  adaptModel(model: LaundryModel): LaundryDTO {
+    const dtoKeys = Object.keys(LaundryType.properties) as (keyof LaundryDTO)[];
+    const dto = _.pick(model, dtoKeys);
+    return dto;
   }
 }
