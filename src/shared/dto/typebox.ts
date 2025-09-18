@@ -1,9 +1,21 @@
 import { Type } from "@sinclair/typebox";
-import { t } from "elysia";
 
-const DateISO = Type.Transform(t.Date())
-  .Decode((value) => value.toISOString())
-  .Encode((value) => new Date(value));
+const DateISO = Type.Transform(
+  Type.String({
+    format: "date-time",
+    description: "Date with format ISO 8601",
+    default: "2025-09-18T19:35:25.102Z",
+  }),
+)
+  .Decode((value) => new Date(value))
+  .Encode((value) => value.toISOString());
+
+const DateString = Type.String({
+  format: "date",
+  description: "Date with format YYYY-MM-DD",
+  default: "2000-01-01",
+  examples: ["2007-05-02"],
+});
 
 export const OwnerType = Type.Object({
   id: Type.String(),
@@ -13,7 +25,7 @@ export const OwnerType = Type.Object({
   verified: Type.Boolean(),
   email: Type.String(),
   password: Type.String(),
-  birth_date: DateISO,
+  birth_date: DateString,
   cep: Type.String(),
   created_at: Type.Union([DateISO, Type.Null()]),
 });
@@ -25,7 +37,7 @@ export const CustomerType = Type.Object({
   email: Type.String(),
   is_pj: Type.Boolean(),
   doc: Type.String(),
-  birth_date: DateISO,
+  birth_date: DateString,
   gender: Type.String(),
   password: Type.String(),
   created_at: Type.Union([DateISO, Type.Null()]),
