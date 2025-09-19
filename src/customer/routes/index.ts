@@ -6,6 +6,7 @@ import { updateCustomer } from "./update-customer";
 import { authenticateCustomer } from "./authenticate-customer";
 import { listCustomers } from "./list-customers";
 import { appServices } from "../../shared/services";
+import { getCustomerOrders } from "./get-customer-orders";
 
 const customerController = new Elysia()
   .use(postCustomer(appServices.customer))
@@ -13,6 +14,7 @@ const customerController = new Elysia()
   .use(getCustomer(appServices.customer))
   .use(updateCustomer(appServices.customer))
   .use(authenticateCustomer(appServices.customer))
-  .use(listCustomers(appServices.customer));
+  .use(listCustomers(appServices.customer))
+  .use(getCustomerOrders(appServices.customer, appServices.order));
 
 export { customerController };
