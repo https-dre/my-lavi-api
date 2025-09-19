@@ -56,6 +56,7 @@ export const LaundryType = Type.Object({
   account_type: Type.String(),
   type: Type.String(),
   opening: Type.String(),
+  putEmployeeCode: Type.Union([Type.String(), Type.Null()]),
   created_at: Type.Union([DateISO, Type.Null()]),
   ownerId: Type.String(),
 });
@@ -85,8 +86,8 @@ export const OrderType = Type.Object({
 export const EmployeeType = Type.Object({
   id: Type.String({ format: "uuid" }),
   name: Type.String(),
-  cpf: Type.String({ maxLength: 11}),
+  cpf: Type.String({ maxLength: 11 }),
   email: Type.String(),
   password: Type.String(),
-  laundryId: Type.String()
+  laundryId: Type.String(),
 });

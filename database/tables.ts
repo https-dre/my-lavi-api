@@ -39,6 +39,7 @@ export const laundry = pgTable("laundry", {
   bank_agency: text().notNull(),
   account_number: text().unique().notNull(),
   account_type: text().notNull(),
+  putEmployeeCode: text(),
   type: text().notNull(),
   created_at: timestamp().defaultNow(),
   ownerId: text()
