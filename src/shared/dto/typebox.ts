@@ -85,9 +85,7 @@ export const OrderType = Type.Object({
 export const EmployeeType = Type.Object({
   id: Type.String({ format: "uuid" }),
   name: Type.String(),
-  cpf_blind_index: Type.String(),
   cpf: Type.String({ maxLength: 11}),
-  email_blind_index: Type.String(),
   email: Type.String(),
   password: Type.String(),
   laundryId: Type.String()

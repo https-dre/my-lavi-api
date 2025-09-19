@@ -55,13 +55,13 @@ export const laundryBanner = pgTable("laundryBanner", {
 
 export const employee = pgTable("employee", {
   id: text().primaryKey(),
-  name: varchar({ length: 255 }),
-  cpf_blind_index: text().unique(),
-  cpf: char({ length: 11 }).unique(),
-  email_blind_index: text().unique(),
-  email: varchar().unique(),
-  password: text(),
-  laundryId: text().references(() => laundry.id),
+  name: varchar({ length: 255 }).notNull(),
+  cpf_blind_index: text().unique().notNull(),
+  cpf: char({ length: 11 }).unique().notNull(),
+  email_blind_index: text().unique().notNull(),
+  email: varchar().unique().notNull(),
+  password: text().notNull(),
+  laundryId: text().references(() => laundry.id).notNull(),
 });
 
 export const customer = pgTable("customer", {

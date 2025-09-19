@@ -5,6 +5,7 @@ import {
   LaundryBannerModel,
   OrderModel,
   OrderItemModel,
+  EmployeeModel,
 } from "../models";
 
 export interface ICustomerRepository {
@@ -28,6 +29,13 @@ export interface IOwnerRepository {
   findByCpf(cpf: string): Promise<OwnerModel>;
   update(updates: Partial<Omit<OwnerModel, "id">>, id: string): Promise<void>;
   listAllIds(): Promise<{ id: string }[]>;
+}
+
+export interface IEmployeeRepository {
+  save(data: Omit<EmployeeModel, "id">): Promise<EmployeeModel>;
+  findByEmail(email: string): Promise<EmployeeModel>;
+  findById(id: string): Promise<EmployeeModel>;
+  deleteWithId(id: string): Promise<void>;
 }
 
 export interface ILaundryRepository {
