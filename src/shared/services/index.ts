@@ -8,11 +8,14 @@ import { OrderService } from "../../order/order-service";
 import { LaundryRepository } from "../../laundry/laundry-repository";
 import { LaundryService } from "../../laundry/laundry-service";
 import { CustomerService } from "../../customer/customer-service";
+import { EmployeeRepository } from "../../employee/employee.repository";
+import { EmployeeService } from "../../employee/employee.service";
 
 const ownerRepository = new OwnerRepository();
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
 const laundryRepository = new LaundryRepository();
+const employeeRepository = new EmployeeRepository();
 
 const cryptoProvider = new CryptoProvider();
 const jwtProvider = new JwtProvider();
@@ -42,6 +45,7 @@ const appServices = {
     customerRepository,
     laundryRepository,
   ),
+  employee: new EmployeeService(employeeRepository, laundryRepository, cryptoProvider)
 };
 
 export { appServices };
