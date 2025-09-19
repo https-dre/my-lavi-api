@@ -45,7 +45,6 @@ export const LaundryType = Type.Object({
   opening: Type.String(),
   putEmployeeCode: Type.Union([Type.String(), Type.Null()]),
   created_at: Type.Union([DateISO, Type.Null()]),
-  ownerId: Type.String(),
 });
 
 export const OrderItemType = Type.Object({
