@@ -5,9 +5,9 @@ import { OrderItemType } from "../../shared/dto/typebox";
 export const pushOrderItems = (service: OrderService): Elysia => {
   return new Elysia().post(
     "/orders/:id/items",
-    async ({ body, status }) => {
+    async ({ params, body, status }) => {
       const { items } = body;
-      const items_created = await service.pushOrderItems(items);
+      const items_created = await service.pushOrderItems(params.id, items);
       return status(201, { items_created });
     },
     {
@@ -16,7 +16,10 @@ export const pushOrderItems = (service: OrderService): Elysia => {
         tags: ["orders"],
       },
       body: t.Object({
-        items: t.Array(t.Omit(OrderItemType, ["id"])),
+        items: t.Array(t.Omit(OrderItemType, ["id", "orderId"])),
+      }),
+      params: t.Object({
+        id: t.String()
       }),
       response: {
         201: t.Object({

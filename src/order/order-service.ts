@@ -1,4 +1,5 @@
 import { BadResponse } from "../../http/error-handler";
+import { OrderDTO } from "../shared/dto";
 import { OrderItemModel, OrderModel } from "../shared/models";
 import {
   ICustomerRepository,
@@ -30,8 +31,14 @@ export class OrderService {
     await this.repository.delete(orderId);
   }
 
-  async pushOrderItems(items: Omit<OrderItemModel, "id">[]) {
-    const itemsCreated = await this.repository.pushManyOrderItems(items);
+  async pushOrderItems(orderId: string, items: Omit<OrderItemModel, "id" | "orderId">[]) {
+    const ordersToPut = items.map(i => {
+      return {
+        ...i,
+        orderId
+      }
+    })
+    const itemsCreated = await this.repository.pushManyOrderItems(ordersToPut);
     return itemsCreated;
   }
 
@@ -39,6 +46,15 @@ export class OrderService {
     if (!(await this.repository.findById(orderId)))
       throw new BadResponse("Pedido não encontrado.", 404);
     await this.repository.updateFields(orderId, { status });
+  }
+
+  async updateOrderFields(
+    orderId: string,
+    fields: Partial<Omit<OrderDTO, "id" | "created_at" | "updated_at">>
+  ) {
+    if (!(await this.repository.findById(orderId)))
+      throw new BadResponse("Pedido não encontrado.", 404);
+    await this.repository.updateFields(orderId, fields);
   }
 
   async getOrdersByCustomerId(customerId: string) {
