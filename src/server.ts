@@ -1,7 +1,6 @@
 import { verify_env } from "./env-config";
 import { logger } from "./logger";
 import { check_db } from "../database/conn";
-import { buildApp } from "../http/buildApp";
 import { buildElysiaApp } from "../http/buildElysiaApp";
 
 const run = async () => {
