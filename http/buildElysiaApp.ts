@@ -5,6 +5,7 @@ import { ownerController } from "../src/owner/routes";
 import { customerController } from "../src/customer/routes";
 import { laundryController } from "../src/laundry/routes";
 import { orderController } from "../src/order/routes";
+import { employeeController } from "../src/employee/routes";
 
 /**
  * @returns New Elysia App
@@ -24,7 +25,7 @@ export const buildElysiaApp = (): Elysia => {
         scalar: {
           url: "/docs/json",
         },
-      }),
+      })
     )
     .error({
       BadResponse,
@@ -48,6 +49,7 @@ export const buildElysiaApp = (): Elysia => {
   app.use(customerController);
   app.use(laundryController);
   app.use(orderController);
+  app.use(employeeController);
   // @ts-ignore
   return app;
 };
