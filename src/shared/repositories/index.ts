@@ -43,6 +43,7 @@ export interface ILaundryRepository {
   delete(id: string): Promise<void>;
   findByCNPJ(cnpj: string): Promise<LaundryModel>;
   findById(id: string): Promise<LaundryModel>;
+  findByEmployeeCode(code: string): Promise<LaundryModel>;
   findByOwnerId(id: string): Promise<LaundryModel[]>;
   update(id: string, fields: Record<string, any>): Promise<void>;
   searchByName(name: string): Promise<LaundryModel[]>;

@@ -17,6 +17,14 @@ export class LaundryRepository implements ILaundryRepository {
     return result[0];
   }
 
+  async findByEmployeeCode(code: string): Promise<LaundryModel> {
+    const result = await db
+      .select()
+      .from(t.laundry)
+      .where(eq(t.laundry.putEmployeeCode, code));
+    return result[0];
+  }
+
   async delete(id: string): Promise<void> {
     await db.delete(t.laundry).where(eq(t.laundry.id, id));
   }
