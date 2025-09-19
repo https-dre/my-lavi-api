@@ -18,7 +18,7 @@ export class EmployeeService {
 
   async saveEmployee(data: Omit<EmployeeDTO, "id">): Promise<EmployeeDTO> {
     const email_blind_index = this.crypto.hmac(data.email);
-    
+
     const employeeWithEmail = await this.repository.findByEmail(
       email_blind_index
     );
@@ -37,6 +37,19 @@ export class EmployeeService {
     };
     const saved = await this.repository.save(encrypted);
     return this.decryptEmployee(saved);
+  }
+
+  async createEmployeeByCode(
+    code: string,
+    data: Omit<EmployeeDTO, "id" | "laundryId">
+  ): Promise<EmployeeDTO> {
+    const laundryWithCode = await this.laundryRepository.findByEmployeeCode(
+      code
+    );
+    if (!laundryWithCode)
+      throw new BadResponse("Lavanderia não encontrada!", 404);
+
+    return await this.saveEmployee({ ...data, laundryId: laundryWithCode.id });
   }
 
   decryptEmployee(data: EmployeeModel): EmployeeDTO {
