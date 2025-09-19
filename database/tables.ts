@@ -89,15 +89,19 @@ export const customerAddress = pgTable("customerAddress", {
 
 export const order = pgTable("order", {
   id: text().primaryKey(),
-  created_at: timestamp().defaultNow(),
+  created_at: timestamp().defaultNow().notNull(),
   updated_at: timestamp(),
-  status: text(),
-  delivery_type: text(),
-  details: text(),
-  latitude: numeric(),
-  longitude: numeric(),
-  laundryId: text().references(() => laundry.id, { onDelete: "set null" }),
-  customerId: text().references(() => customer.id, { onDelete: "set null" }),
+  status: text().notNull(),
+  delivery_type: text().notNull(),
+  details: text().notNull(),
+  latitude: numeric().notNull(),
+  longitude: numeric().notNull(),
+  laundryId: text()
+    .references(() => laundry.id, { onDelete: "set null" })
+    .notNull(),
+  customerId: text()
+    .references(() => customer.id, { onDelete: "set null" })
+    .notNull(),
 });
 
 export const orderItem = pgTable("orderItem", {

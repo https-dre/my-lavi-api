@@ -14,7 +14,7 @@ export interface ICustomerRepository {
   findById(id: string): Promise<CustomerModel>;
   update(
     updates: Partial<Omit<CustomerModel, "id">>,
-    id: string
+    id: string,
   ): Promise<void>;
   findByDoc(doc: string): Promise<CustomerModel>;
   listAllIds(): Promise<{ id: string }[]>;
@@ -49,26 +49,28 @@ export interface ILaundryBannerRepository {
 }
 
 export interface IOrderRepository {
-  create(data: Omit<OrderModel, "id">): Promise<OrderModel>;
+  create(
+    data: Omit<OrderModel, "id" | "created_at" | "updated_at">,
+  ): Promise<OrderModel>;
   delete(orderId: string): Promise<void>;
   findByCustomerId(id: string): Promise<OrderModel[]>;
   findByCustomerIdWithCursorIndex(
     id: string,
-    cursor: Date
+    cursor: Date,
   ): Promise<OrderModel[]>;
   findById(id: string): Promise<OrderModel>;
   findByCustomerIdWithDateInterval(
     id: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<OrderModel[]>;
   findByCustomerIdAndStatus(
     customerId: string,
-    status: string
+    status: string,
   ): Promise<OrderModel[]>;
   pushOrderItem(item: Omit<OrderItemModel, "id">): Promise<OrderItemModel>;
   pushManyOrderItems(
-    items: Omit<OrderItemModel, "id">[]
+    items: Omit<OrderItemModel, "id">[],
   ): Promise<OrderItemModel[]>;
   deleteOrderItem(itemId: string): Promise<void>;
   deleteAllItemsFromOrder(id: string): Promise<void>;
@@ -76,6 +78,6 @@ export interface IOrderRepository {
   findOrderItemById(id: string): Promise<OrderItemModel>;
   updateFields(
     orderId: string,
-    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>
+    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
   ): Promise<void>;
 }

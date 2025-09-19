@@ -12,7 +12,7 @@ export type LaundryBannerModel = typeof tables.laundryBanner.$inferInsert;
 
 export type EmployeeModel = typeof tables.employee.$inferInsert;
 
-export type OrderModel = typeof tables.order.$inferInsert;
+export type OrderModel = typeof tables.order.$inferSelect;
 
 export type OrderItemModel = typeof tables.orderItem.$inferInsert;
 
