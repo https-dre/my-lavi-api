@@ -5,7 +5,7 @@ const DateISO = Type.Transform(
     format: "date-time",
     description: "Date with format ISO 8601",
     default: "2025-09-18T19:35:25.102Z",
-  }),
+  })
 )
   .Decode((value) => value.toISOString())
   .Encode((value) => new Date(value));
@@ -80,4 +80,15 @@ export const OrderType = Type.Object({
   longitude: Type.String(),
   laundryId: Type.String(),
   customerId: Type.String(),
+});
+
+export const EmployeeType = Type.Object({
+  id: Type.String({ format: "uuid" }),
+  name: Type.String(),
+  cpf_blind_index: Type.String(),
+  cpf: Type.String({ maxLength: 11}),
+  email_blind_index: Type.String(),
+  email: Type.String(),
+  password: Type.String(),
+  laundryId: Type.String()
 });
