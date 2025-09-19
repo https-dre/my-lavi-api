@@ -1,9 +1,11 @@
 import { Elysia } from "elysia";
+import { BadResponse } from "./error-handler";
 import { openapi } from "@elysiajs/openapi";
 import { ownerController } from "../src/owner/routes";
 import { customerController } from "../src/customer/routes";
 import { laundryController } from "../src/laundry/routes";
-import { BadResponse } from "./error-handler";
+import { orderController } from "../src/order/routes";
+
 /**
  * @returns New Elysia App
  */
@@ -45,6 +47,7 @@ export const buildElysiaApp = (): Elysia => {
   app.use(ownerController);
   app.use(customerController);
   app.use(laundryController);
+  app.use(orderController);
   // @ts-ignore
   return app;
 };
