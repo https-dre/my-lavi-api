@@ -1,12 +1,14 @@
 import { IOrderRepository } from "../shared/repositories";
-import { db } from "../shared/database/conn";
+import { db } from "../../database/conn";
 import { OrderItemModel, OrderModel } from "../shared/models";
-import * as t from "../shared/database/tables";
+import * as t from "../../database/tables";
 import { randomUUID } from "crypto";
 import { and, eq, gt, gte, lt, lte } from "drizzle-orm";
 
 export class OrderRepository implements IOrderRepository {
-  async create(data: Omit<OrderModel, "id">): Promise<OrderModel> {
+  async create(
+    data: Omit<OrderModel, "id" | "created_at" | "updated_at">,
+  ): Promise<OrderModel> {
     const result = await db
       .insert(t.order)
       .values({
@@ -28,13 +30,13 @@ export class OrderRepository implements IOrderRepository {
 
   async findByCustomerIdAndStatus(
     customerId: string,
-    status: string
+    status: string,
   ): Promise<OrderModel[]> {
     const result = await db
       .select()
       .from(t.order)
       .where(
-        and(eq(t.order.customerId, customerId), eq(t.order.status, status))
+        and(eq(t.order.customerId, customerId), eq(t.order.status, status)),
       );
 
     return result;
@@ -45,7 +47,7 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async pushOrderItem(
-    item: Omit<OrderItemModel, "id">
+    item: Omit<OrderItemModel, "id">,
   ): Promise<OrderItemModel> {
     const result = await db
       .insert(t.orderItem)
@@ -58,7 +60,7 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async pushManyOrderItems(
-    items: Omit<OrderItemModel, "id">[]
+    items: Omit<OrderItemModel, "id">[],
   ): Promise<OrderItemModel[]> {
     const data = items.map((item) => ({ id: randomUUID(), ...item }));
     const result = await db.insert(t.orderItem).values(data).returning();
@@ -75,7 +77,7 @@ export class OrderRepository implements IOrderRepository {
 
   async updateFields(
     orderId: string,
-    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>
+    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
   ): Promise<void> {
     await db
       .update(t.order)
@@ -103,7 +105,7 @@ export class OrderRepository implements IOrderRepository {
 
   async findByCustomerIdWithCursorIndex(
     id: string,
-    cursor: Date
+    cursor: Date,
   ): Promise<OrderModel[]> {
     return await db
       .select()
@@ -114,7 +116,7 @@ export class OrderRepository implements IOrderRepository {
   async findByCustomerIdWithDateInterval(
     id: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<OrderModel[]> {
     return await db
       .select()
@@ -123,8 +125,8 @@ export class OrderRepository implements IOrderRepository {
         and(
           eq(t.order.customerId, id),
           gte(t.order.created_at, startDate),
-          lte(t.order.created_at, endDate)
-        )
+          lte(t.order.created_at, endDate),
+        ),
       );
   }
 }
