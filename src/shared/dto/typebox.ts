@@ -5,7 +5,7 @@ const DateISO = Type.Transform(
     format: "date-time",
     description: "Date with format ISO 8601",
     default: "2025-09-18T19:35:25.102Z",
-  })
+  }),
 )
   .Decode((value) => value.toISOString())
   .Encode((value) => new Date(value));
@@ -76,7 +76,7 @@ export const AccountType = Type.Object({
   email: Type.String({ format: "email" }),
   cpf: Type.String({ maxLength: 11 }),
   password: Type.String({ minLength: 8 }),
-  role: Type.String(),
+  roles: Type.Array(Type.String()),
   laundryId: Type.Union([Type.String(), Type.Null()]),
   created_at: Type.Union([DateISO, Type.Null()]),
 });

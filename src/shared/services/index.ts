@@ -7,6 +7,7 @@ import { LaundryRepository } from "../../laundry/laundry-repository";
 import { LaundryService } from "../../laundry/laundry-service";
 import { CustomerService } from "../../customer/customer-service";
 import { AccountRepository } from "../../account/account.repository";
+import { AccountService } from "../../account/account.service";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
@@ -18,7 +19,7 @@ const jwtProvider = new JwtProvider();
 
 const identityService = new IdentityService(
   customerRepository,
-  accountRepository
+  accountRepository,
 );
 
 const appServices = {
@@ -27,13 +28,14 @@ const appServices = {
     customerRepository,
     cryptoProvider,
     jwtProvider,
-    identityService
+    identityService,
   ),
   order: new OrderService(
     orderRepository,
     customerRepository,
-    laundryRepository
+    laundryRepository,
   ),
+  account: new AccountService(accountRepository, jwtProvider, cryptoProvider),
 };
 
 export { appServices };

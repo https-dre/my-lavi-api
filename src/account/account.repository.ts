@@ -7,7 +7,7 @@ import { IAccountRepository } from "../shared/repositories";
 
 export class AccountRepository implements IAccountRepository {
   async save(
-    data: Omit<AccountModel, "id" | "created_at">
+    data: Omit<AccountModel, "id" | "created_at">,
   ): Promise<AccountModel> {
     const result = await db
       .insert(t.account)
@@ -42,10 +42,15 @@ export class AccountRepository implements IAccountRepository {
   async deleteById(id: string): Promise<void> {
     await db.delete(t.account).where(eq(t.account.id, id));
   }
+
   async updateFields(
     id: string,
-    fields: Partial<Omit<AccountModel, "id" | "created_at">>
+    fields: Partial<Omit<AccountModel, "id" | "created_at">>,
   ) {
     await db.update(t.account).set(fields).where(eq(t.account.id, id));
+  }
+
+  async findByLaundryId(id: string): Promise<AccountModel[]> {
+    return await db.select().from(t.account).where(eq(t.account.laundryId, id));
   }
 }

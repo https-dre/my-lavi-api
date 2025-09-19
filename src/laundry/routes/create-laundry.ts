@@ -6,8 +6,8 @@ export const createLaundry = (service: LaundryService): Elysia => {
   return new Elysia().post(
     "/laundries",
     async ({ body, status }) => {
-      const { laundry } = body;
-      const laundryId = await service.save(laundry);
+      const { laundry, ownerId } = body;
+      const laundryId = await service.save(ownerId, laundry);
       return status(201, { laundryId });
     },
     {
@@ -16,6 +16,7 @@ export const createLaundry = (service: LaundryService): Elysia => {
         tags: ["laundries"],
       },
       body: t.Object({
+        ownerId: t.String({ format: "uuid" }),
         laundry: t.Omit(LaundryType, ["created_at", "id", "putEmployeeCode"]),
       }),
       response: {
@@ -23,6 +24,6 @@ export const createLaundry = (service: LaundryService): Elysia => {
           laundryId: t.String({ format: "uuid" }),
         }),
       },
-    }
+    },
   );
 };

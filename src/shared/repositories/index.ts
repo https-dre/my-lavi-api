@@ -37,8 +37,12 @@ export interface IAccountRepository {
   findById(id: string): Promise<AccountModel>;
   findByEmail(email: string): Promise<AccountModel>;
   findByCpf(cpf: string): Promise<AccountModel>;
+  findByLaundryId(id: string): Promise<AccountModel[]>;
   deleteById(id: string): void;
-  updateFields(id: string, fields: Partial<Omit<AccountModel, "id" | "created_at">>): void;
+  updateFields(
+    id: string,
+    fields: Partial<Omit<AccountModel, "id" | "created_at">>,
+  ): void;
 }
 
 export interface ILaundryBannerRepository {

@@ -26,7 +26,7 @@ export const laundry = pgTable("laundry", {
   account_type: text().notNull(),
   putEmployeeCode: text(),
   type: text().notNull(),
-  created_at: timestamp().defaultNow()
+  created_at: timestamp().defaultNow(),
 });
 
 export const account = pgTable("account", {
@@ -38,7 +38,7 @@ export const account = pgTable("account", {
   cpf: text().notNull(),
   cpf_blind_index: text().notNull(),
   password: text().notNull(),
-  role: text().notNull(),
+  roles: text().array().notNull(),
   laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
   created_at: timestamp().defaultNow(),
 });
@@ -125,7 +125,7 @@ const tables = {
   orderItem,
   feedbackPost,
   feedbackImage,
-  account
+  account,
 };
 
 export default tables;

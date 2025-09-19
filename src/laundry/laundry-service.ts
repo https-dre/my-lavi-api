@@ -31,14 +31,17 @@ export class LaundryService {
     this.crypto = new CryptoProvider();
   }
 
-  async save(laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">) {
+  async save(
+    accountId: string,
+    laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">,
+  ) {
     const cnpj_index = this.crypto.sha256(laundry.cnpj!);
     const laundryFounded = await this.repository.findByCNPJ(cnpj_index);
     if (laundryFounded) {
       throw new BadResponse("Este CNPJ já foi registrado.");
     }
 
-    const owner = await this.accountRepository.findById(laundry.ownerId);
+    const owner = await this.accountRepository.findById(accountId);
     if (!owner) {
       throw new BadResponse("Cadastro de dono não encontrado!");
     }
