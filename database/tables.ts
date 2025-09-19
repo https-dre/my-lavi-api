@@ -106,11 +106,11 @@ export const order = pgTable("order", {
 
 export const orderItem = pgTable("orderItem", {
   id: text().primaryKey(),
-  qntd: integer(),
-  unitPrice_inCents: integer(),
-  name: text(),
-  service: text(),
-  orderId: text().references(() => order.id, { onDelete: "cascade" }),
+  qntd: integer().notNull(),
+  unitPrice_inCents: integer().notNull(),
+  name: text().notNull(),
+  service: text().notNull(),
+  orderId: text().references(() => order.id, { onDelete: "cascade" }).notNull(),
 });
 
 export const feedbackPost = pgTable("feedbackPost", {
