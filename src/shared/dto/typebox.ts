@@ -16,19 +16,6 @@ const DateString = Type.String({
   examples: ["2007-05-02"],
 });
 
-export const OwnerType = Type.Object({
-  id: Type.String(),
-  profile_url: Type.Union([Type.String(), Type.Null()]),
-  name: Type.String(),
-  cpf: Type.String(),
-  verified: Type.Boolean(),
-  email: Type.String(),
-  password: Type.String(),
-  birth_date: DateString,
-  cep: Type.String(),
-  created_at: Type.Union([DateISO, Type.Null()]),
-});
-
 export const CustomerType = Type.Object({
   id: Type.String(),
   profile_url: Type.Union([Type.String(), Type.Null()]),
@@ -83,11 +70,14 @@ export const OrderType = Type.Object({
   customerId: Type.String(),
 });
 
-export const EmployeeType = Type.Object({
+export const AccountType = Type.Object({
   id: Type.String({ format: "uuid" }),
+  profile_url: Type.Union([Type.String(), Type.Null()]),
   name: Type.String(),
+  email: Type.String({ format: "email" }),
   cpf: Type.String({ maxLength: 11 }),
-  email: Type.String(),
-  password: Type.String(),
-  laundryId: Type.String(),
+  password: Type.String({ minLength: 8 }),
+  role: Type.String(),
+  laundryId: Type.Union([Type.String(), Type.Null()]),
+  created_at: Type.Union([DateISO, Type.Null()]),
 });

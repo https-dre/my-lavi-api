@@ -15,6 +15,13 @@
       "when": 1758285357596,
       "tag": "0001_powerful_snowbird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758303504271,
+      "tag": "0002_fair_micromax",
+      "breakpoints": true
     }
   ]
 }
