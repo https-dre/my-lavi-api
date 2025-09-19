@@ -1,11 +1,10 @@
 import {
   CustomerModel,
   LaundryModel,
-  OwnerModel,
   LaundryBannerModel,
   OrderModel,
   OrderItemModel,
-  EmployeeModel,
+  AccountModel,
 } from "../models";
 
 export interface ICustomerRepository {
@@ -21,23 +20,6 @@ export interface ICustomerRepository {
   listAllIds(): Promise<{ id: string }[]>;
 }
 
-export interface IOwnerRepository {
-  save(data: Omit<OwnerModel, "id" | "created_at">): Promise<OwnerModel>;
-  delete(id: string): Promise<void>;
-  findByEmail(email: string): Promise<OwnerModel>;
-  findById(id: string): Promise<OwnerModel>;
-  findByCpf(cpf: string): Promise<OwnerModel>;
-  update(updates: Partial<Omit<OwnerModel, "id">>, id: string): Promise<void>;
-  listAllIds(): Promise<{ id: string }[]>;
-}
-
-export interface IEmployeeRepository {
-  save(data: Omit<EmployeeModel, "id">): Promise<EmployeeModel>;
-  findByEmail(email: string): Promise<EmployeeModel>;
-  findById(id: string): Promise<EmployeeModel>;
-  deleteWithId(id: string): Promise<void>;
-}
-
 export interface ILaundryRepository {
   save(data: Omit<LaundryModel, "id">): Promise<LaundryModel>;
   delete(id: string): Promise<void>;
@@ -48,6 +30,15 @@ export interface ILaundryRepository {
   update(id: string, fields: Record<string, any>): Promise<void>;
   searchByName(name: string): Promise<LaundryModel[]>;
   listAll(): Promise<LaundryModel[]>;
+}
+
+export interface IAccountRepository {
+  save(data: Omit<AccountModel, "id" | "created_at">): Promise<AccountModel>;
+  findById(id: string): Promise<AccountModel>;
+  findByEmail(email: string): Promise<AccountModel>;
+  findByCpf(cpf: string): Promise<AccountModel>;
+  deleteById(id: string): void;
+  updateFields(id: string, fields: Partial<Omit<AccountModel, "id" | "created_at">>): void;
 }
 
 export interface ILaundryBannerRepository {

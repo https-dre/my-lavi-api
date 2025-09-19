@@ -1,18 +1,18 @@
-import { ICustomerRepository, IOwnerRepository } from "../repositories";
+import { IAccountRepository, ICustomerRepository } from "../repositories";
 
 export class IdentityService {
   constructor(
     readonly customerRepository: ICustomerRepository,
-    readonly ownerRepository: IOwnerRepository
+    readonly accountRepository: IAccountRepository
   ) {}
 
   async isIdentityTaken(key: string) {
-    const owner = await this.ownerRepository.findByCpf(key);
+    const user = await this.accountRepository.findByCpf(key);
     const customer = await this.customerRepository.findByDoc(key);
-    if (owner || customer) {
-      return true
+    if ((user.role == "owner" && user) || customer) {
+      return true;
     }
 
-    return false
+    return false;
   }
 }

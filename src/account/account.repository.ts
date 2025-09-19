@@ -3,8 +3,9 @@ import { db } from "../../database/conn";
 import * as t from "../../database/tables";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
+import { IAccountRepository } from "../shared/repositories";
 
-export class AccountRepository {
+export class AccountRepository implements IAccountRepository {
   async save(
     data: Omit<AccountModel, "id" | "created_at">
   ): Promise<AccountModel> {
@@ -38,7 +39,7 @@ export class AccountRepository {
       .where(eq(t.account.cpf_blind_index, cpf));
     return result[0];
   }
-  async deleteById(id: string) {
+  async deleteById(id: string): Promise<void> {
     await db.delete(t.account).where(eq(t.account.id, id));
   }
   async updateFields(
