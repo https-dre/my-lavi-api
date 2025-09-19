@@ -10,21 +10,6 @@ import {
   date,
 } from "drizzle-orm/pg-core";
 
-export const owner = pgTable("owner", {
-  id: text().primaryKey(),
-  profile_url: text(),
-  name: varchar().notNull(),
-  cpf: text().notNull(),
-  cpf_blind_index: text().notNull().unique(),
-  verified: boolean().default(false).notNull(),
-  email: text().notNull(),
-  email_blind_index: text().unique(),
-  password: text().notNull(),
-  birth_date: date().notNull(),
-  cep: text().notNull(),
-  created_at: timestamp().defaultNow(),
-});
-
 export const laundry = pgTable("laundry", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
@@ -41,10 +26,21 @@ export const laundry = pgTable("laundry", {
   account_type: text().notNull(),
   putEmployeeCode: text(),
   type: text().notNull(),
+  created_at: timestamp().defaultNow()
+});
+
+export const account = pgTable("account", {
+  id: text().primaryKey(),
+  profile_url: text(),
+  name: text().notNull(),
+  email: text().notNull(),
+  email_blind_index: text().notNull(),
+  cpf: text().notNull(),
+  cpf_blind_index: text().notNull(),
+  password: text().notNull(),
+  role: text().notNull(),
+  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
   created_at: timestamp().defaultNow(),
-  ownerId: text()
-    .references(() => owner.id, { onDelete: "cascade" })
-    .notNull(),
 });
 
 export const laundryBanner = pgTable("laundryBanner", {
@@ -52,17 +48,6 @@ export const laundryBanner = pgTable("laundryBanner", {
   resource: text(),
   resource_key: text(),
   laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
-});
-
-export const employee = pgTable("employee", {
-  id: text().primaryKey(),
-  name: varchar({ length: 255 }).notNull(),
-  cpf_blind_index: text().unique().notNull(),
-  cpf: char({ length: 11 }).unique().notNull(),
-  email_blind_index: text().unique().notNull(),
-  email: varchar().unique().notNull(),
-  password: text().notNull(),
-  laundryId: text().references(() => laundry.id).notNull(),
 });
 
 export const customer = pgTable("customer", {
@@ -111,7 +96,9 @@ export const orderItem = pgTable("orderItem", {
   unitPrice_inCents: integer().notNull(),
   name: text().notNull(),
   service: text().notNull(),
-  orderId: text().references(() => order.id, { onDelete: "cascade" }).notNull(),
+  orderId: text()
+    .references(() => order.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 export const feedbackPost = pgTable("feedbackPost", {
@@ -130,16 +117,15 @@ export const feedbackImage = pgTable("feedbackImage", {
 });
 
 const tables = {
-  owner,
   laundry,
   laundryBanner,
-  employee,
   customer,
   customerAddress,
   order,
   orderItem,
   feedbackPost,
   feedbackImage,
+  account
 };
 
 export default tables;

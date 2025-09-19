@@ -1,12 +1,10 @@
 import { Elysia } from "elysia";
 import { BadResponse } from "./error-handler";
 import { openapi } from "@elysiajs/openapi";
-import { ownerController } from "../src/owner/routes";
+
 import { customerController } from "../src/customer/routes";
 import { laundryController } from "../src/laundry/routes";
 import { orderController } from "../src/order/routes";
-import { employeeController } from "../src/employee/routes";
-
 /**
  * @returns New Elysia App
  */
@@ -45,11 +43,10 @@ export const buildElysiaApp = (): Elysia => {
 
   // Configura as rotas
   app.get("/", ({ redirect }) => redirect("/docs"));
-  app.use(ownerController);
   app.use(customerController);
   app.use(laundryController);
   app.use(orderController);
-  app.use(employeeController);
+
   // @ts-ignore
   return app;
 };
