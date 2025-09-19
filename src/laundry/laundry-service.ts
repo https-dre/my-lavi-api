@@ -9,6 +9,7 @@ import {
 import { ILaundryRepository, IOwnerRepository } from "../shared/repositories";
 import { LaundryType } from "../shared/dto/typebox";
 import _ from "lodash";
+import { generateSlug } from "../shared/functions/generate-slug";
 
 const sensitive_fields = [
   "account_number",
@@ -30,7 +31,7 @@ export class LaundryService {
     this.crypto = new CryptoProvider();
   }
 
-  async save(laundry: Omit<LaundryDTO, "id" | "created_at">) {
+  async save(laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">) {
     const cnpj_index = this.crypto.sha256(laundry.cnpj!);
     const laundryFounded = await this.repository.findByCNPJ(cnpj_index);
     if (laundryFounded) {
@@ -50,6 +51,7 @@ export class LaundryService {
       bank_agency: this.crypto.encrypt(laundry.bank_agency!),
       account_number: this.crypto.encrypt(laundry.account_number!),
       account_type: this.crypto.encrypt(laundry.account_type!),
+      putEmployeeCode: generateSlug(laundry.name),
       created_at: new Date(),
     };
 

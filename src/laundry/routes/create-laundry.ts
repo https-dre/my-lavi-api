@@ -16,13 +16,13 @@ export const createLaundry = (service: LaundryService): Elysia => {
         tags: ["laundries"],
       },
       body: t.Object({
-        laundry: t.Omit(LaundryType, ["created_at", "id"]),
+        laundry: t.Omit(LaundryType, ["created_at", "id", "putEmployeeCode"]),
       }),
       response: {
         201: t.Object({
           laundryId: t.String({ format: "uuid" }),
         }),
       },
-    },
+    }
   );
 };
