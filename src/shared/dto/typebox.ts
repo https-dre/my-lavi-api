@@ -77,6 +77,5 @@ export const MemberType = Type.Object({
   cpf: Type.String({ maxLength: 11 }),
   password: Type.String({ minLength: 8 }),
   roles: Type.Array(Type.String()),
-  laundryId: Type.Union([Type.String(), Type.Null()]),
   created_at: Type.Union([DateISO, Type.Null()]),
 });

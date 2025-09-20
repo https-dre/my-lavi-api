@@ -1,3 +1,4 @@
+import { randomUUIDv7 } from "bun";
 import {
   text,
   pgTable,
@@ -10,7 +11,7 @@ import {
   date,
 } from "drizzle-orm/pg-core";
 
-export const laundry = pgTable("laundry", {
+export const laundry = pgTable("laundries", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   profile_url: text(),
@@ -29,7 +30,7 @@ export const laundry = pgTable("laundry", {
   created_at: timestamp().defaultNow(),
 });
 
-export const member = pgTable("account", {
+export const member = pgTable("members", {
   id: text().primaryKey(),
   profile_url: text(),
   name: text().notNull(),
@@ -39,18 +40,30 @@ export const member = pgTable("account", {
   cpf_blind_index: text().notNull(),
   password: text().notNull(),
   roles: text().array().notNull(),
-  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
   created_at: timestamp().defaultNow(),
 });
 
-export const laundryBanner = pgTable("laundryBanner", {
+export const laundry_member = pgTable("laundry_member", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => randomUUIDv7()),
+  laundryId: text()
+    .references(() => laundry.id, { onDelete: "cascade" })
+    .notNull(),
+  memberId: text()
+    .references(() => member.id, { onDelete: "cascade" })
+    .notNull(),
+  created_at: timestamp().defaultNow(),
+});
+
+export const laundryBanner = pgTable("laundryBanners", {
   id: text().primaryKey(),
   resource: text(),
   resource_key: text(),
   laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
 });
 
-export const customer = pgTable("customer", {
+export const customer = pgTable("customers", {
   id: text().primaryKey(),
   profile_url: text(),
   name: text().notNull(),
@@ -65,7 +78,7 @@ export const customer = pgTable("customer", {
   created_at: timestamp().defaultNow(),
 });
 
-export const customerAddress = pgTable("customerAddress", {
+export const customerAddress = pgTable("customerAddresses", {
   id: text().primaryKey(),
   name: text(),
   latitude: numeric(),
@@ -73,7 +86,7 @@ export const customerAddress = pgTable("customerAddress", {
   customerId: text().references(() => customer.id, { onDelete: "cascade" }),
 });
 
-export const order = pgTable("order", {
+export const order = pgTable("orders", {
   id: text().primaryKey(),
   created_at: timestamp().defaultNow().notNull(),
   updated_at: timestamp(),
@@ -90,7 +103,7 @@ export const order = pgTable("order", {
     .notNull(),
 });
 
-export const orderItem = pgTable("orderItem", {
+export const orderItem = pgTable("orderItems", {
   id: text().primaryKey(),
   qntd: integer().notNull(),
   unitPrice_inCents: integer().notNull(),
@@ -101,7 +114,7 @@ export const orderItem = pgTable("orderItem", {
     .notNull(),
 });
 
-export const feedbackPost = pgTable("feedbackPost", {
+export const feedbackPost = pgTable("feedbackPosts", {
   id: text().primaryKey(),
   content: text().notNull(),
   rate: integer(),
@@ -110,7 +123,7 @@ export const feedbackPost = pgTable("feedbackPost", {
   customerId: text().references(() => customer.id, { onDelete: "cascade" }),
 });
 
-export const feedbackImage = pgTable("feedbackImage", {
+export const feedbackImage = pgTable("feedbackImages", {
   id: text().primaryKey(),
   url: text().notNull(),
   postId: text().references(() => feedbackPost.id, { onDelete: "cascade" }),

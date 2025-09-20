@@ -3,7 +3,7 @@ import { IMemberRepository } from "@/shared/repositories";
 import { db } from "@/database/conn";
 import * as t from "@/database/tables";
 import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export class MemberRepository implements IMemberRepository {
   async save(
@@ -48,6 +48,29 @@ export class MemberRepository implements IMemberRepository {
   }
 
   async findByLaundryId(id: string): Promise<MemberModel[]> {
-    return await db.select().from(t.member).where(eq(t.member.laundryId, id));
+    const result = await db
+      .select()
+      .from(t.member)
+      .innerJoin(t.laundry_member, eq(t.member.id, t.laundry_member.memberId))
+      .where(eq(t.laundry_member.laundryId, id));
+    return result.map((row) => row.members);
+  }
+
+  async pushMemberToLaundry(
+    memberId: string,
+    laundryId: string,
+  ): Promise<void> {
+    await db.insert(t.laundry_member).values({ memberId, laundryId });
+  }
+
+  async popMemberLaundry(memberId: string, laundryId: string): Promise<void> {
+    await db
+      .delete(t.laundry_member)
+      .where(
+        and(
+          eq(t.laundry_member.laundryId, laundryId),
+          eq(t.laundry_member.memberId, memberId),
+        ),
+      );
   }
 }

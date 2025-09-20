@@ -1,11 +1,11 @@
 {
-  "id": "d39e8c6c-649a-44c0-8511-be8416cc4104",
+  "id": "23880b94-01b0-4fa5-8745-b91921e49e59",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.customer": {
-      "name": "customer",
+    "public.customers": {
+      "name": "customers",
       "schema": "",
       "columns": {
         "id": {
@@ -87,15 +87,15 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "customer_email_blind_index_unique": {
-          "name": "customer_email_blind_index_unique",
+        "customers_email_blind_index_unique": {
+          "name": "customers_email_blind_index_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email_blind_index"
           ]
         },
-        "customer_doc_blind_index_unique": {
-          "name": "customer_doc_blind_index_unique",
+        "customers_doc_blind_index_unique": {
+          "name": "customers_doc_blind_index_unique",
           "nullsNotDistinct": false,
           "columns": [
             "doc_blind_index"
@@ -106,8 +106,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.customerAddress": {
-      "name": "customerAddress",
+    "public.customerAddresses": {
+      "name": "customerAddresses",
       "schema": "",
       "columns": {
         "id": {
@@ -143,10 +143,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "customerAddress_customerId_customer_id_fk": {
-          "name": "customerAddress_customerId_customer_id_fk",
-          "tableFrom": "customerAddress",
-          "tableTo": "customer",
+        "customerAddresses_customerId_customers_id_fk": {
+          "name": "customerAddresses_customerId_customers_id_fk",
+          "tableFrom": "customerAddresses",
+          "tableTo": "customers",
           "columnsFrom": [
             "customerId"
           ],
@@ -163,112 +163,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.employee": {
-      "name": "employee",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cpf_blind_index": {
-          "name": "cpf_blind_index",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cpf": {
-          "name": "cpf",
-          "type": "char(11)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "email_blind_index": {
-          "name": "email_blind_index",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "password": {
-          "name": "password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "laundryId": {
-          "name": "laundryId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "employee_laundryId_laundry_id_fk": {
-          "name": "employee_laundryId_laundry_id_fk",
-          "tableFrom": "employee",
-          "tableTo": "laundry",
-          "columnsFrom": [
-            "laundryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "employee_cpf_blind_index_unique": {
-          "name": "employee_cpf_blind_index_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "cpf_blind_index"
-          ]
-        },
-        "employee_cpf_unique": {
-          "name": "employee_cpf_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "cpf"
-          ]
-        },
-        "employee_email_blind_index_unique": {
-          "name": "employee_email_blind_index_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email_blind_index"
-          ]
-        },
-        "employee_email_unique": {
-          "name": "employee_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.feedbackImage": {
-      "name": "feedbackImage",
+    "public.feedbackImages": {
+      "name": "feedbackImages",
       "schema": "",
       "columns": {
         "id": {
@@ -292,10 +188,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "feedbackImage_postId_feedbackPost_id_fk": {
-          "name": "feedbackImage_postId_feedbackPost_id_fk",
-          "tableFrom": "feedbackImage",
-          "tableTo": "feedbackPost",
+        "feedbackImages_postId_feedbackPosts_id_fk": {
+          "name": "feedbackImages_postId_feedbackPosts_id_fk",
+          "tableFrom": "feedbackImages",
+          "tableTo": "feedbackPosts",
           "columnsFrom": [
             "postId"
           ],
@@ -312,8 +208,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.feedbackPost": {
-      "name": "feedbackPost",
+    "public.feedbackPosts": {
+      "name": "feedbackPosts",
       "schema": "",
       "columns": {
         "id": {
@@ -356,10 +252,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "feedbackPost_laundryId_laundry_id_fk": {
-          "name": "feedbackPost_laundryId_laundry_id_fk",
-          "tableFrom": "feedbackPost",
-          "tableTo": "laundry",
+        "feedbackPosts_laundryId_laundries_id_fk": {
+          "name": "feedbackPosts_laundryId_laundries_id_fk",
+          "tableFrom": "feedbackPosts",
+          "tableTo": "laundries",
           "columnsFrom": [
             "laundryId"
           ],
@@ -369,10 +265,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "feedbackPost_customerId_customer_id_fk": {
-          "name": "feedbackPost_customerId_customer_id_fk",
-          "tableFrom": "feedbackPost",
-          "tableTo": "customer",
+        "feedbackPosts_customerId_customers_id_fk": {
+          "name": "feedbackPosts_customerId_customers_id_fk",
+          "tableFrom": "feedbackPosts",
+          "tableTo": "customers",
           "columnsFrom": [
             "customerId"
           ],
@@ -389,8 +285,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.laundry": {
-      "name": "laundry",
+    "public.laundries": {
+      "name": "laundries",
       "schema": "",
       "columns": {
         "id": {
@@ -471,6 +367,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "putEmployeeCode": {
+          "name": "putEmployeeCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "type": {
           "name": "type",
           "type": "text",
@@ -483,48 +385,28 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
-        },
-        "ownerId": {
-          "name": "ownerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "laundry_ownerId_owner_id_fk": {
-          "name": "laundry_ownerId_owner_id_fk",
-          "tableFrom": "laundry",
-          "tableTo": "owner",
-          "columnsFrom": [
-            "ownerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "laundry_cnpj_blind_index_unique": {
-          "name": "laundry_cnpj_blind_index_unique",
+        "laundries_cnpj_blind_index_unique": {
+          "name": "laundries_cnpj_blind_index_unique",
           "nullsNotDistinct": false,
           "columns": [
             "cnpj_blind_index"
           ]
         },
-        "laundry_cnpj_unique": {
-          "name": "laundry_cnpj_unique",
+        "laundries_cnpj_unique": {
+          "name": "laundries_cnpj_unique",
           "nullsNotDistinct": false,
           "columns": [
             "cnpj"
           ]
         },
-        "laundry_account_number_unique": {
-          "name": "laundry_account_number_unique",
+        "laundries_account_number_unique": {
+          "name": "laundries_account_number_unique",
           "nullsNotDistinct": false,
           "columns": [
             "account_number"
@@ -535,8 +417,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.laundryBanner": {
-      "name": "laundryBanner",
+    "public.laundryBanners": {
+      "name": "laundryBanners",
       "schema": "",
       "columns": {
         "id": {
@@ -566,10 +448,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "laundryBanner_laundryId_laundry_id_fk": {
-          "name": "laundryBanner_laundryId_laundry_id_fk",
-          "tableFrom": "laundryBanner",
-          "tableTo": "laundry",
+        "laundryBanners_laundryId_laundries_id_fk": {
+          "name": "laundryBanners_laundryId_laundries_id_fk",
+          "tableFrom": "laundryBanners",
+          "tableTo": "laundries",
           "columnsFrom": [
             "laundryId"
           ],
@@ -586,14 +468,26 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.order": {
-      "name": "order",
+    "public.laundry_member": {
+      "name": "laundry_member",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
           "primaryKey": true,
+          "notNull": true
+        },
+        "laundryId": {
+          "name": "laundryId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memberId": {
+          "name": "memberId",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "created_at": {
@@ -602,140 +496,29 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "delivery_type": {
-          "name": "delivery_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "details": {
-          "name": "details",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "latitude": {
-          "name": "latitude",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "longitude": {
-          "name": "longitude",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "laundryId": {
-          "name": "laundryId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "customerId": {
-          "name": "customerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "order_laundryId_laundry_id_fk": {
-          "name": "order_laundryId_laundry_id_fk",
-          "tableFrom": "order",
-          "tableTo": "laundry",
+        "laundry_member_laundryId_laundries_id_fk": {
+          "name": "laundry_member_laundryId_laundries_id_fk",
+          "tableFrom": "laundry_member",
+          "tableTo": "laundries",
           "columnsFrom": [
             "laundryId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "order_customerId_customer_id_fk": {
-          "name": "order_customerId_customer_id_fk",
-          "tableFrom": "order",
-          "tableTo": "customer",
+        "laundry_member_memberId_members_id_fk": {
+          "name": "laundry_member_memberId_members_id_fk",
+          "tableFrom": "laundry_member",
+          "tableTo": "members",
           "columnsFrom": [
-            "customerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.orderItem": {
-      "name": "orderItem",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "qntd": {
-          "name": "qntd",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "unitPrice_inCents": {
-          "name": "unitPrice_inCents",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "service": {
-          "name": "service",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "orderId": {
-          "name": "orderId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "orderItem_orderId_order_id_fk": {
-          "name": "orderItem_orderId_order_id_fk",
-          "tableFrom": "orderItem",
-          "tableTo": "order",
-          "columnsFrom": [
-            "orderId"
+            "memberId"
           ],
           "columnsTo": [
             "id"
@@ -750,8 +533,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.owner": {
-      "name": "owner",
+    "public.members": {
+      "name": "members",
       "schema": "",
       "columns": {
         "id": {
@@ -768,7 +551,19 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_blind_index": {
+          "name": "email_blind_index",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -784,40 +579,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "verified": {
-          "name": "verified",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email_blind_index": {
-          "name": "email_blind_index",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "password": {
           "name": "password",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "birth_date": {
-          "name": "birth_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "cep": {
-          "name": "cep",
-          "type": "text",
+        "roles": {
+          "name": "roles",
+          "type": "text[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -832,22 +602,171 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "owner_cpf_blind_index_unique": {
-          "name": "owner_cpf_blind_index_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "cpf_blind_index"
-          ]
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.orders": {
+      "name": "orders",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
         },
-        "owner_email_blind_index_unique": {
-          "name": "owner_email_blind_index_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email_blind_index"
-          ]
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "delivery_type": {
+          "name": "delivery_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "details": {
+          "name": "details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "laundryId": {
+          "name": "laundryId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customerId": {
+          "name": "customerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
+      "indexes": {},
+      "foreignKeys": {
+        "orders_laundryId_laundries_id_fk": {
+          "name": "orders_laundryId_laundries_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "laundries",
+          "columnsFrom": [
+            "laundryId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "orders_customerId_customers_id_fk": {
+          "name": "orders_customerId_customers_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "customers",
+          "columnsFrom": [
+            "customerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.orderItems": {
+      "name": "orderItems",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "qntd": {
+          "name": "qntd",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unitPrice_inCents": {
+          "name": "unitPrice_inCents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service": {
+          "name": "service",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "orderId": {
+          "name": "orderId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "orderItems_orderId_orders_id_fk": {
+          "name": "orderItems_orderId_orders_id_fk",
+          "tableFrom": "orderItems",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "orderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

@@ -43,6 +43,8 @@ export interface IMemberRepository {
     id: string,
     fields: Partial<Omit<MemberModel, "id" | "created_at">>,
   ): void;
+  pushMemberToLaundry(memberId: string, laundryId: string): Promise<void>;
+  popMemberLaundry(memberId: string, laundryId: string): Promise<void>;
 }
 
 export interface ILaundryBannerRepository {

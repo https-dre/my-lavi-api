@@ -32,7 +32,7 @@ export class LaundryService {
   }
 
   async save(
-    accountId: string,
+    ownerId: string,
     laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">,
   ) {
     const cnpj_index = this.crypto.sha256(laundry.cnpj!);
@@ -41,7 +41,7 @@ export class LaundryService {
       throw new BadResponse("Este CNPJ já foi registrado.");
     }
 
-    const owner = await this.memberRepository.findById(accountId);
+    const owner = await this.memberRepository.findById(ownerId);
     if (!owner) {
       throw new BadResponse("Cadastro de dono não encontrado!");
     }
@@ -59,6 +59,7 @@ export class LaundryService {
     };
 
     const saved_laundry = await this.repository.save(encrypted_laundry);
+    await this.memberRepository.pushMemberToLaundry(owner.id, saved_laundry.id);
     return saved_laundry.id;
   }
 
