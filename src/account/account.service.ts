@@ -1,4 +1,4 @@
-import { BadResponse } from "../../http/error-handler";
+import { BadResponse } from "../http/error-handler";
 import { AccountModel } from "../shared/models";
 import {
   CryptoProvider,
@@ -13,7 +13,7 @@ export class AccountService {
   constructor(
     readonly repository: AccountRepository,
     readonly jwt: JwtProvider,
-    readonly crypto: CryptoProvider
+    readonly crypto: CryptoProvider,
   ) {}
 
   private adaptModel(model: AccountModel): AccountDTO {
@@ -68,7 +68,7 @@ export class AccountService {
 
   async authenticateAccount(
     email: string,
-    password: string
+    password: string,
   ): Promise<{ accountId: string | null; auth: boolean }> {
     const account = await this.repository.findByEmail(this.crypto.hmac(email));
     if (!account) return { accountId: null, auth: false };

@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { ICustomerRepository } from "../shared/repositories";
-import { db } from "../../database/conn";
-import tables from "../../database/tables";
+import { db } from "../database/conn";
+import tables from "../database/tables";
 import { CustomerModel } from "../shared/models";
 import { eq } from "drizzle-orm";
 
@@ -50,7 +50,7 @@ export class CustomerRepository implements ICustomerRepository {
 
   public async update(
     updates: Partial<Omit<CustomerModel, "id">>,
-    id: string
+    id: string,
   ): Promise<void> {
     await db
       .update(tables.customer)

@@ -1,4 +1,4 @@
-import { logger } from "../src/logger";
+import { logger } from "../logger";
 
 export class BadResponse extends Error {
   public response: string | object;

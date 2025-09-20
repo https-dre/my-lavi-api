@@ -1,6 +1,6 @@
 import JWT from "jsonwebtoken";
 import { CustomerDTO } from "../shared/dto";
-import { BadResponse } from "../../http/error-handler";
+import { BadResponse } from "@/http/error-handler";
 import {
   CryptoProvider,
   JwtProvider,

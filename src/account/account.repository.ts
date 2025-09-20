@@ -1,9 +1,9 @@
 import { AccountModel } from "../shared/models";
-import { db } from "../../database/conn";
-import * as t from "../../database/tables";
+import { IAccountRepository } from "@/shared/repositories";
+import { db } from "@/database/conn";
+import * as t from "@/database/tables";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
-import { IAccountRepository } from "../shared/repositories";
 
 export class AccountRepository implements IAccountRepository {
   async save(

@@ -1,4 +1,4 @@
-import tables from "../../database/tables";
+import tables from "@/database/tables";
 
 export type CustomerModel = Required<typeof tables.customer.$inferInsert>;
 

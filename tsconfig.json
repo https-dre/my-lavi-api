@@ -4,11 +4,15 @@
 
   "compilerOptions": {
     "lib": ["ESNext"],
-	  "outDir": "dist/",
+    "outDir": "dist/",
     "module": "Preserve",
     "target": "ESNext",
     "noEmit": true,
     "allowImportingTsExtensions": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     "strict": true,
     "esModuleInterop": true,

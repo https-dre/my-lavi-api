@@ -2,9 +2,9 @@ import { Elysia } from "elysia";
 import { BadResponse } from "./error-handler";
 import { openapi } from "@elysiajs/openapi";
 
-import { customerController } from "../src/customer/routes";
-import { laundryController } from "../src/laundry/routes";
-import { orderController } from "@/src/order/routes";
+import { customerController } from "../customer/routes";
+import { laundryController } from "../laundry/routes";
+import { orderController } from "@/order/routes";
 
 /**
  * @returns New Elysia App

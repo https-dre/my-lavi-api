@@ -1,7 +1,7 @@
 import { IOrderRepository } from "../shared/repositories";
-import { db } from "../../database/conn";
+import { db } from "@/database/conn";
 import { OrderItemModel, OrderModel } from "../shared/models";
-import * as t from "../../database/tables";
+import * as t from "@/database/tables";
 import { randomUUID } from "crypto";
 import { and, eq, gt, gte, lt, lte } from "drizzle-orm";
 
