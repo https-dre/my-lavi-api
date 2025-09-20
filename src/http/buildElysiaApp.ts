@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { BadResponse } from "./error-handler";
 import { openapi } from "@elysiajs/openapi";
 
+import { memberController } from "@/member/routes";
 import { customerController } from "../customer/routes";
 import { laundryController } from "../laundry/routes";
 import { orderController } from "@/order/routes";
@@ -39,6 +40,7 @@ export const buildElysiaApp = (): Elysia => {
 
   // Configura as rotas
   app.get("/", ({ redirect }) => redirect("/openapi"));
+  app.use(memberController);
   app.use(customerController);
   app.use(laundryController);
   app.use(orderController);
