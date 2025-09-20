@@ -36,7 +36,12 @@ const appServices = {
     laundryRepository,
   ),
   laundry: new LaundryService(laundryRepository, memberRepository),
-  account: new MemberService(memberRepository, jwtProvider, cryptoProvider),
+  member: new MemberService(
+    memberRepository,
+    laundryRepository,
+    jwtProvider,
+    cryptoProvider,
+  ),
 };
 
 export { appServices };
