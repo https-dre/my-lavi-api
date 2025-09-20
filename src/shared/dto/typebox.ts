@@ -69,7 +69,7 @@ export const OrderType = Type.Object({
   customerId: Type.String(),
 });
 
-export const AccountType = Type.Object({
+export const MemberType = Type.Object({
   id: Type.String({ format: "uuid" }),
   profile_url: Type.Union([Type.String(), Type.Null()]),
   name: Type.String(),

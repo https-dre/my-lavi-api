@@ -16,4 +16,4 @@ export type FeedbackModel = typeof tables.feedbackPost.$inferInsert;
 
 export type FeedbackImageModel = typeof tables.feedbackImage.$inferInsert;
 
-export type AccountModel = typeof tables.account.$inferSelect;
+export type MemberModel = typeof tables.member.$inferSelect;

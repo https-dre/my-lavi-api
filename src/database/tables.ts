@@ -29,7 +29,7 @@ export const laundry = pgTable("laundry", {
   created_at: timestamp().defaultNow(),
 });
 
-export const account = pgTable("account", {
+export const member = pgTable("account", {
   id: text().primaryKey(),
   profile_url: text(),
   name: text().notNull(),
@@ -125,7 +125,7 @@ const tables = {
   orderItem,
   feedbackPost,
   feedbackImage,
-  account,
+  member,
 };
 
 export default tables;

@@ -1,27 +1,27 @@
 import { BadResponse } from "../http/error-handler";
-import { AccountModel } from "../shared/models";
+import { MemberModel } from "../shared/models";
 import {
   CryptoProvider,
   JwtProvider,
 } from "../shared/providers/crypto-provider";
-import { AccountRepository } from "./account.repository";
-import { AccountDTO } from "../shared/dto";
-import { AccountType } from "../shared/dto/typebox";
+import { IMemberRepository } from "@/shared/repositories";
+import { MemberDTO } from "../shared/dto";
+import { MemberType } from "../shared/dto/typebox";
 import _ from "lodash";
 
-export class AccountService {
+export class MemberService {
   constructor(
-    readonly repository: AccountRepository,
+    readonly repository: IMemberRepository,
     readonly jwt: JwtProvider,
     readonly crypto: CryptoProvider,
   ) {}
 
-  private adaptModel(model: AccountModel): AccountDTO {
-    const dtoKeys = Object.keys(AccountType.properties) as (keyof AccountDTO)[];
+  private adaptModel(model: MemberModel): MemberDTO {
+    const dtoKeys = Object.keys(MemberType.properties) as (keyof MemberDTO)[];
     return _.pick(model, dtoKeys);
   }
 
-  private decryptAccount(model: AccountModel): AccountDTO {
+  private decryptAccount(model: MemberModel): MemberDTO {
     const decrypted = this.crypto.decryptEntity(model, [
       "name",
       "email",
@@ -30,7 +30,7 @@ export class AccountService {
     return this.adaptModel(decrypted);
   }
 
-  async createAccount(account: Omit<AccountDTO, "id" | "created_at">) {
+  async createAccount(account: Omit<MemberDTO, "id" | "created_at">) {
     const email_blind_index = this.crypto.hmac(account.email);
     if (await this.repository.findByEmail(email_blind_index))
       throw new BadResponse("E-mail já cadastrado!");
@@ -39,7 +39,7 @@ export class AccountService {
     if (await this.repository.findByCpf(cpf_blind_index))
       throw new BadResponse("CPF já cadastrado!");
 
-    const encrypted: Omit<AccountModel, "id" | "created_at"> = {
+    const encrypted: Omit<MemberModel, "id" | "created_at"> = {
       ...account,
       cpf_blind_index,
       email_blind_index,
@@ -59,7 +59,7 @@ export class AccountService {
     await this.repository.deleteById(id);
   }
 
-  async getAccountById(id: string): Promise<AccountDTO> {
+  async getAccountById(id: string): Promise<MemberDTO> {
     const account = await this.repository.findById(id);
     if (!account) throw new BadResponse("Conta não encontrada", 404);
 

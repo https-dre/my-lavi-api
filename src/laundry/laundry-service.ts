@@ -1,12 +1,12 @@
 import { LaundryDTO } from "../shared/dto";
-import { BadResponse } from "../../http/error-handler";
+import { BadResponse } from "@/http/error-handler";
 import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
 import { LaundryModel } from "../shared/models";
 import {
   CryptoProvider,
   JwtProvider,
 } from "../shared/providers/crypto-provider";
-import { ILaundryRepository, IAccountRepository } from "../shared/repositories";
+import { ILaundryRepository, IMemberRepository } from "../shared/repositories";
 import { LaundryType } from "../shared/dto/typebox";
 import _ from "lodash";
 import { generateSlug } from "../shared/functions/generate-slug";
@@ -25,7 +25,7 @@ export class LaundryService {
   private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
-    private accountRepository: IAccountRepository,
+    private memberRepository: IMemberRepository,
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();
@@ -41,7 +41,7 @@ export class LaundryService {
       throw new BadResponse("Este CNPJ já foi registrado.");
     }
 
-    const owner = await this.accountRepository.findById(accountId);
+    const owner = await this.memberRepository.findById(accountId);
     if (!owner) {
       throw new BadResponse("Cadastro de dono não encontrado!");
     }

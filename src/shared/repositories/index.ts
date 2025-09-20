@@ -4,7 +4,7 @@ import {
   LaundryBannerModel,
   OrderModel,
   OrderItemModel,
-  AccountModel,
+  MemberModel,
 } from "../models";
 
 export interface ICustomerRepository {
@@ -32,16 +32,16 @@ export interface ILaundryRepository {
   listAll(): Promise<LaundryModel[]>;
 }
 
-export interface IAccountRepository {
-  save(data: Omit<AccountModel, "id" | "created_at">): Promise<AccountModel>;
-  findById(id: string): Promise<AccountModel>;
-  findByEmail(email: string): Promise<AccountModel>;
-  findByCpf(cpf: string): Promise<AccountModel>;
-  findByLaundryId(id: string): Promise<AccountModel[]>;
+export interface IMemberRepository {
+  save(data: Omit<MemberModel, "id" | "created_at">): Promise<MemberModel>;
+  findById(id: string): Promise<MemberModel>;
+  findByEmail(email: string): Promise<MemberModel>;
+  findByCpf(cpf: string): Promise<MemberModel>;
+  findByLaundryId(id: string): Promise<MemberModel[]>;
   deleteById(id: string): void;
   updateFields(
     id: string,
-    fields: Partial<Omit<AccountModel, "id" | "created_at">>,
+    fields: Partial<Omit<MemberModel, "id" | "created_at">>,
   ): void;
 }
 

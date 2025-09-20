@@ -1,29 +1,29 @@
-import { CustomerRepository } from "../../customer/customer-repository";
+import { CustomerRepository } from "@/customer/customer-repository";
 import { CryptoProvider, JwtProvider } from "../providers/crypto-provider";
 import { IdentityService } from "./identity-service";
-import { OrderRepository } from "../../order/order-repository";
-import { OrderService } from "../../order/order-service";
-import { LaundryRepository } from "../../laundry/laundry-repository";
-import { LaundryService } from "../../laundry/laundry-service";
-import { CustomerService } from "../../customer/customer-service";
-import { AccountRepository } from "../../account/account.repository";
-import { AccountService } from "../../account/account.service";
+import { OrderRepository } from "@/order/order-repository";
+import { OrderService } from "@/order/order-service";
+import { LaundryRepository } from "@/laundry/laundry-repository";
+import { LaundryService } from "@/laundry/laundry-service";
+import { CustomerService } from "@/customer/customer-service";
+import { MemberRepository } from "@/member/member-repository";
+import { MemberService } from "@/member/member-service";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
 const laundryRepository = new LaundryRepository();
-const accountRepository = new AccountRepository();
+const memberRepository = new MemberRepository();
 
 const cryptoProvider = new CryptoProvider();
 const jwtProvider = new JwtProvider();
 
 const identityService = new IdentityService(
   customerRepository,
-  accountRepository,
+  memberRepository,
 );
 
 const appServices = {
-  identity: new IdentityService(customerRepository, accountRepository),
+  identity: new IdentityService(customerRepository, memberRepository),
   customer: new CustomerService(
     customerRepository,
     cryptoProvider,
@@ -35,7 +35,8 @@ const appServices = {
     customerRepository,
     laundryRepository,
   ),
-  account: new AccountService(accountRepository, jwtProvider, cryptoProvider),
+  laundry: new LaundryService(laundryRepository, memberRepository),
+  account: new MemberService(memberRepository, jwtProvider, cryptoProvider),
 };
 
 export { appServices };
