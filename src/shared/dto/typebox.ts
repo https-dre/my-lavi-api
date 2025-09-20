@@ -76,6 +76,6 @@ export const MemberType = Type.Object({
   email: Type.String({ format: "email" }),
   cpf: Type.String({ maxLength: 11 }),
   password: Type.String({ minLength: 8 }),
-  roles: Type.Array(Type.String()),
+  roles: Type.Array(Type.String(), { minItems: 1 }),
   created_at: Type.Union([DateISO, Type.Null()]),
 });
