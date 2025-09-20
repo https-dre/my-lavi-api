@@ -4,7 +4,8 @@ import { openapi } from "@elysiajs/openapi";
 
 import { customerController } from "../src/customer/routes";
 import { laundryController } from "../src/laundry/routes";
-import { orderController } from "../src/order/routes";
+import { orderController } from "@/src/order/routes";
+
 /**
  * @returns New Elysia App
  */
@@ -12,18 +13,13 @@ export const buildElysiaApp = (): Elysia => {
   const app = new Elysia()
     .use(
       openapi({
-        path: "/docs",
         documentation: {
           info: {
-            title: "Laví API",
-            version: "2.0.0",
+            title: "Laví API - Docs",
+            version: "v2.0.0",
           },
         },
-        // @ts-ignore
-        scalar: {
-          url: "/docs/json",
-        },
-      })
+      }),
     )
     .error({
       BadResponse,
@@ -42,7 +38,7 @@ export const buildElysiaApp = (): Elysia => {
     });
 
   // Configura as rotas
-  app.get("/", ({ redirect }) => redirect("/docs"));
+  app.get("/", ({ redirect }) => redirect("/openapi"));
   app.use(customerController);
   app.use(laundryController);
   app.use(orderController);
