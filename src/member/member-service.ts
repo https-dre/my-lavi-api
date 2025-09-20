@@ -4,14 +4,16 @@ import {
   CryptoProvider,
   JwtProvider,
 } from "../shared/providers/crypto-provider";
-import { IMemberRepository } from "@/shared/repositories";
+import { ILaundryRepository, IMemberRepository } from "@/shared/repositories";
 import { MemberDTO } from "../shared/dto";
 import { MemberType } from "../shared/dto/typebox";
 import _ from "lodash";
 
 export class MemberService {
+  private allowed_roles: string[] = ["owner", "employee"];
   constructor(
     readonly repository: IMemberRepository,
+    readonly laundryRepository: ILaundryRepository,
     readonly jwt: JwtProvider,
     readonly crypto: CryptoProvider,
   ) {}
@@ -30,52 +32,89 @@ export class MemberService {
     return this.adaptModel(decrypted);
   }
 
-  async createAccount(account: Omit<MemberDTO, "id" | "created_at">) {
-    const email_blind_index = this.crypto.hmac(account.email);
+  async createMember(data: Omit<MemberDTO, "id" | "created_at">) {
+    const email_blind_index = this.crypto.hmac(data.email);
     if (await this.repository.findByEmail(email_blind_index))
       throw new BadResponse("E-mail já cadastrado!");
 
-    const cpf_blind_index = this.crypto.hmac(account.cpf);
+    const cpf_blind_index = this.crypto.hmac(data.cpf);
     if (await this.repository.findByCpf(cpf_blind_index))
       throw new BadResponse("CPF já cadastrado!");
 
+    const roles = data.roles.filter((role) =>
+      this.allowed_roles.includes(role),
+    );
+
     const encrypted: Omit<MemberModel, "id" | "created_at"> = {
-      ...account,
+      ...data,
+      roles,
       cpf_blind_index,
       email_blind_index,
-      email: this.crypto.encrypt(account.email),
-      cpf: this.crypto.encrypt(account.cpf),
-      name: this.crypto.encrypt(account.name),
-      password: this.crypto.hashPassword(account.password),
+      email: this.crypto.encrypt(data.email),
+      cpf: this.crypto.encrypt(data.cpf),
+      name: this.crypto.encrypt(data.name),
+      password: this.crypto.hashPassword(data.password),
     };
+
     const created = await this.repository.save(encrypted);
-    return this.decryptAccount(created);
+    const decrypted = this.decryptAccount(created);
+    const { password, ...rest } = decrypted;
+    return rest;
   }
 
-  async deleteAccount(id: string) {
+  async deleteMember(id: string) {
     if (!(await this.repository.findById(id)))
       throw new BadResponse("Conta não encontrada", 404);
 
     await this.repository.deleteById(id);
   }
 
-  async getAccountById(id: string): Promise<MemberDTO> {
+  async getMemberByid(id: string): Promise<MemberDTO> {
     const account = await this.repository.findById(id);
     if (!account) throw new BadResponse("Conta não encontrada", 404);
 
     return this.decryptAccount(account);
   }
 
-  async authenticateAccount(
-    email: string,
-    password: string,
-  ): Promise<{ accountId: string | null; auth: boolean }> {
+  async authenticateMember(email: string, password: string) {
     const account = await this.repository.findByEmail(this.crypto.hmac(email));
-    if (!account) return { accountId: null, auth: false };
+    if (!account) throw new BadResponse("E-mail ou Senha incorretos.", 401);
 
     const passResult = this.crypto.comparePassword(password, account.password);
-    if (!passResult) return { accountId: null, auth: false };
+    if (!passResult) throw new BadResponse("E-mail ou Senha incorretos.", 401);
 
-    return { accountId: account.id, auth: true };
+    return this.jwt.generateToken({
+      roles: account.roles,
+      memberId: account.id,
+    });
+  }
+
+  async createOwnerMember(
+    data: Omit<MemberDTO, "id" | "created_at" | "roles">,
+  ) {
+    const dataToBeSaved = {
+      ...data,
+      roles: ["owner"],
+    };
+
+    const created = await this.createMember(dataToBeSaved);
+    return created;
+  }
+
+  async createEmployeeMember(
+    data: Omit<MemberDTO, "id" | "created_at" | "roles">,
+    laundryId: string,
+  ) {
+    if (!(await this.laundryRepository.findById(laundryId)))
+      throw new BadResponse("Lavanderia não encontrada!", 404);
+
+    const dataToBeSaved = {
+      ...data,
+      roles: ["employee"],
+    };
+
+    const created = await this.createMember(dataToBeSaved);
+    await this.repository.pushMemberToLaundry(created.id, laundryId);
+    return created;
   }
 }
