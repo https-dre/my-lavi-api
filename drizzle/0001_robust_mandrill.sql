@@ -1,0 +1,1 @@
+ALTER TABLE "laundries" ADD COLUMN "email" text NOT NULL;
