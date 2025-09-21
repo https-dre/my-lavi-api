@@ -73,4 +73,9 @@ export class MemberRepository implements IMemberRepository {
         ),
       );
   }
+
+  async listAll(): Promise<MemberModel[]> {
+    const result = await db.select().from(t.member);
+    return result;
+  }
 }
