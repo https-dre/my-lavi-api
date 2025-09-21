@@ -23,7 +23,7 @@ export class MemberService {
     return _.pick(model, dtoKeys);
   }
 
-  private decryptAccount(model: MemberModel): MemberDTO {
+  private decryptMember(model: MemberModel): MemberDTO {
     const decrypted = this.crypto.decryptEntity(model, [
       "name",
       "email",
@@ -57,7 +57,7 @@ export class MemberService {
     };
 
     const created = await this.repository.save(encrypted);
-    const decrypted = this.decryptAccount(created);
+    const decrypted = this.decryptMember(created);
     const { password, ...rest } = decrypted;
     return rest;
   }
@@ -73,7 +73,7 @@ export class MemberService {
     const account = await this.repository.findById(id);
     if (!account) throw new BadResponse("Conta não encontrada", 404);
 
-    return this.decryptAccount(account);
+    return this.decryptMember(account);
   }
 
   async authenticateMember(email: string, password: string) {
@@ -116,5 +116,14 @@ export class MemberService {
     const created = await this.createMember(dataToBeSaved);
     await this.repository.pushMemberToLaundry(created.id, laundryId);
     return created;
+  }
+
+  async listAllMembers(): Promise<Omit<MemberDTO, "password">[]> {
+    const members = await this.repository.listAll();
+    const members_decrypted = members.map((m) => this.decryptMember(m));
+    return members_decrypted.map((m) => {
+      const { password, ...rest } = m;
+      return rest;
+    });
   }
 }
