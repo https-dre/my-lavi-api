@@ -20,6 +20,9 @@ export const buildElysiaApp = (): Elysia => {
             version: "v2.0.0",
           },
         },
+        scalar: {
+          url: "/openapi/json",
+        },
       }),
     )
     .error({
