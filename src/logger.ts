@@ -1,13 +1,21 @@
 import pino from "pino";
 
-export const logger = pino({
-  transport: {
-    target: "pino-pretty",
-    options: {
-      colorize: true,
-      translateName: "SYS:standard",
-      ignore: "pid,hostname",
-      translateTime: "yyyy-mm-dd HH:MM:ss",
-    },
-  },
-});
+const isProduction = process.env.NODE_ENV === "production";
+
+const loggerOptions = isProduction
+  ? {
+      level: "info",
+    }
+  : {
+      level: "debug",
+      transport: {
+        target: "pino-pretty",
+        options: {
+          colorize: false,
+          translateTime: "SYS:standard", // Formato de hora mais curto
+          ignore: "pid,hostname",
+        },
+      },
+    };
+
+export const logger = pino(loggerOptions);
