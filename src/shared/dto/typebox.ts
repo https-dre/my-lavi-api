@@ -32,6 +32,7 @@ export const CustomerType = Type.Object({
 export const LaundryType = Type.Object({
   id: Type.String(),
   name: Type.String(),
+  email: Type.String({ format: "email" }),
   profile_url: Type.Union([Type.String(), Type.Null()]),
   cnpj: Type.String(),
   address: Type.String(),

@@ -15,6 +15,7 @@ export const laundry = pgTable("laundries", {
   id: text().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   profile_url: text(),
+  email: text().notNull(),
   address: text().notNull(),
   opening: text().notNull(),
   longitude: numeric().notNull(),
