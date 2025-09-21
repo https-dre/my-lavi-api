@@ -1,21 +1,20 @@
+import { Type } from "@sinclair/typebox";
 import { logger } from "./logger";
+import { Value } from "@sinclair/typebox/value";
 
-const EnvConfig = new Map<string, string>(
-  Object.entries(process.env).filter(
-    (entry): entry is [string, string] => entry[1] !== undefined
-  )
-);
-
-const vars = ["DATABASE_URL", "JWT_KEY", "ENCRYPT_CORE_KEY"];
+const envSchema = Type.Object({
+  DATABASE_URL: Type.String({ pattern: "^postgres://" }),
+  ENCRYPT_CORE_KEY: Type.String(),
+  BLIND_KEY: Type.String(),
+  JWT_KEY: Type.String(),
+});
 
 export const verify_env = () => {
-  logger.info("Checking environment...");
-  const missingVars = vars.filter((v) => !EnvConfig.has(v));
-  if (missingVars.length) {
-    logger.fatal(`Missing: ${missingVars.join(", ")}`);
+  logger.info("Checking Environment...");
+  const errors = [...Value.Errors(envSchema, process.env)];
+  if (errors.length > 0) {
+    errors.map((err) => logger.fatal(`Missing ${err.path}`));
     process.exit(1);
   }
   logger.info("Environment ok!");
 };
-
-export default EnvConfig;
