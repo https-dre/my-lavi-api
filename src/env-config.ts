@@ -3,7 +3,7 @@ import { logger } from "./logger";
 import { Value } from "@sinclair/typebox/value";
 
 const envSchema = Type.Object({
-  DATABASE_URL: Type.String({ pattern: "^postgres://" }),
+  DATABASE_URL: Type.String({ pattern: "^postgresql://" }),
   ENCRYPT_CORE_KEY: Type.String(),
   BLIND_KEY: Type.String(),
   JWT_KEY: Type.String(),
