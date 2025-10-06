@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "e2e": "vitest run",
-    "dev": "bun run --env-file .env --watch src/server.ts",
+    "dev": "bun run --watch src/server.ts",
     "build": "bun build src/server.ts --compile --outfile server",
     "start": "bun run src/server.ts",
     "db:schema": "bunx --bun drizzle-kit generate",
