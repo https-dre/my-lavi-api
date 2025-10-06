@@ -1,4 +1,4 @@
-name: EC2 Delivery
+name: deploy-api-to-production
 on:
   push:
     branches: ["main"]
