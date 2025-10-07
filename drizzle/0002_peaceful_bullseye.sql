@@ -1,0 +1,1 @@
+ALTER TABLE "orderItems" ADD COLUMN "color" text NOT NULL;

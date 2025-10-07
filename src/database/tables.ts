@@ -110,6 +110,7 @@ export const orderItem = pgTable("orderItems", {
   unitPrice_inCents: integer().notNull(),
   name: text().notNull(),
   service: text().notNull(),
+  color: text().notNull(),
   orderId: text()
     .references(() => order.id, { onDelete: "cascade" })
     .notNull(),

@@ -15,6 +15,13 @@
       "when": 1758484360932,
       "tag": "0001_robust_mandrill",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1759838512083,
+      "tag": "0002_peaceful_bullseye",
+      "breakpoints": true
     }
   ]
 }

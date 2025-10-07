@@ -53,6 +53,7 @@ export const OrderItemType = Type.Object({
   qntd: Type.Integer(),
   unitPrice_inCents: Type.Integer(),
   name: Type.String(),
+  color: Type.String(),
   service: Type.String(),
   orderId: Type.String(),
 });
