@@ -1,15 +1,15 @@
-import { IAccountRepository, ICustomerRepository } from "../repositories";
+import { IMemberRepository, ICustomerRepository } from "../repositories";
 
 export class IdentityService {
   constructor(
     readonly customerRepository: ICustomerRepository,
-    readonly accountRepository: IAccountRepository
+    readonly memberRepository: IMemberRepository
   ) {}
 
   async isIdentityTaken(key: string) {
-    const user = await this.accountRepository.findByCpf(key);
+    const user = await this.memberRepository.findByCpf(key);
     const customer = await this.customerRepository.findByDoc(key);
-    if ((user.role == "owner" && user) || customer) {
+    if ((user.roles.includes("owner") && user) || customer) {
       return true;
     }
 
