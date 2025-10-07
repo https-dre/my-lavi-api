@@ -1,13 +1,14 @@
 import Elysia, { t } from "elysia";
 import { OrderService } from "../order-service";
-import { OrderType } from "../../shared/dto/typebox";
+import { OrderItemType, OrderType } from "../../shared/dto/typebox";
 
 export const createOrder = (service: OrderService): Elysia => {
   return new Elysia().post(
     "/orders",
     async ({ body, status }) => {
-      const { order } = body;
+      const { order, items } = body;
       const result = await service.createOrder(order);
+      await service.pushOrderItems(result.id, items)
       return status(201, { order: result });
     },
     {
@@ -17,6 +18,7 @@ export const createOrder = (service: OrderService): Elysia => {
       },
       body: t.Object({
         order: t.Omit(OrderType, ["id", "created_at", "updated_at"]),
+        items: t.Array(t.Omit(OrderItemType, ['id', 'orderId']))
       }),
       response: {
         201: t.Object({
