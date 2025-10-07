@@ -9,7 +9,7 @@ export class IdentityService {
   async isIdentityTaken(key: string) {
     const user = await this.memberRepository.findByCpf(key);
     const customer = await this.customerRepository.findByDoc(key);
-    if ((user.roles.includes("owner") && user) || customer) {
+    if (user || customer) {
       return true;
     }
 

@@ -33,9 +33,10 @@ export const buildElysiaApp = (): Elysia => {
         case "BadResponse":
           return status(error.status, error.response);
         default:
+          console.log(error)
           return status(500, {
             details: "Internal server error",
-            alert: "CONTACT ADM!",
+            alert: "Contact the admin!",
             error,
           });
       }
