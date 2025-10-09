@@ -11,11 +11,15 @@ export class CatalogItemService {
     private laundryRepository: ILaundryRepository,
   ) {}
 
-  async createItem(data: Omit<CatalogItemDTO, "id">): Promise<CatalogItemDTO> {
-    if (!(await this.laundryRepository.findById(data.laundryId)))
+  async createItem(
+    laundryId: string,
+    data: Omit<CatalogItemDTO, "id" | "laundryId">,
+  ): Promise<CatalogItemDTO> {
+    if (!(await this.laundryRepository.findById(laundryId)))
       throw new BadResponse("Lavanderia não encontrada!", 404);
 
-    const created = await this.repository.create(data);
+    const dataToBeSaved = { ...data, laundryId };
+    const created = await this.repository.create(dataToBeSaved);
     return created;
   }
 

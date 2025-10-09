@@ -6,6 +6,7 @@ import { memberController } from "@/member/routes";
 import { customerController } from "../customer/routes";
 import { laundryController } from "../laundry/routes";
 import { orderController } from "@/order/routes";
+import { catalogController } from "@/catalog-item/routes";
 
 /**
  * @returns New Elysia App
@@ -33,7 +34,7 @@ export const buildElysiaApp = (): Elysia => {
         case "BadResponse":
           return status(error.status, error.response);
         default:
-          console.log(error)
+          console.log(error);
           return status(500, {
             details: "Internal server error",
             alert: "Contact the admin!",
@@ -47,6 +48,7 @@ export const buildElysiaApp = (): Elysia => {
   app.use(memberController);
   app.use(customerController);
   app.use(laundryController);
+  app.use(catalogController);
   app.use(orderController);
 
   // @ts-ignore
