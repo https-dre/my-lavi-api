@@ -5,6 +5,7 @@ import {
   OrderModel,
   OrderItemModel,
   MemberModel,
+  CatalogItemModel,
 } from "../models";
 
 export interface ICustomerRepository {
@@ -87,4 +88,15 @@ export interface IOrderRepository {
     orderId: string,
     fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
   ): Promise<void>;
+}
+
+export interface LaundryCatalogItemRepository {
+  findById(id: string): Promise<CatalogItemModel>;
+  create(data: Omit<CatalogItemModel, "id">): Promise<CatalogItemModel>;
+  deleteById(id: string): Promise<void>;
+  updateById(
+    id: string,
+    fieldsUpdated: Partial<Omit<CatalogItemModel, "id">>,
+  ): Promise<void>;
+  findByLaundryId(laundryId: string): Promise<CatalogItemModel[]>;
 }
