@@ -90,7 +90,7 @@ export interface IOrderRepository {
   ): Promise<void>;
 }
 
-export interface LaundryCatalogItemRepository {
+export interface ICatalogItemRepository {
   findById(id: string): Promise<CatalogItemModel>;
   create(data: Omit<CatalogItemModel, "id">): Promise<CatalogItemModel>;
   deleteById(id: string): Promise<void>;
