@@ -8,11 +8,14 @@ import { LaundryService } from "@/laundry/laundry-service";
 import { CustomerService } from "@/customer/customer-service";
 import { MemberRepository } from "@/member/member-repository";
 import { MemberService } from "@/member/member-service";
+import { CatalogRepository } from "@/catalog-item/catalog-item.repository";
+import { CatalogItemService } from "@/catalog-item/catalog-item.service";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
 const laundryRepository = new LaundryRepository();
 const memberRepository = new MemberRepository();
+const catalogRepository = new CatalogRepository();
 
 const cryptoProvider = new CryptoProvider();
 const jwtProvider = new JwtProvider();
@@ -42,6 +45,7 @@ const appServices = {
     jwtProvider,
     cryptoProvider,
   ),
+  catalogService: new CatalogItemService(catalogRepository, laundryRepository),
 };
 
 export { appServices };
