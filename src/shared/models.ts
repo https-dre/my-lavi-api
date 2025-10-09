@@ -1,4 +1,4 @@
-import tables from "@/database/tables";
+import * as tables from "@/database/tables";
 
 export type CustomerModel = Required<typeof tables.customer.$inferInsert>;
 
@@ -17,3 +17,5 @@ export type FeedbackModel = typeof tables.feedbackPost.$inferInsert;
 export type FeedbackImageModel = typeof tables.feedbackImage.$inferInsert;
 
 export type MemberModel = typeof tables.member.$inferSelect;
+
+export type CatalogItemModel = typeof tables.laundryCatalogItem.$inferSelect;

@@ -64,6 +64,18 @@ export const laundryBanner = pgTable("laundryBanners", {
   laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
 });
 
+export const laundryCatalogItem = pgTable("laundryCatalogItems", {
+  id: text().primaryKey(),
+  color: text().notNull(),
+  units: integer().notNull(),
+  priceInCents: integer().notNull(),
+  clothing: text().notNull(),
+  wash_cycle: text().notNull(),
+  laundryId: text()
+    .references(() => laundry.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
 export const customer = pgTable("customers", {
   id: text().primaryKey(),
   profile_url: text(),

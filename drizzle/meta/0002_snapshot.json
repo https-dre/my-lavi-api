@@ -1,5 +1,5 @@
 {
-  "id": "3fed5822-eab5-4f45-99dc-5aff78c2da26",
+  "id": "32271b2b-fc55-48c4-8585-f41846c52dc0",
   "prevId": "a23648a7-b032-4b51-a12a-b910923acea9",
   "version": "7",
   "dialect": "postgresql",
@@ -90,16 +90,12 @@
         "customers_email_blind_index_unique": {
           "name": "customers_email_blind_index_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email_blind_index"
-          ]
+          "columns": ["email_blind_index"]
         },
         "customers_doc_blind_index_unique": {
           "name": "customers_doc_blind_index_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "doc_blind_index"
-          ]
+          "columns": ["doc_blind_index"]
         }
       },
       "policies": {},
@@ -147,12 +143,8 @@
           "name": "customerAddresses_customerId_customers_id_fk",
           "tableFrom": "customerAddresses",
           "tableTo": "customers",
-          "columnsFrom": [
-            "customerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["customerId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -192,12 +184,8 @@
           "name": "feedbackImages_postId_feedbackPosts_id_fk",
           "tableFrom": "feedbackImages",
           "tableTo": "feedbackPosts",
-          "columnsFrom": [
-            "postId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["postId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -256,12 +244,8 @@
           "name": "feedbackPosts_laundryId_laundries_id_fk",
           "tableFrom": "feedbackPosts",
           "tableTo": "laundries",
-          "columnsFrom": [
-            "laundryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["laundryId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -269,12 +253,8 @@
           "name": "feedbackPosts_customerId_customers_id_fk",
           "tableFrom": "feedbackPosts",
           "tableTo": "customers",
-          "columnsFrom": [
-            "customerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["customerId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -400,23 +380,17 @@
         "laundries_cnpj_blind_index_unique": {
           "name": "laundries_cnpj_blind_index_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "cnpj_blind_index"
-          ]
+          "columns": ["cnpj_blind_index"]
         },
         "laundries_cnpj_unique": {
           "name": "laundries_cnpj_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "cnpj"
-          ]
+          "columns": ["cnpj"]
         },
         "laundries_account_number_unique": {
           "name": "laundries_account_number_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "account_number"
-          ]
+          "columns": ["account_number"]
         }
       },
       "policies": {},
@@ -458,12 +432,73 @@
           "name": "laundryBanners_laundryId_laundries_id_fk",
           "tableFrom": "laundryBanners",
           "tableTo": "laundries",
-          "columnsFrom": [
-            "laundryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["laundryId"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.laundryCatalogItems": {
+      "name": "laundryCatalogItems",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "color": {
+          "name": "color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "units": {
+          "name": "units",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "priceInCents": {
+          "name": "priceInCents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "clothing": {
+          "name": "clothing",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wash_cycle": {
+          "name": "wash_cycle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "laundryId": {
+          "name": "laundryId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "laundryCatalogItems_laundryId_laundries_id_fk": {
+          "name": "laundryCatalogItems_laundryId_laundries_id_fk",
+          "tableFrom": "laundryCatalogItems",
+          "tableTo": "laundries",
+          "columnsFrom": ["laundryId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -510,12 +545,8 @@
           "name": "laundry_member_laundryId_laundries_id_fk",
           "tableFrom": "laundry_member",
           "tableTo": "laundries",
-          "columnsFrom": [
-            "laundryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["laundryId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -523,12 +554,8 @@
           "name": "laundry_member_memberId_members_id_fk",
           "tableFrom": "laundry_member",
           "tableTo": "members",
-          "columnsFrom": [
-            "memberId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["memberId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -685,12 +712,8 @@
           "name": "orders_laundryId_laundries_id_fk",
           "tableFrom": "orders",
           "tableTo": "laundries",
-          "columnsFrom": [
-            "laundryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["laundryId"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -698,12 +721,8 @@
           "name": "orders_customerId_customers_id_fk",
           "tableFrom": "orders",
           "tableTo": "customers",
-          "columnsFrom": [
-            "customerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["customerId"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -748,12 +767,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "color": {
-          "name": "color",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "orderId": {
           "name": "orderId",
           "type": "text",
@@ -767,12 +780,8 @@
           "name": "orderItems_orderId_orders_id_fk",
           "tableFrom": "orderItems",
           "tableTo": "orders",
-          "columnsFrom": [
-            "orderId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["orderId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
