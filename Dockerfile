@@ -8,8 +8,6 @@ RUN bun install --production
 
 COPY . .
 
-RUN bun run build
-
 ENV NODE_ENV=production
 
 CMD ["bun", "start"]
