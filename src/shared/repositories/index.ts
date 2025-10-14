@@ -6,6 +6,8 @@ import {
   OrderItemModel,
   MemberModel,
   CatalogItemModel,
+  FeedbackImageModel,
+  FeedbackModel,
 } from "../models";
 
 export interface ICustomerRepository {
@@ -99,4 +101,14 @@ export interface ICatalogItemRepository {
     fieldsUpdated: Partial<Omit<CatalogItemModel, "id">>,
   ): Promise<void>;
   findByLaundryId(laundryId: string): Promise<CatalogItemModel[]>;
+}
+
+export interface IFeedbackRepository {
+  save(data: Omit<FeedbackModel, "id" | "created_at">): Promise<FeedbackModel>;
+  deleteById(id: string): Promise<void>;
+  saveImages(images: Omit<FeedbackImageModel, "id">[]): Promise<FeedbackImageModel[]>;
+  deleteImage(key: string): Promise<void>;
+  findByLaundryId(laundryId: string): Promise<FeedbackModel[]>;
+  findByCustomerId(customerId: string): Promise<FeedbackModel[]>;
+  findById(id: string): Promise<FeedbackModel[]>;
 }

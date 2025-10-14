@@ -130,6 +130,7 @@ export const orderItem = pgTable("orderItems", {
 
 export const feedbackPost = pgTable("feedbackPosts", {
   id: text().primaryKey(),
+  title: text().notNull(),
   content: text().notNull(),
   rate: integer(),
   created_at: timestamp().defaultNow(),
@@ -139,6 +140,7 @@ export const feedbackPost = pgTable("feedbackPosts", {
 
 export const feedbackImage = pgTable("feedbackImages", {
   id: text().primaryKey(),
+  objectId: text().notNull(),
   url: text().notNull(),
   postId: text().references(() => feedbackPost.id, { onDelete: "cascade" }),
 });

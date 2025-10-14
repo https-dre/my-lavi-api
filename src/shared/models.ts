@@ -12,9 +12,9 @@ export type OrderModel = typeof tables.order.$inferSelect;
 
 export type OrderItemModel = typeof tables.orderItem.$inferInsert;
 
-export type FeedbackModel = typeof tables.feedbackPost.$inferInsert;
+export type FeedbackModel = typeof tables.feedbackPost.$inferSelect;
 
-export type FeedbackImageModel = typeof tables.feedbackImage.$inferInsert;
+export type FeedbackImageModel = typeof tables.feedbackImage.$inferSelect;
 
 export type MemberModel = typeof tables.member.$inferSelect;
 
