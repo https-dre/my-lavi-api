@@ -12,4 +12,4 @@ RUN bun run build
 
 ENV NODE_ENV=production
 
-CMD ["./server"]
+CMD ["bun", "start"]
