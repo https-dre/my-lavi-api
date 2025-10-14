@@ -5,7 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { BadResponse } from "../../../http/error-handler";
+import { BadResponse } from "@/http/error-handler";
 
 export type S3ObjectProps = {
   key: string;
