@@ -1,9 +1,9 @@
-import { verify_env } from "./env-config";
-import { logger } from "./logger";
-import { check_db } from "./database/conn";
-import { buildElysiaApp } from "./http/buildElysiaApp";
+import { verify_env } from "../env-config";
+import { logger } from "../logger";
+import { check_db } from "../database/conn";
+import { buildElysiaApp } from "../http/buildElysiaApp";
 
-const run = async () => {
+export const executeServer = async () => {
   verify_env();
   await check_db();
 
@@ -15,5 +15,3 @@ const run = async () => {
   logger.info(`Server running at: http://localhost:${current_port}`);
   app.listen(Number(current_port));
 };
-
-run();
