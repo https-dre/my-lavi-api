@@ -3,7 +3,7 @@ import { CustomerService } from "../customer-service";
 import Elysia, { t } from "elysia";
 
 export const updateCustomer = (service: CustomerService): Elysia => {
-  return new Elysia().put(
+  return new Elysia().patch(
     "/customer/:id",
     async ({ body, params, status }) => {
       const { fields } = body;

@@ -3,7 +3,7 @@ import { OrderService } from "../order-service";
 import { OrderType } from "../../shared/dto/typebox";
 
 export const updateOrder = (service: OrderService): Elysia => {
-  return new Elysia().put(
+  return new Elysia().patch(
     "/orders/:id",
     async ({ params, body }) => {
       const { fields } = body;
@@ -18,12 +18,12 @@ export const updateOrder = (service: OrderService): Elysia => {
       },
       body: t.Object({
         fields: t.Partial(
-          t.Omit(OrderType, ["id", "created_at", "updated_at", "customerId"])
+          t.Omit(OrderType, ["id", "created_at", "updated_at", "customerId"]),
         ),
       }),
       params: t.Object({
         id: t.String({ format: "uuid" }),
       }),
-    }
+    },
   );
 };
