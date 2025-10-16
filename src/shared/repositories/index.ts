@@ -108,7 +108,8 @@ export interface IFeedbackRepository {
   deleteById(id: string): Promise<void>;
   saveImages(images: Omit<FeedbackImageModel, "id">[]): Promise<FeedbackImageModel[]>;
   deleteImage(key: string): Promise<void>;
-  findByLaundryId(laundryId: string): Promise<FeedbackModel[]>;
-  findByCustomerId(customerId: string): Promise<FeedbackModel[]>;
-  findById(id: string): Promise<FeedbackModel[]>;
+  findWithInnerJoin(laundryId: string): Promise<any>;
+  findByLaundryId(laundryId: string, page: number, pageSize: number): Promise<any>;
+  findByCustomerId(customerId: string, page: number, pageSize: number): Promise<FeedbackModel[]>;
+  findById(id: string): Promise<FeedbackModel>;
 }
