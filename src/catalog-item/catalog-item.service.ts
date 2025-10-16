@@ -43,4 +43,14 @@ export class CatalogItemService {
     if (!item) throw new BadResponse("Item não encontrado!", 404);
     return item;
   }
+
+  async updateCatalogItem(
+    id: string,
+    fields: Omit<CatalogItemDTO, "id" | "laundryId">,
+  ) {
+    if (!(await this.repository.findById(id)))
+      throw new BadResponse("Item não encontrado.", 404);
+
+    await this.repository.updateById(id, fields);
+  }
 }
