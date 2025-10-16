@@ -7,14 +7,17 @@ import { authenticateCustomer } from "./authenticate-customer";
 import { listCustomers } from "./list-customers";
 import { appServices } from "../../shared/services";
 import { getCustomerOrders } from "./get-customer-orders";
+import { customerSessionValidator } from "../session-validator";
 
 const customerController = new Elysia()
   .use(postCustomer(appServices.customer))
-  .use(deleteCustomer(appServices.customer))
-  .use(getCustomer(appServices.customer))
-  .use(updateCustomer(appServices.customer))
   .use(authenticateCustomer(appServices.customer))
   .use(listCustomers(appServices.customer))
+  .use(getCustomer(appServices.customer))
+  // routes with authentication
+  .use(customerSessionValidator({ checkAuth: appServices.customer.checkAuth }))
+  .use(deleteCustomer(appServices.customer))
+  .use(updateCustomer(appServices.customer))
   .use(getCustomerOrders(appServices.customer, appServices.order));
 
 export { customerController };

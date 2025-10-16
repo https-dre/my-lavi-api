@@ -91,7 +91,7 @@ export class CustomerService {
       throw new BadResponse("Senha ou e-mail incorretos!", 401);
     }
 
-    return this.jwt.generateToken({ email });
+    return this.jwt.generateToken({ id: customerFounded.id });
   }
 
   public async updateCustomer(id: string, fields: Record<string, any>) {
@@ -122,10 +122,9 @@ export class CustomerService {
    */
   public async checkAuth(token: string) {
     try {
-      const payload = this.jwt.verifyToken(token) as { email: string };
-      const email_hash = this.crypto.hmac(payload.email);
-      if (!(await this.repository.findByEmail(email_hash)))
-        throw new BadResponse("E-mail não encontrado!", 404);
+      const payload = this.jwt.verifyToken(token) as { id: string };
+      if (!(await this.repository.findById(payload.id)))
+        throw new BadResponse("Conta não encontrada!", 404);
       return payload;
     } catch (err) {
       if (err instanceof JWT.TokenExpiredError)
