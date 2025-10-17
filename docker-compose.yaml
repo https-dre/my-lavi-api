@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: ./api
+    env_file: ./api/.env.production
+    ports:
+      - "${API_PORT}:${API_PORT}"
+  realtime_api:
+    build:
+      context: ./realtime
+    env_file: ./realtime/.env.production
+    ports:
+      - "${WS_PORT}:${WS_PORT}"
